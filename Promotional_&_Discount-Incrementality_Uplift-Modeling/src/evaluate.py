@@ -121,6 +121,14 @@ def shap_explain(cfg, tr_X, te, preds, best_name, n_sample=2000):
     return imp, out
 
 
+def save_propensity(cfg, tr):
+    """Persist e(x) = P(T=1|X) (same learner as the IPW propensity in train.py) for the serving / flows layer."""
+    from src.models import make_classifier
+    m = make_classifier(cfg, small=True).fit(tr[FEATURES].values, tr["T"].values)
+    joblib.dump(m, resolve(cfg["paths"]["models"]) / "propensity.joblib")
+    return m
+
+
 def run(cfg=None, best: str | None = None):
     cfg = cfg or load_config()
     logs = resolve(cfg["paths"]["logs"])
@@ -132,6 +140,7 @@ def run(cfg=None, best: str | None = None):
     best = best or select_best(bench)
     log.info("Best estimator (rank of PEHE + Qini): %s", best)
 
+    save_propensity(cfg, tr)
     base = fit_baseline_conv(cfg, tr)
     joblib.dump(base, resolve(cfg["paths"]["models"]) / "baseline_conv.joblib")
     p0 = base.predict_proba(te[FEATURES].values)[:, 1]

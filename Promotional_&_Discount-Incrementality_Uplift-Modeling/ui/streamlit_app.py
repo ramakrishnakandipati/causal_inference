@@ -12,6 +12,7 @@ import streamlit as st
 
 from src.common import FEATURES, LOYALTY_LEVELS, load_config, resolve
 from src.serving import PRESETS, Scorer
+from ui.flows_ui import render_flows_tab
 
 st.set_page_config(page_title="Hospitality Uplift CATE Simulator", page_icon="🏨", layout="wide")
 cfg = load_config()
@@ -46,7 +47,8 @@ def apply_preset(name):
 scorer = get_scorer()
 st.title("🏨 Hospitality Promotional Incrementality — CATE Simulator")
 st.caption("Who should receive the offer? Persuadables yes; Always-Takers, Lost Causes and Sleeping Dogs no.")
-tab1, tab2, tab3 = st.tabs(["Guest CATE Simulator", "Model Benchmark & Diagnostics", "Campaign ROI & Policy Simulator"])
+tab1, tab2, tab3, tab4 = st.tabs(["Guest CATE Simulator", "Model Benchmark & Diagnostics", "Campaign ROI & Policy Simulator",
+                                  "End-to-End Flows"])
 
 # ------------------------------------------------------------------ Tab 1
 with tab1:
@@ -169,3 +171,7 @@ with tab3:
                  hide_index=True, width="stretch")
     st.caption(f"Scaled from the {len(te):,}-guest test set to {db:,} guests using ground-truth counterfactuals. "
                "Points arm is modelled (conv lift = 80% of discount lift); discount arm uses DGP ground truth.")
+
+# ------------------------------------------------------------------ Tab 4
+with tab4:
+    render_flows_tab(scorer, cfg)

@@ -1,0 +1,34 @@
+{
+  "flow1": {
+    "persona": "Persuadable",
+    "api_quadrant": "Persuadable",
+    "api_decision": "SEND 2,000 POINTS",
+    "api_tau_margin_hat": 14.588,
+    "ui_shows_same_quadrant": true,
+    "ui_shows_same_decision": true
+  },
+  "flow2": {
+    "persona": "Always-Taker",
+    "api_quadrant": "Always-Taker",
+    "api_decision": "SUPPRESS",
+    "api_tau_margin_hat": -65.918,
+    "ui_shows_same_quadrant": true,
+    "ui_shows_same_decision": true
+  },
+  "flow3": {
+    "persona": "Lost Cause",
+    "api_quadrant": "Lost Cause",
+    "api_decision": "SUPPRESS",
+    "api_tau_margin_hat": -1.731,
+    "ui_shows_same_quadrant": true,
+    "ui_shows_same_decision": true
+  },
+  "flow4": {
+    "persona": "Sleeping Dog",
+    "api_quadrant": "Sleeping Dog",
+    "api_decision": "SUPPRESS",
+    "api_tau_margin_hat": -29.405,
+    "ui_shows_same_quadrant": true,
+    "ui_shows_same_decision": true
+  }
+}

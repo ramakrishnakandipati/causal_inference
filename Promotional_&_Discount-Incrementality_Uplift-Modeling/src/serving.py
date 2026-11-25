@@ -66,7 +66,11 @@ class Scorer:
     def __init__(self, cfg=None):
         self.cfg = cfg or load_config()
         md = resolve(self.cfg["paths"]["models"])
-        self.models = {p.stem: joblib.load(p) for p in md.glob("*.joblib") if p.stem not in ("baseline_conv", "conv_companion")}
+        aux = ("baseline_conv", "conv_companion", "propensity")
+        self.models = {p.stem: joblib.load(p) for p in md.glob("*.joblib") if p.stem not in aux}
+        from src.models import ESTIMATORS
+        self.order = [n for n in ESTIMATORS if n in self.models]
+        self.prop = joblib.load(md / "propensity.joblib") if (md / "propensity.joblib").exists() else None
         self.conv = joblib.load(md / "conv_companion.joblib")
         self.base = joblib.load(md / "baseline_conv.joblib")
         self.surrogates = {p.stem: joblib.load(p) for p in (md / "surrogates").glob("*.joblib")}
@@ -75,7 +79,7 @@ class Scorer:
         self.best = json.load(open(s))["best_model"] if s.exists() else next(iter(self.models))
         # serve entirely on CPU: avoids CUDA/XGBoost calls from multiple server threads (hard-crashed Streamlit reruns)
         seen: set = set()
-        for obj in [*self.models.values(), self.conv, self.base, *self.surrogates.values()]:
+        for obj in [*self.models.values(), self.conv, self.base, self.prop, *self.surrogates.values()]:
             _force_cpu(obj, seen)
 
     @staticmethod
@@ -84,6 +88,13 @@ class Scorer:
         if df["loyalty_tier"].dtype == object:
             df["loyalty_tier"] = df["loyalty_tier"].map({n: i for i, n in enumerate(LOYALTY_LEVELS)})
         return df[FEATURES].astype(float)
+
+    def propensity(self, rows: list[dict]) -> np.ndarray:
+        """Historical-CRM propensity e(x) = P(T=1 | X), clipped to the overlap range used for IPW."""
+        if self.prop is None:
+            raise RuntimeError("propensity.joblib missing - run `python main.py --stage evaluate`")
+        lo, hi = self.cfg["evaluation"]["propensity_clip"]
+        return np.clip(self.prop.predict_proba(self.frame(rows).values.astype(np.float32))[:, 1], lo, hi)
 
     def score(self, rows: list[dict], estimator: str | None = None, offer: dict | None = None, explain: bool = False) -> list[dict]:
         t0 = time.perf_counter()

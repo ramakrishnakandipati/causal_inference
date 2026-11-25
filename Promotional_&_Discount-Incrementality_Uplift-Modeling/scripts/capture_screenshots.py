@@ -38,7 +38,37 @@ def idle(pg, timeout=180):
     pg.wait_for_timeout(2000)
 
 
-def main():
+def capture_flows(pg, out, ui_url, api_url):
+    """Screenshot every step of the 5 end-to-end flows and check that the UI decision equals the API decision."""
+    from src.flows import FLOWS, guest_payload, load_flow_data, pick_guest
+    te, _ = load_flow_data()
+    fdir = out / "flows"; fdir.mkdir(parents=True, exist_ok=True)
+    best = requests.get(f"{api_url}/health").json()["default_estimator"]
+    pg.set_viewport_size({"width": 1500, "height": 5200})   # tall enough that a whole flow is on screen (element shots clip at the viewport)
+    pg.goto(ui_url); idle(pg)
+    pg.add_style_tag(content="header[data-testid=stHeader]{display:none !important}")
+    pg.get_by_role("tab", name="End-to-End Flows").click(); pg.wait_for_timeout(2500); idle(pg)
+    checks = {}
+    for f in FLOWS:
+        pg.locator("[data-testid=stRadio]").get_by_text(f["short"], exact=True).click()
+        pg.wait_for_timeout(2000); idle(pg)
+        fid = f["id"]
+        pg.locator(f".st-key-{fid}_full").wait_for(timeout=60000)
+        pg.locator(f".st-key-{fid}_full").screenshot(path=fdir / f"{fid}_{f['slug']}_full.png")
+        for k in range(1, 6):
+            pg.locator(f".st-key-{fid}_step{k}").screenshot(path=fdir / f"{fid}_{f['slug']}_step{k}.png")
+        if f["kind"] == "guest":
+            payload = guest_payload(pick_guest(te, f["persona"]))
+            api = requests.post(f"{api_url}/score", json={"guest": payload, "estimator": best}).json()
+            ui_text = pg.locator(f".st-key-{fid}_step4").inner_text()
+            checks[fid] = {"persona": f["persona"], "api_quadrant": api["quadrant"], "api_decision": api["decision"],
+                           "api_tau_margin_hat": round(api["tau_margin_hat"], 3),
+                           "ui_shows_same_quadrant": api["quadrant"] in ui_text, "ui_shows_same_decision": api["decision"] in ui_text}
+    (fdir / "flow_api_vs_ui_check.json").write_text(json.dumps(checks, indent=2))
+    print("flows ->", fdir, "| UI==API:", all(v["ui_shows_same_decision"] and v["ui_shows_same_quadrant"] for v in checks.values()))
+
+
+def main(only: str = "all"):
     out = resolve(load_config()["paths"]["screenshots"]); out.mkdir(parents=True, exist_ok=True)
     flags = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
     procs = [subprocess.Popen([sys.executable, "-m", "uvicorn", "api.app:app", "--port", str(API)], cwd=ROOT, creationflags=flags,
@@ -53,6 +83,10 @@ def main():
         with sync_playwright() as p:
             b = p.chromium.launch()
             pg = b.new_page(viewport={"width": 1500, "height": 1000})
+            if only == "flows":
+                capture_flows(pg, out, f"http://localhost:{UI}", f"http://localhost:{API}")
+                b.close()
+                return
             pg.goto(f"http://localhost:{API}/docs"); pg.wait_for_selector(".opblock")
             pg.screenshot(path=out / "api_01_swagger_docs.png", full_page=True)
             # live API call for each preset -> JSON rendered page
@@ -74,6 +108,7 @@ def main():
             pg.screenshot(path=out / "ui_03_benchmark.png", full_page=True)
             pg.get_by_role("tab", name="Campaign ROI & Policy Simulator").click(); pg.wait_for_timeout(3000); idle(pg)
             pg.screenshot(path=out / "ui_04_roi.png", full_page=True)
+            capture_flows(pg, out, f"http://localhost:{UI}", f"http://localhost:{API}")
             b.close()
         print("screenshots ->", out)
     finally:
@@ -87,4 +122,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else "all")
