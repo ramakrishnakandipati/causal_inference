@@ -1,0 +1,22 @@
+{
+  "Weekend Leisure Browser": {
+    "quadrant": "Persuadable",
+    "decision": "SEND 2,000 POINTS",
+    "tau_margin_hat": 14.054701453455914
+  },
+  "Frequent Corporate Platinum": {
+    "quadrant": "Always-Taker",
+    "decision": "SUPPRESS",
+    "tau_margin_hat": -64.17618992136642
+  },
+  "Dormant 2-Year Lapsed Guest": {
+    "quadrant": "Lost Cause",
+    "decision": "SUPPRESS",
+    "tau_margin_hat": -1.68688735367013
+  },
+  "Full-Rate Loyal Guest with Active Booking": {
+    "quadrant": "Sleeping Dog",
+    "decision": "SUPPRESS",
+    "tau_margin_hat": -26.802058618903832
+  }
+}

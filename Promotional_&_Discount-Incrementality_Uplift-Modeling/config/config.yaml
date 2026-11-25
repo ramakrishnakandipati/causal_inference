@@ -1,0 +1,52 @@
+# Hospitality Promotional Uplift / CATE — central configuration
+seed: 42
+
+data:
+  n_samples: 50000
+  rct_fraction: 0.20          # randomized holdout (T ~ Bernoulli(0.5)) used for unbiased Qini
+  path: data/hospitality_uplift.parquet
+  split: {train: 0.60, val: 0.15, test: 0.25}
+
+offer:
+  discount_pct: 0.20          # "20% off weekend stay"
+  margin_rate: 0.35           # gross margin on a full-rate stay
+  points_offer: 2000          # "2,000 bonus loyalty points"
+  points_cost_per_point: 0.01 # liability $ per point -> $20 when redeemed
+  points_conv_effect_ratio: 0.80   # points offer drives 80% of the discount's conversion lift
+  comm_cost: 0.05             # $ cost per email/push send
+  cate_threshold: 0.05        # target iff tau_margin_hat > cate_threshold (offer cost)
+  crm_database_size: 1000000
+
+gpu:
+  enabled: true               # falls back to CPU automatically if CUDA is unavailable
+  xgb_tree_method: hist
+  catboost_task_type: GPU
+
+training:
+  quick: false
+  base_learner: xgboost       # xgboost | lightgbm | catboost (default base for meta-learners)
+  crossfit_folds: 5
+  ci_bootstrap: {default: 8, dr: 3, nn: 4}   # subsample replicas for SE-based 95% CIs (models w/o native CI)
+  optuna:
+    enabled: true
+    n_trials: 12
+    timeout_s: 240
+  xgb: {n_estimators: 300, max_depth: 4, learning_rate: 0.05, subsample: 0.8, colsample_bytree: 0.8}
+  forest: {n_estimators: 200, min_samples_leaf: 50, max_depth: 8}
+  uplift_rf: {n_estimators: 100, max_depth: 6, min_samples_leaf: 100, evaluationFunction: CTS}
+  nn: {hidden: 128, rep_layers: 3, epochs: 60, batch_size: 1024, lr: 0.001, weight_decay: 0.0001, patience: 10, amp: true}
+  dragonnet_alpha: 1.0
+  dragonnet_beta: 1.0
+
+evaluation:
+  uplift_k: [0.10, 0.20, 0.30]
+  propensity_clip: [0.05, 0.95]
+  quadrant_conv_threshold: 0.02
+  sleeping_dog_conv_threshold: 0.06
+  quadrant_margin_threshold: 0.05
+
+paths:
+  models: outputs/models
+  plots: outputs/plots
+  screenshots: outputs/screenshots
+  logs: outputs/logs

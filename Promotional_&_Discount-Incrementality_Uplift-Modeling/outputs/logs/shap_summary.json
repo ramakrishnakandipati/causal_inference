@@ -1,0 +1,28 @@
+{
+  "model": "CausalForestDML",
+  "mean_abs_shap": {
+    "avg_adr": 10.806148529052734,
+    "hist_booking_freq": 5.883503437042236,
+    "weekend_stay_ratio": 3.897618293762207,
+    "hist_price_sensitivity": 2.3394198417663574,
+    "cancellation_rate": 1.1839861869812012,
+    "days_since_last_stay": 0.7411214113235474,
+    "avg_lead_time": 0.6543368697166443,
+    "points_balance": 0.43132099509239197,
+    "email_open_rate_90d": 0.22027693688869476,
+    "loyalty_tier": 0.21156726777553558
+  },
+  "surrogate_r2": {
+    "S-Learner": 0.9988065504454336,
+    "T-Learner": 0.9938639353987184,
+    "X-Learner": 0.9974682503232285,
+    "R-Learner": 0.995805907839932,
+    "DR-Learner": 0.9947323212129927,
+    "LinearDML": 0.9892028407927875,
+    "NonParamDML": 0.9951475000427896,
+    "CausalForestDML": 0.9985695087673964,
+    "UpliftRF": 0.997586401538277,
+    "TARNet": 0.9980010132270096,
+    "DragonNet": 0.9980492292389483
+  }
+}

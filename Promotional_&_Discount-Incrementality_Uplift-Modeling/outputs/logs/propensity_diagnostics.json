@@ -1,0 +1,36 @@
+{
+  "overlap_train": {
+    "min": 0.13255813717842102,
+    "max": 0.8471323847770691,
+    "frac_below_0.1": 0.0,
+    "frac_above_0.9": 0.0,
+    "mean_treated": 0.48616162165681204,
+    "mean_control": 0.39911468925368354
+  },
+  "smd_raw": {
+    "hist_booking_freq": 0.41642241073847375,
+    "days_since_last_stay": 0.44645526444312056,
+    "loyalty_tier": 0.46474122556328895,
+    "hist_price_sensitivity": 0.01395029685982878,
+    "avg_lead_time": 0.30459517733168034,
+    "avg_adr": 0.4199936250876903,
+    "weekend_stay_ratio": 0.020628363499272218,
+    "cancellation_rate": 0.07899784015732392,
+    "email_open_rate_90d": 0.5367885406407993,
+    "points_balance": 0.32394691480010507
+  },
+  "smd_ipw": {
+    "hist_booking_freq": 0.0020975204055793495,
+    "days_since_last_stay": 0.007215065352022778,
+    "loyalty_tier": 0.009409171204766335,
+    "hist_price_sensitivity": 0.005421081811420279,
+    "avg_lead_time": 0.0036137075974334056,
+    "avg_adr": 0.006149968791855052,
+    "weekend_stay_ratio": 0.0012324664070917394,
+    "cancellation_rate": 0.0013697157863749832,
+    "email_open_rate_90d": 0.001310975403973371,
+    "points_balance": 0.0028223041832639126
+  },
+  "max_smd_raw": 0.5367885406407993,
+  "max_smd_ipw": 0.009409171204766335
+}

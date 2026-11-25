@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# regenerable artifacts (run `python main.py --stage all`)
+outputs/models/
+*.parquet
+outputs/logs/full_run.log
