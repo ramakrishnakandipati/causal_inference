@@ -1,0 +1,27 @@
+<section id="ablation" data-transition="fade">
+<p class="eyebrow">Model comparison · Base learners</p>
+<h2>The base learner matters more than the meta-learner</h2>
+<div class="two">
+<div class="col" style="width:1010px">
+<table class="t s">
+<tr class="hd"><th style="width:30%">Base learner</th><th style="width:14%">Meta</th><th style="width:18%;text-align:right">PEHE ($)</th><th style="width:20%;text-align:right">Qini (IPW)</th><th style="width:18%;text-align:right">Fit (s)</th></tr>
+<tr><td>XGBoost (GPU)</td><td>S</td><td style="text-align:right">16.15</td><td style="text-align:right">0.940</td><td style="text-align:right">0.36</td></tr>
+<tr class="alt"><td>XGBoost (GPU)</td><td>T</td><td style="text-align:right">15.62</td><td style="text-align:right">0.942</td><td style="text-align:right">0.69</td></tr>
+<tr><td>XGBoost (GPU)</td><td>X</td><td style="text-align:right">15.20</td><td style="text-align:right">0.951</td><td style="text-align:right">1.56</td></tr>
+<tr class="alt"><td>LightGBM (CPU)</td><td>S</td><td style="text-align:right">15.75</td><td style="text-align:right">0.941</td><td style="text-align:right">0.12</td></tr>
+<tr><td>LightGBM (CPU)</td><td>T</td><td style="text-align:right">19.46</td><td style="text-align:right">0.915</td><td style="text-align:right">0.14</td></tr>
+<tr class="alt"><td>LightGBM (CPU)</td><td>X</td><td style="text-align:right">17.88</td><td style="text-align:right">0.926</td><td style="text-align:right">0.42</td></tr>
+<tr><td>CatBoost (GPU)</td><td>S</td><td style="text-align:right">15.16</td><td style="text-align:right">0.942</td><td style="text-align:right">1.80</td></tr>
+<tr class="alt"><td>CatBoost (GPU)</td><td>T</td><td style="text-align:right">16.74</td><td style="text-align:right">0.935</td><td style="text-align:right">2.28</td></tr>
+<tr><td>CatBoost (GPU)</td><td>X</td><td style="text-align:right">15.80</td><td style="text-align:right">0.947</td><td style="text-align:right">5.74</td></tr>
+</table>
+</div>
+<div class="col" style="width:606px;gap:24px">
+<p class="med">The same meta-learner moves by up to 3.8 PEHE points across base learners (T-Learner: 15.62 to 19.46), more than the spread among the eleven headline estimators.</p>
+<p class="med">CatBoost S-Learner has the best PEHE of the nine (15.16); XGBoost X-Learner has the best Qini (0.951).</p>
+<p class="med">LightGBM is fastest even on CPU, and the worst T-Learner base.</p>
+<p class="cap">Single fits without confidence-interval refits, so times are lower than on the speed slide.</p>
+</div>
+</div>
+<aside>This is a robustness check of the headline table: the eleven estimators use XGBoost as their default base learner, and the ablation swaps in LightGBM and CatBoost for the S, T and X meta-learners. Results are one seed.</aside>
+</section>

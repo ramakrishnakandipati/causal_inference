@@ -1,0 +1,26 @@
+<section id="causal" data-transition="fade">
+<p class="eyebrow">Documentation · Causal framing</p>
+<h2>The causal question and its assumptions</h2>
+<div class="two">
+<div class="col" style="width:720px">
+<div class="card"><p class="k">Estimand</p><p class="code">τ(x) = E[ Y(1) − Y(0) | X = x ]</p></div>
+<ul class="ulist s">
+<li><b>T</b>: guest receives the promo email or push</li>
+<li><b>Y margin</b>: 30-day net margin after discount or points cost</li>
+<li><b>Y conv</b>: completed stay within 30 days</li>
+<li><b>X</b>: ten confounders, from booking frequency and recency to loyalty tier, price sensitivity, lead time, ADR, weekend ratio, cancellations, email opens and points balance</li>
+</ul>
+</div>
+<div class="col" style="width:896px">
+<table class="t s" style="margin-top:0">
+<tr class="hd"><th style="width:25%">Assumption</th><th style="width:45%">Pipeline response</th><th style="width:30%">Evidence</th></tr>
+<tr><td>Unconfoundedness</td><td>Cross-fitted propensity and outcome nuisances, IPW weights</td><td>Max |SMD| 0.537 → 0.009</td></tr>
+<tr class="alt"><td>Overlap</td><td>Propensity clipped to [0.05, 0.95]</td><td>Observed e(x) in 0.13–0.85</td></tr>
+<tr><td>Unbiased evaluation</td><td>20% randomized holdout, T ~ Bernoulli(0.5)</td><td>2,532 test guests</td></tr>
+<tr class="alt"><td>No interference</td><td>Assumed: one guest's offer does not affect another's</td><td>Not testable in this setup</td></tr>
+</table>
+<p class="small muted">The CRM historically mailed engaged, loyal guests. Comparing mailed with unmailed guests directly would credit the promo with engagement that was already there.</p>
+</div>
+</div>
+<aside>Three of the four assumptions are checked or controlled by design. SUTVA is simply assumed: there is no interference between guests, for example no capacity effect from one guest's booking on another's availability.</aside>
+</section>

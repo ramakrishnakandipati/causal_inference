@@ -1,0 +1,29 @@
+<section id="policy" data-transition="fade">
+<p class="eyebrow">Stage 5 · Policies and decisions</p>
+<h2>From a CATE to a CRM decision</h2>
+<div class="two">
+<div class="col" style="width:700px">
+<h3>Four CRM policies</h3>
+<ul class="ulist s">
+<li><b>Mass Blast</b>: 20% off to 100% of guests</li>
+<li><b>No Promo</b>: nobody is mailed</li>
+<li><b>Propensity Targeting</b>: top P(Y = 1 | X), given the same mail budget as the causal policy</li>
+<li><b>Causal Uplift</b>: mail when τ̂ margin exceeds the $0.05 offer threshold plus the $0.05 send cost</li>
+</ul>
+<p class="small muted">Policy value is computed with the true counterfactuals, and checked with an IPW estimate from observed data only.</p>
+</div>
+<div class="col" style="width:916px">
+<table class="t xs">
+<tr class="hd"><th style="width:30%">Rule</th><th style="width:70%">Condition</th></tr>
+<tr><td><b>Sleeping Dog</b></td><td>τ̂ conversion below −0.06</td></tr>
+<tr class="alt"><td><b>Persuadable</b></td><td>τ̂ conversion ≥ 0.02 and τ̂ margin above $0.05</td></tr>
+<tr><td><b>Always-Taker</b></td><td>baseline conversion ≥ 30%</td></tr>
+<tr class="alt"><td><b>Lost Cause</b></td><td>everything else</td></tr>
+<tr><td><b>SEND 20% OFF</b></td><td>discount arm has the higher τ̂ margin, above threshold</td></tr>
+<tr class="alt"><td><b>SEND 2,000 POINTS</b></td><td>points arm wins: modelled at 80% of the discount's conversion lift, $20 liability</td></tr>
+<tr><td><b>SUPPRESS</b></td><td>Sleeping Dogs, no conversion lift, or below threshold</td></tr>
+</table>
+</div>
+</div>
+<aside>The points arm is not observed in the data. It is modelled from the estimated conversion uplift, with a $0.01 liability per point, so 2,000 points cost $20 when redeemed. Treat decisions that choose points over the discount as dependent on those assumptions.</aside>
+</section>

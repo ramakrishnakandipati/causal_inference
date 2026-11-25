@@ -1,0 +1,13 @@
+<section id="eval" data-transition="fade">
+<p class="eyebrow">Stage 5 · Evaluation</p>
+<h2>How the estimators are judged</h2>
+<div class="grid3">
+<div class="card"><h3>PEHE</h3><p class="med">√ mean((τ̂ − τ)²) against the true effect, in dollars of 30-day margin. Lower is better. Only possible because the data is synthetic.</p></div>
+<div class="card"><h3>Qini and AUUC</h3><p class="med">Rank guests by τ̂ and track cumulative incremental margin per guest as the list grows. AUUC is the area under that curve.</p></div>
+<div class="card"><h3>Normalized Qini</h3><p class="med">(AUUC − random) ÷ (oracle − random), where the oracle ranks by the true τ. A score of 1.0 is a perfect ranking.</p></div>
+<div class="card"><h3>Uplift at K</h3><p class="med">Observed treated-minus-control margin inside the top 10%, 20% and 30% of the ranking, IPW-weighted.</p></div>
+<div class="card"><h3>Two evaluation sets</h3><p class="med">The IPW-weighted test set (12,501 guests) and the unbiased randomized holdout inside it (2,532 guests).</p></div>
+<div class="card"><h3>Policy value, CI coverage</h3><p class="med">Policy value is Σ true τ over mailed guests minus $0.05 per mail. Coverage is the share of guests whose true τ falls in the 95% interval.</p></div>
+</div>
+<aside>Ranking metrics use observed outcomes only, so they are what a real team could compute. PEHE, policy value and interval coverage need the ground-truth counterfactuals and are only available here because the data is simulated.</aside>
+</section>

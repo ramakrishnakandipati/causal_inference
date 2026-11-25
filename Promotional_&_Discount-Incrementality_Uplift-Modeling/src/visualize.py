@@ -141,7 +141,7 @@ def plot_policies(cfg, logs):
     ax[0].axhline(0, color="black", lw=0.8)
     ax[0].set_xticks(range(len(pol))); ax[0].set_xticklabels(labels, fontsize=8.5)
     ax[0].set(ylabel="Net incremental margin on test set ($)", title="Net incremental margin by CRM policy")
-    ax[0].set_ylim(min(v.min() * 1.3, -1), max(v.max() * 1.35, 1))
+    ax[0].set_ylim(min(v.min() * 1.3, -1), max(v.max() * 1.7, 1))
     x = np.arange(len(pol))
     ax[1].bar(x - 0.27, pol["discount_cannibalization"], 0.27, color=C["neg"], label="Discount cannibalization ($ paid to would-have-booked guests)")
     ax[1].bar(x, pol["incremental_bookings"] * 100, 0.27, color=C["treated"], label="Incremental bookings (x100)")

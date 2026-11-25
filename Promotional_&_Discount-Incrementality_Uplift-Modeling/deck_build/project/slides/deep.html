@@ -1,0 +1,16 @@
+<section id="deep" data-transition="fade">
+<p class="eyebrow">Model comparison · Deep estimators</p>
+<h2>TARNet and DragonNet stop at epoch 6 of 16</h2>
+<div class="two">
+<div class="col" style="width:1100px">
+<img class="shot" src="/_blob/a16521f8d886fe2aae083c600b536c30" alt="Training and validation loss curves for TARNet and DragonNet on CUDA with AMP" style="width:1100px;height:459px">
+<p class="cap">Training and validation loss per epoch; dotted line marks the best validation epoch.</p>
+</div>
+<div class="col" style="width:516px;gap:22px">
+<p class="med"><b>TARNet</b>: best validation MSE 0.7015 on the standardized margin, at epoch 6. Early stopping ends the run at epoch 16.</p>
+<p class="med"><b>DragonNet</b>: same stopping points. Its loss of 2.05 adds propensity and targeted-regularization terms, so it is not comparable with TARNet's.</p>
+<p class="med">Test PEHE is $15.14 for TARNet and $15.18 for DragonNet: the extra propensity head and T-Reg add no measurable benefit here.</p>
+</div>
+</div>
+<aside>Both networks overfit quickly on 30,000 training rows, which is why early stopping with patience 10 selects epoch 6. The difference between the two on test PEHE is 0.04, well inside what a different seed could change.</aside>
+</section>

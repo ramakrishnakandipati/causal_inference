@@ -1,0 +1,32 @@
+<section id="uncertainty" data-transition="fade">
+<p class="eyebrow">Model comparison · Uncertainty</p>
+<h2>Intervals cover 8–71% of true effects, not 95%</h2>
+<div class="row" style="margin-top:26px;gap:26px">
+<div class="col" style="gap:14px;width:210px">
+<p class="k" style="height:34px">Estimator</p>
+<p class="lab">LinearDML</p><p class="lab">TARNet</p><p class="lab">CausalForestDML</p><p class="lab">DragonNet</p><p class="lab">T-Learner</p><p class="lab">R-Learner</p><p class="lab">NonParamDML</p><p class="lab">DR-Learner</p><p class="lab">X-Learner</p><p class="lab">S-Learner</p><p class="lab">UpliftRF</p>
+</div>
+<div class="col" style="gap:14px;width:690px">
+<p class="k" style="height:34px">Share of true τ inside the 95% interval (track = 95% target)</p>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:424px"></div></div><p class="val">70.7%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:303px"></div></div><p class="val">50.5%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:276px"></div></div><p class="val">46.0%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:275px"></div></div><p class="val">45.9%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:233px"></div></div><p class="val">38.9%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:232px"></div></div><p class="val">38.6%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:207px"></div></div><p class="val">34.5%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:186px"></div></div><p class="val">31.0%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar" style="width:147px"></div></div><p class="val">24.5%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar warn" style="width:80px"></div></div><p class="val">13.4%</p></div>
+<div class="rowb"><div class="rowb" style="width:570px;background:#E4E0D4;border-radius:4px"><div class="bar warn" style="width:50px"></div></div><p class="val">8.4%</p></div>
+</div>
+<div class="col" style="gap:14px;width:130px">
+<p class="k" style="height:34px">Width, $</p>
+<p class="val">19.5</p><p class="val">8.9</p><p class="val">11.4</p><p class="val">8.2</p><p class="val">11.1</p><p class="val">10.3</p><p class="val">9.8</p><p class="val">9.5</p><p class="val">8.3</p><p class="val">5.2</p><p class="val">3.9</p>
+</div>
+<div class="card" style="width:470px;align-self:flex-start"><h3>Read as relative uncertainty</h3>
+<p class="small">Both the native intervals (CausalForestDML, LinearDML) and the half-sample replicas capture sampling variance but miss regularization bias.</p>
+<p class="small">Wider is not safer: LinearDML has the widest intervals and the best coverage, still far from 95%.</p></div>
+</div>
+<aside>Coverage is the share of the 12,501 test guests whose true conditional effect lies inside the model's 95% interval. Only the synthetic data can measure this. The practical advice is to use intervals to compare guests with each other, for example to flag decisions whose interval straddles zero, and not to read them as calibrated probabilities.</aside>
+</section>

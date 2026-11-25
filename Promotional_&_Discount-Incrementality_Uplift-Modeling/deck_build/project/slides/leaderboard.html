@@ -1,0 +1,21 @@
+<section id="leaderboard" data-transition="fade">
+<p class="eyebrow">Model comparison · Leaderboard</p>
+<h2>All eleven estimators on the test set</h2>
+<table class="t xs" style="margin-top:22px">
+<tr class="hd"><th style="width:7%">Rank</th><th style="width:21%">Estimator</th><th style="width:14%;text-align:right">Qini (IPW)</th><th style="width:14%;text-align:right">Qini (RCT)</th><th style="width:14%;text-align:right">AUUC (IPW)</th><th style="width:12%;text-align:right">PEHE ($)</th><th style="width:10%;text-align:right">Corr. τ</th><th style="width:8%">Device</th></tr>
+<tr class="hi"><td>1</td><td><b>CausalForestDML</b></td><td style="text-align:right">0.952</td><td style="text-align:right">0.949</td><td style="text-align:right">−0.430</td><td style="text-align:right">14.94</td><td style="text-align:right">0.861</td><td>GPU</td></tr>
+<tr><td>2</td><td>TARNet</td><td style="text-align:right">0.940</td><td style="text-align:right">0.920</td><td style="text-align:right">−0.521</td><td style="text-align:right">15.14</td><td style="text-align:right">0.858</td><td>GPU</td></tr>
+<tr class="alt"><td>3</td><td>DragonNet</td><td style="text-align:right">0.941</td><td style="text-align:right">0.919</td><td style="text-align:right">−0.515</td><td style="text-align:right">15.18</td><td style="text-align:right">0.858</td><td>GPU</td></tr>
+<tr><td>4</td><td>X-Learner</td><td style="text-align:right">0.951</td><td style="text-align:right">0.935</td><td style="text-align:right">−0.441</td><td style="text-align:right">15.20</td><td style="text-align:right">0.856</td><td>GPU</td></tr>
+<tr class="alt"><td>5</td><td>R-Learner</td><td style="text-align:right">0.944</td><td style="text-align:right">0.934</td><td style="text-align:right">−0.495</td><td style="text-align:right">15.57</td><td style="text-align:right">0.848</td><td>GPU</td></tr>
+<tr><td>6</td><td>T-Learner</td><td style="text-align:right">0.942</td><td style="text-align:right">0.926</td><td style="text-align:right">−0.506</td><td style="text-align:right">15.62</td><td style="text-align:right">0.848</td><td>GPU</td></tr>
+<tr class="alt"><td>7</td><td>LinearDML</td><td style="text-align:right">0.930</td><td style="text-align:right">0.894</td><td style="text-align:right">−0.597</td><td style="text-align:right">15.75</td><td style="text-align:right">0.845</td><td>CPU</td></tr>
+<tr><td>8</td><td>NonParamDML</td><td style="text-align:right">0.942</td><td style="text-align:right">0.926</td><td style="text-align:right">−0.503</td><td style="text-align:right">15.77</td><td style="text-align:right">0.844</td><td>GPU</td></tr>
+<tr class="alt"><td>9</td><td>DR-Learner</td><td style="text-align:right">0.934</td><td style="text-align:right">0.915</td><td style="text-align:right">−0.561</td><td style="text-align:right">15.79</td><td style="text-align:right">0.843</td><td>GPU</td></tr>
+<tr><td>10</td><td>S-Learner</td><td style="text-align:right">0.940</td><td style="text-align:right">0.918</td><td style="text-align:right">−0.518</td><td style="text-align:right">16.15</td><td style="text-align:right">0.837</td><td>GPU</td></tr>
+<tr class="alt"><td>11</td><td>UpliftRF</td><td style="text-align:right">0.907</td><td style="text-align:right">0.880</td><td style="text-align:right">−0.760</td><td style="text-align:right">17.49</td><td style="text-align:right">0.845</td><td>CPU</td></tr>
+<tr><td>–</td><td>Constant effect (ATE)</td><td style="text-align:right">–</td><td style="text-align:right">–</td><td style="text-align:right">–</td><td style="text-align:right">29.29</td><td style="text-align:right">–</td><td>–</td></tr>
+</table>
+<p class="cap" style="margin-top:14px">Ranked by PEHE. CausalForestDML is first on every column. AUUC is negative for all models because mailing everyone loses margin on average. Corr. τ is the correlation of τ̂ with the true effect.</p>
+<aside>Qini (IPW) uses the full test set with inverse-propensity weights; Qini (RCT) uses only the 2,532 randomized-holdout guests, where no weighting is needed. The two agree on the order of the top estimators. The nine best PEHE values sit within 1.2 dollars of each other, and with one seed the gaps between ranks 2 and 9 have not been tested for significance.</aside>
+</section>

@@ -1,0 +1,13 @@
+<section id="overall" data-transition="fade">
+<p class="eyebrow">Metrics · Overall</p>
+<h2>Overall scoreboard</h2>
+<div class="grid3">
+<div class="card"><p class="k">Data</p><p class="med"><b>50,000</b> guests, 43.7% mailed, 20.3% randomized holdout</p><p class="med">True ATE: <b class="neg">−$13.64</b> margin, <b class="pos">+7.0 pp</b> conversion</p></div>
+<div class="card"><p class="k">Causal diagnostics</p><p class="med">Overlap e(x): <b>0.13–0.85</b></p><p class="med">Max |SMD|: <b>0.537 → 0.009</b> after IPW</p><p class="med">Split 30,000 / 7,499 / 12,501</p></div>
+<div class="card"><p class="k">Estimators</p><p class="med"><b>11 / 11</b> fitted in 82.7 s</p><p class="med">Best PEHE <b>$14.94</b> vs $29.29 constant (−49%)</p><p class="med">Best Qini <b>0.952</b> IPW, 0.949 RCT</p></div>
+<div class="card"><p class="k">Persona recovery</p><p class="med">Persuadable <b>96%</b> · Always-Taker <b>96%</b></p><p class="med">Lost Cause <b>94%</b> · Sleeping Dog <b>98%</b></p><p class="med">97% of harmful guests left alone</p></div>
+<div class="card"><p class="k">Policy value, test set</p><p class="med">Causal <b class="pos">+$28.9k</b> vs mass blast <b class="neg">−$165.7k</b></p><p class="med">Propensity <b class="neg">−$127.4k</b>, same budget</p><p class="med">Wasted offers $28.9k vs $224.9k (−87%)</p></div>
+<div class="card"><p class="k">Serving and quality</p><p class="med"><b>5</b> API endpoints, ≈0.1 ms per guest</p><p class="med">UI decisions equal API: <b>4 / 4</b></p><p class="med">3 metric unit tests pass</p></div>
+</div>
+<aside>This is the pipeline-level view: one number set for the whole project. The next two slides break the same metrics down by stage and by flow. The 49% PEHE reduction compares the best estimator with a constant-effect predictor, whose PEHE equals the standard deviation of the true effect on the test set (29.29).</aside>
+</section>

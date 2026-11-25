@@ -1,0 +1,25 @@
+<section id="pipeline" data-transition="fade">
+<p class="eyebrow">Documentation · End-to-end flow</p>
+<h2>Seven stages from raw guests to a CRM decision</h2>
+<div class="row" style="margin-top:28px;align-items:center;gap:14px">
+<p class="chip c-ink">① Data</p><p class="muted">→</p>
+<p class="chip c-ink">② Features</p><p class="muted">→</p>
+<p class="chip c-ink">③ Tune</p><p class="muted">→</p>
+<p class="chip c-ink">④ Train</p><p class="muted">→</p>
+<p class="chip c-ink">⑤ Evaluate</p><p class="muted">→</p>
+<p class="chip c-ink">⑥ Visualize</p><p class="muted">→</p>
+<p class="chip c-blue">⑦ Serve</p>
+</div>
+<table class="t s" style="margin-top:28px">
+<tr class="hd"><th style="width:11%">Stage</th><th style="width:27%">Module</th><th style="width:40%">What happens</th><th style="width:22%">Output</th></tr>
+<tr><td>1 Data</td><td>data/synthetic_generator.py</td><td>50,000 guests, 5 personas, confounded T + RCT holdout</td><td>hospitality_uplift.parquet</td></tr>
+<tr class="alt"><td>2 Features</td><td>src/features.py</td><td>Split 60/15/25, cross-fitted propensity, IPW, SMD</td><td>train / val / test, e(x)</td></tr>
+<tr><td>3 Tune</td><td>src/train.py (Optuna)</td><td>12 trials on validation R-loss</td><td>best XGBoost params</td></tr>
+<tr class="alt"><td>4 Train</td><td>src/models.py, train.py</td><td>Fit 11 estimators with CIs, time latency</td><td>outputs/models/*.joblib</td></tr>
+<tr><td>5 Evaluate</td><td>src/metrics.py, evaluate.py</td><td>Qini, AUUC, PEHE, policies, personas, SHAP</td><td>outputs/logs/*.csv, *.json</td></tr>
+<tr class="alt"><td>6 Visualize</td><td>src/visualize.py</td><td>Six 300-DPI diagnostic plots</td><td>outputs/plots/*.png</td></tr>
+<tr><td>7 Serve</td><td>src/serving.py, api/, ui/</td><td>FastAPI + Streamlit, Playwright screenshots</td><td>outputs/screenshots/</td></tr>
+</table>
+<p class="small muted" style="margin-top:28px">config/config.yaml drives every stage. <b>python main.py --stage all</b> runs them in order; each stage can also run alone.</p>
+<aside>Each stage writes artifacts that the next one reads, so any stage can be re-run without redoing the earlier ones. Evaluation reads the saved predictions and test set; serving reads the saved models.</aside>
+</section>

@@ -1,0 +1,54 @@
+<section id="glance" data-transition="fade">
+<p class="eyebrow">Model comparison · At a glance</p>
+<h2>Close at the top, UpliftRF behind</h2>
+<div class="row" style="margin-top:26px;gap:30px">
+<div class="col" style="gap:14px;width:210px">
+<p class="k" style="height:34px">Estimator</p>
+<p class="lab">CausalForestDML</p><p class="lab">TARNet</p><p class="lab">DragonNet</p><p class="lab">X-Learner</p><p class="lab">R-Learner</p><p class="lab">T-Learner</p><p class="lab">LinearDML</p><p class="lab">NonParamDML</p><p class="lab">DR-Learner</p><p class="lab">S-Learner</p><p class="lab">UpliftRF</p>
+</div>
+<div class="col" style="gap:14px;width:404px">
+<p class="k" style="height:34px">PEHE, $ (lower is better)</p>
+<div class="rowb"><div class="bar best" style="width:249px"></div><p class="val">14.94</p></div>
+<div class="rowb"><div class="bar" style="width:252px"></div><p class="val">15.14</p></div>
+<div class="rowb"><div class="bar" style="width:253px"></div><p class="val">15.18</p></div>
+<div class="rowb"><div class="bar" style="width:253px"></div><p class="val">15.20</p></div>
+<div class="rowb"><div class="bar" style="width:260px"></div><p class="val">15.57</p></div>
+<div class="rowb"><div class="bar" style="width:260px"></div><p class="val">15.62</p></div>
+<div class="rowb"><div class="bar" style="width:263px"></div><p class="val">15.75</p></div>
+<div class="rowb"><div class="bar" style="width:263px"></div><p class="val">15.77</p></div>
+<div class="rowb"><div class="bar" style="width:263px"></div><p class="val">15.79</p></div>
+<div class="rowb"><div class="bar" style="width:269px"></div><p class="val">16.15</p></div>
+<div class="rowb"><div class="bar warn" style="width:292px"></div><p class="val">17.49</p></div>
+</div>
+<div class="col" style="gap:14px;width:404px">
+<p class="k" style="height:34px">Normalized Qini, IPW (higher)</p>
+<div class="rowb"><div class="bar best" style="width:286px"></div><p class="val">0.952</p></div>
+<div class="rowb"><div class="bar" style="width:282px"></div><p class="val">0.940</p></div>
+<div class="rowb"><div class="bar" style="width:282px"></div><p class="val">0.941</p></div>
+<div class="rowb"><div class="bar" style="width:285px"></div><p class="val">0.951</p></div>
+<div class="rowb"><div class="bar" style="width:283px"></div><p class="val">0.944</p></div>
+<div class="rowb"><div class="bar" style="width:283px"></div><p class="val">0.942</p></div>
+<div class="rowb"><div class="bar" style="width:279px"></div><p class="val">0.930</p></div>
+<div class="rowb"><div class="bar" style="width:283px"></div><p class="val">0.942</p></div>
+<div class="rowb"><div class="bar" style="width:280px"></div><p class="val">0.934</p></div>
+<div class="rowb"><div class="bar" style="width:282px"></div><p class="val">0.940</p></div>
+<div class="rowb"><div class="bar warn" style="width:272px"></div><p class="val">0.907</p></div>
+</div>
+<div class="col" style="gap:14px;width:404px">
+<p class="k" style="height:34px">Uplift at top 20%, $ (higher)</p>
+<div class="rowb"><div class="bar" style="width:244px"></div><p class="val">11.38</p></div>
+<div class="rowb"><div class="bar best" style="width:263px"></div><p class="val">12.25</p></div>
+<div class="rowb"><div class="bar" style="width:255px"></div><p class="val">11.91</p></div>
+<div class="rowb"><div class="bar" style="width:247px"></div><p class="val">11.53</p></div>
+<div class="rowb"><div class="bar" style="width:246px"></div><p class="val">11.50</p></div>
+<div class="rowb"><div class="bar" style="width:230px"></div><p class="val">10.71</p></div>
+<div class="rowb"><div class="bar" style="width:210px"></div><p class="val">9.78</p></div>
+<div class="rowb"><div class="bar" style="width:243px"></div><p class="val">11.34</p></div>
+<div class="rowb"><div class="bar" style="width:253px"></div><p class="val">11.79</p></div>
+<div class="rowb"><div class="bar" style="width:228px"></div><p class="val">10.66</p></div>
+<div class="rowb"><div class="bar warn" style="width:119px"></div><p class="val">5.53</p></div>
+</div>
+</div>
+<p class="cap" style="margin-top:20px">Bars start at zero. Green marks the best value in a column, orange the worst. Rows follow the PEHE ranking. Oracle uplift in the top 20% is $11.98 per guest.</p>
+<aside>Zero-based bars are deliberate: they show how close the estimators are. Nine of eleven sit within about 7% of each other on PEHE and within 0.02 on normalized Qini. TARNet has the highest uplift in the top 20% even though it ranks second on PEHE, so the metrics do not always agree.</aside>
+</section>

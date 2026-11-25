@@ -1,0 +1,21 @@
+<section id="s5a" data-transition="fade">
+<p class="eyebrow">Scenario 5 · Campaign, part 1</p>
+<h2>Score a 2,000-guest list and decide per guest</h2>
+<div class="two">
+<div class="col" style="width:880px;gap:16px">
+<img class="shot" src="/_blob/3bb1bc82029dcb60c91aa00b336504b0" alt="Batch scoring step: 2,000 guests scored, decision mix of suppress, points and discount" style="width:860px;height:330px">
+<img class="shot" src="/_blob/005f7170fb1e7b6c3e36d7230c919cba" alt="Targeting quality step: assigned persona by true persona confusion matrix" style="width:860px;height:243px">
+</div>
+<div class="col" style="width:736px;gap:20px">
+<p class="chip c-blue">Batch scoring and targeting quality</p>
+<ul class="ulist s">
+<li>2,000 random held-out guests, threshold $0.05</li>
+<li>Scored in about 0.1 ms per guest: 1,036 suppressed, 956 sent points, 8 sent the discount</li>
+<li>Right persona for 96% of Always-Takers, 94% of Lost Causes, 96% of Persuadables, 99% of Sleeping Dogs</li>
+<li>97% of Always-Takers and Sleeping Dogs left alone</li>
+<li>The mailed list is 44% Persuadable and 38% Neutral</li>
+</ul>
+</div>
+</div>
+<aside>The Neutral guests are the main source of imperfection: they have a small positive conversion effect, so the model mails many of them with the points offer. Their margin effect under the discount is slightly negative, but the modelled points arm is positive for them.</aside>
+</section>

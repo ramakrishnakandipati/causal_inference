@@ -1,0 +1,21 @@
+<section id="features" data-transition="fade">
+<p class="eyebrow">Stage 2 · Features and propensity</p>
+<h2>Split, propensity model and balance check</h2>
+<div class="two">
+<div class="col" style="width:660px">
+<ul class="ulist s">
+<li>Stratified split by treatment × holdout: <b>30,000</b> train, <b>7,499</b> validation, <b>12,501</b> test</li>
+<li>log1p and standardization for the neural nets</li>
+<li>5-fold cross-fitted GBM propensity: out-of-fold e(x) on the training set</li>
+<li>Stabilized, clipped inverse-propensity weights</li>
+<li>Overlap: e(x) spans <b>0.13–0.85</b>, nobody below 0.1 or above 0.9</li>
+<li>Max |SMD| falls from <b>0.537</b> (email opens) to <b>0.009</b> after IPW</li>
+</ul>
+</div>
+<div class="col" style="width:956px">
+<img class="shot" src="/_blob/0b2dd57ccb9fc2e074efdf0923449213" alt="Propensity overlap histogram for treated and control guests, and covariate standardized mean differences before and after IPW" style="width:950px;height:438px">
+<p class="cap">Left: propensity overlap, treated vs control. Right: |SMD| per covariate, unweighted vs IPW-weighted.</p>
+</div>
+</div>
+<aside>The balance check is the main evidence that the observational selection bias is handled: before weighting, treated and control guests differ by up to half a standard deviation on email open rate, tier and recency; after weighting every covariate is within 0.01.</aside>
+</section>

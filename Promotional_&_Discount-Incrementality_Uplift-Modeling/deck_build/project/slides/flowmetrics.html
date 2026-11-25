@@ -1,0 +1,18 @@
+<section id="flowmetrics" data-transition="fade">
+<p class="eyebrow">Metrics · Flow level</p>
+<h2>Five scenarios, one set of metrics</h2>
+<table class="t xs" style="margin-top:22px">
+<tr class="hd"><th style="width:19%">Flow</th><th style="width:6%">e(x)</th><th style="width:19%">τ̂ (95% CI)</th><th style="width:9%">True τ</th><th style="width:9%">In CI?</th><th style="width:9%">Mail votes</th><th style="width:15%">Decision</th><th style="width:14%">Gain / 1,000</th></tr>
+<tr><td><b class="c-pers-t">1 Persuadable</b></td><td>0.49</td><td>+14.59 [11.8, 17.3]</td><td>+9.06</td><td>No</td><td>11 / 11</td><td>SEND 2,000 POINTS</td><td class="pos">+$13,055</td></tr>
+<tr class="alt"><td><b class="c-at-t">2 Always-Taker</b></td><td>0.64</td><td>−65.9 [−76.8, −55.0]</td><td>−76.41</td><td>Yes</td><td>0 / 11</td><td>SUPPRESS</td><td class="pos">+$76,459</td></tr>
+<tr><td><b class="c-lc-t">3 Lost Cause</b></td><td>0.19</td><td>−1.73 [−2.6, −0.8]</td><td>−0.70</td><td>No</td><td>3 / 11</td><td>SUPPRESS</td><td class="pos">+$745</td></tr>
+<tr class="alt"><td><b class="c-sd-t">4 Sleeping Dog</b></td><td>0.44</td><td>−29.4 [−36.7, −22.1]</td><td>−16.15</td><td>No</td><td>0 / 11</td><td>SUPPRESS</td><td class="pos">+$16,151</td></tr>
+<tr><td><b>5 Campaign, 2,000</b></td><td>–</td><td>964 mailed (48%)</td><td>–</td><td>–</td><td>–</td><td>956 pts · 8 disc.</td><td class="pos">+$44,104</td></tr>
+</table>
+<div class="cards" style="margin-top:26px">
+<div class="card"><h3>Guest flows 1–4</h3><p class="med">Persona matches ground truth in 4 of 4. All four decisions are the right call. The headline 95% interval contains the true τ in 1 of 4.</p></div>
+<div class="card"><h3>Campaign flow 5</h3><p class="med">+$14.2k vs −$29.9k for mass blast and −$23.4k for propensity targeting. Wasted offers fall from $40.3k to $2.0k.</p></div>
+</div>
+<p class="cap" style="margin-top:14px">Headline estimator: CausalForestDML. Gain per 1,000 is the model's decision against mass-blasting 20% off, using true counterfactuals; the points arm is modelled.</p>
+<aside>Mail votes counts how many of the eleven estimators put τ̂ above the $0.05 threshold. In flow 5 the gain of $44,104 is the causal policy's +$14,197 minus mass blast's −$29,907 on the 2,000-guest sample, and 97% of Always-Takers and Sleeping Dogs are left alone.</aside>
+</section>

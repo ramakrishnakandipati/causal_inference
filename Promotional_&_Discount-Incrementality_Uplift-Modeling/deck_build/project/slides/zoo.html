@@ -1,0 +1,20 @@
+<section id="zoo" data-transition="fade">
+<p class="eyebrow">Stage 4 · The estimator suite</p>
+<h2>Eleven estimators across four families</h2>
+<table class="t xs" style="margin-top:24px">
+<tr class="hd"><th style="width:17%">Estimator</th><th style="width:10%">Family</th><th style="width:46%">Idea</th><th style="width:15%">Device</th><th style="width:12%">95% CI</th></tr>
+<tr><td><b>S-Learner</b></td><td>Meta</td><td>One model μ(x, t); τ̂ = μ(x, 1) − μ(x, 0)</td><td>GPU</td><td>replicas</td></tr>
+<tr class="alt"><td><b>T-Learner</b></td><td>Meta</td><td>Separate models for treated and control guests</td><td>GPU</td><td>replicas</td></tr>
+<tr><td><b>X-Learner</b></td><td>Meta</td><td>Impute individual effects, blend by propensity e(x)</td><td>GPU</td><td>replicas</td></tr>
+<tr class="alt"><td><b>R-Learner</b></td><td>Meta</td><td>Residual-on-residual weighted regression</td><td>GPU</td><td>replicas</td></tr>
+<tr><td><b>DR-Learner</b></td><td>Meta</td><td>Doubly robust AIPW pseudo-outcomes</td><td>GPU</td><td>replicas</td></tr>
+<tr class="alt"><td><b>LinearDML</b></td><td>DML</td><td>Orthogonalized, quadratic features, linear final stage</td><td>CPU</td><td>native</td></tr>
+<tr><td><b>NonParamDML</b></td><td>DML</td><td>Non-parametric final stage on residuals</td><td>GPU</td><td>replicas</td></tr>
+<tr class="alt"><td><b>CausalForestDML</b></td><td>Tree</td><td>Honest causal forest on residualized Y and T</td><td>GPU nuisance</td><td>native</td></tr>
+<tr><td><b>UpliftRF</b></td><td>Tree</td><td>Divergence splits (CTS) on conversion, mapped to margin</td><td>CPU</td><td>replicas</td></tr>
+<tr class="alt"><td><b>TARNet</b></td><td>Deep</td><td>Shared representation Φ(x) with two outcome heads</td><td>CUDA + AMP</td><td>replicas</td></tr>
+<tr><td><b>DragonNet</b></td><td>Deep</td><td>Adds a propensity head and targeted regularization</td><td>CUDA + AMP</td><td>replicas</td></tr>
+</table>
+<p class="cap" style="margin-top:18px">replicas = interval from 3–8 half-sample refits; native = produced by the estimator itself. S, T, X and R are hand-written; DR and the DML family come from econml, UpliftRF from causalml.</p>
+<aside>All eleven share one interface: fit on covariates, treatment and outcome; predict a CATE; optionally return an interval. That lets training, evaluation, the API and the app loop over the same registry.</aside>
+</section>

@@ -1,0 +1,23 @@
+<section id="run" class="dark" data-transition="fade">
+<p class="eyebrow">Documentation · Run and extend</p>
+<h2>How to run it, and where to go next</h2>
+<div class="two">
+<div class="col" style="width:760px;gap:22px">
+<p class="code" style="background:#0C192B;color:#D9E2EE">pip install -r requirements.txt<br>python main.py --stage all<br>python main.py --stage serve-api<br>python main.py --stage serve-ui<br>python scripts/capture_screenshots.py flows<br>python main.py --stage test</p>
+<p class="small muted">Stages: data, train, evaluate, plots, screenshots.</p>
+<p class="small muted">Smoke run on 15,000 guests: add --quick. CPU only: add --no-gpu.</p>
+<p class="code" style="background:#0C192B;color:#D9E2EE">config/ data/ src/ api/ ui/ scripts/ tests/<br>outputs/ models · plots · logs · screenshots</p>
+</div>
+<div class="col" style="width:856px;gap:20px">
+<div class="card"><h3>Suggested next steps</h3>
+<ul class="ulist s">
+<li>Re-run on real CRM data with a randomized holdout for evaluation</li>
+<li>Test the points offer in a live experiment to replace the modelled arm</li>
+<li>Repeat across seeds and add significance tests between estimators</li>
+<li>Monitor propensity drift and the calibration of the intervals over time</li>
+</ul></div>
+<p class="small muted">Suggestions only: none of these has been done in this project.</p>
+</div>
+</div>
+<aside>The repository is organized so that each stage can be re-run from the artifacts of the earlier ones. The README documents every stage, embeds the plots and screenshots, and lists the limitations.</aside>
+</section>

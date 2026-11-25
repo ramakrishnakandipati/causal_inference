@@ -1,0 +1,37 @@
+<section id="train" data-transition="fade">
+<p class="eyebrow">Stages 3 and 4 · Tuning and training</p>
+<h2>Tuned once, trained on the GPU</h2>
+<div class="two">
+<div class="col" style="width:700px">
+<div class="card"><h3>Optuna tuning</h3>
+<ul class="ulist s">
+<li>Objective: validation R-loss of a GPU XGBoost T-learner</li>
+<li>12 TPE trials in 7 s</li>
+<li>Best R-loss 2,153.7: depth 3, lr 0.0134, 400 trees</li>
+</ul></div>
+<div class="card"><h3>Training</h3>
+<ul class="ulist s">
+<li>Five-fold cross-fitted nuisances where needed</li>
+<li>Nets: AMP and early stopping (patience 10)</li>
+<li>One failing estimator cannot stop the run</li>
+</ul></div>
+</div>
+<div class="col" style="width:916px">
+<table class="t xs">
+<tr class="hd"><th style="width:60%">Component</th><th style="width:40%">Runs on</th></tr>
+<tr><td>XGBoost base learners and nuisance models</td><td>CUDA, hist</td></tr>
+<tr class="alt"><td>TARNet, DragonNet</td><td>PyTorch CUDA + AMP</td></tr>
+<tr><td>CatBoost (ablation)</td><td>GPU</td></tr>
+<tr class="alt"><td>LightGBM (ablation)</td><td>CPU: pip wheel has no CUDA</td></tr>
+<tr><td>LinearDML, UpliftRF, forest splits</td><td>CPU</td></tr>
+<tr class="alt"><td>Serving (API and app)</td><td>CPU</td></tr>
+</table>
+<div class="row" style="margin-top:12px">
+<div class="stat" style="flex:1"><p class="num" style="font-size:56px">11 / 11</p><p class="k">estimators fitted</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:56px">82.7 s</p><p class="k">total fit time</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:56px">3090</p><p class="k">RTX, 24 GB</p></div>
+</div>
+</div>
+</div>
+<aside>The 82.7 seconds is the sum of the per-estimator fit times, including the subsample refits used for confidence intervals. The whole training stage, with the base-learner ablation, took about two minutes.</aside>
+</section>

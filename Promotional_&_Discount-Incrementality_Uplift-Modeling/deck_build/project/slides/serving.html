@@ -1,0 +1,22 @@
+<section id="serving" data-transition="fade">
+<p class="eyebrow">Stage 7 · Serving</p>
+<h2>One scorer behind the API and the app</h2>
+<div class="row" style="margin-top:32px;align-items:stretch;gap:20px">
+<div class="card" style="width:430px"><h3>Saved artifacts</h3><p class="small">11 estimators, conversion companion, baseline-conversion model, propensity model, and 11 SHAP surrogates, all loaded once at start-up.</p></div>
+<p class="muted" style="align-self:center;font-size:40px">→</p>
+<div class="card" style="width:430px;border-color:#0B6BB5"><h3>Scorer</h3><p class="small">src/serving.py. CPU inference. Returns τ̂, 95% CI, persona, decision and propensity for one guest or a batch.</p></div>
+<p class="muted" style="align-self:center;font-size:40px">→</p>
+<div class="col" style="width:520px">
+<div class="card"><h3>FastAPI</h3><p class="small">GET /health, /models, /presets · POST /score, /score/batch</p></div>
+<div class="card"><h3>Streamlit</h3><p class="small">Simulator · Benchmark · ROI · End-to-End Flows</p></div>
+</div>
+</div>
+<div class="row" style="margin-top:44px">
+<div class="stat" style="flex:1"><p class="num" style="font-size:60px">≈0.1 ms</p><p class="k">per guest in a 2,000-guest batch (CPU)</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:60px">4 / 4</p><p class="k">UI decisions equal API decisions</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:60px">5</p><p class="k">API endpoints</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:60px">≈4 s</p><p class="k">to load all models</p></div>
+</div>
+<p class="small muted" style="margin-top:36px">Serving runs on CPU: scoring on the GPU from several server threads crashed Streamlit during development.</p>
+<aside>The same Scorer class is imported by the FastAPI app, the Streamlit app and the screenshot script, which is why the UI and the API always agree. The screenshot script calls the API for each guest flow and checks that the persona and decision shown in the UI match the response.</aside>
+</section>

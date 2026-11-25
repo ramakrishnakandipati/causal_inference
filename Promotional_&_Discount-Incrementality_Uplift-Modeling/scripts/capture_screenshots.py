@@ -68,6 +68,32 @@ def capture_flows(pg, out, ui_url, api_url):
     print("flows ->", fdir, "| UI==API:", all(v["ui_shows_same_decision"] and v["ui_shows_same_quadrant"] for v in checks.values()))
 
 
+def capture_hires(browser, out, ui_url):
+    """Crisp 2x crops for presentations: the per-estimator chart and the decision banner of each guest flow, plus campaign steps 2-4."""
+    from src.flows import FLOWS
+    fdir = out / "flows" / "hires"; fdir.mkdir(parents=True, exist_ok=True)
+    ctx = browser.new_context(viewport={"width": 1500, "height": 5200}, device_scale_factor=2)
+    pg = ctx.new_page()
+    pg.goto(ui_url)
+    pg.get_by_role("button", name="Example 1").wait_for(timeout=180000)
+    idle(pg)
+    pg.add_style_tag(content="header[data-testid=stHeader]{display:none !important}")
+    pg.get_by_role("tab", name="End-to-End Flows").click(); pg.wait_for_timeout(2500); idle(pg)
+    for f in FLOWS:
+        pg.locator("[data-testid=stRadio]").get_by_text(f["short"], exact=True).click()
+        pg.wait_for_timeout(2000); idle(pg)
+        fid = f["id"]
+        pg.locator(f".st-key-{fid}_full").wait_for(timeout=60000)
+        if f["kind"] == "guest":
+            pg.locator(f".st-key-{fid}_step3 img").first.screenshot(path=fdir / f"{fid}_{f['slug']}_chart.png")
+            pg.locator(f".st-key-{fid}_step4").screenshot(path=fdir / f"{fid}_{f['slug']}_decision.png")
+        else:
+            for k in (2, 3, 4):
+                pg.locator(f".st-key-{fid}_step{k}").screenshot(path=fdir / f"{fid}_{f['slug']}_step{k}.png")
+    ctx.close()
+    print("hires ->", fdir)
+
+
 def main(only: str = "all"):
     out = resolve(load_config()["paths"]["screenshots"]); out.mkdir(parents=True, exist_ok=True)
     flags = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
@@ -83,6 +109,10 @@ def main(only: str = "all"):
         with sync_playwright() as p:
             b = p.chromium.launch()
             pg = b.new_page(viewport={"width": 1500, "height": 1000})
+            if only == "hires":
+                capture_hires(b, out, f"http://localhost:{UI}")
+                b.close()
+                return
             if only == "flows":
                 capture_flows(pg, out, f"http://localhost:{UI}", f"http://localhost:{API}")
                 b.close()
@@ -99,7 +129,9 @@ def main(only: str = "all"):
             pg.set_content(html); pg.screenshot(path=out / "api_02_score_responses.png", full_page=True)
             (out / "preset_decisions.json").write_text(json.dumps({n: {k: r[k] for k in ("quadrant", "decision", "tau_margin_hat")}
                                                                     for n, r in results.items()}, indent=2))
-            pg.goto(f"http://localhost:{UI}"); idle(pg)
+            pg.goto(f"http://localhost:{UI}")
+            pg.get_by_role("button", name="Example 1").wait_for(timeout=180000)   # first load builds the scorer; wait for real content
+            idle(pg)
             pg.screenshot(path=out / "ui_01_simulator_default.png", full_page=True)
             for i, name in enumerate(presets, 1):
                 pg.get_by_role("button", name=f"Example {i}").click(); pg.wait_for_timeout(1500); idle(pg)
@@ -108,7 +140,8 @@ def main(only: str = "all"):
             pg.screenshot(path=out / "ui_03_benchmark.png", full_page=True)
             pg.get_by_role("tab", name="Campaign ROI & Policy Simulator").click(); pg.wait_for_timeout(3000); idle(pg)
             pg.screenshot(path=out / "ui_04_roi.png", full_page=True)
-            capture_flows(pg, out, f"http://localhost:{UI}", f"http://localhost:{API}")
+            if only != "ui":
+                capture_flows(pg, out, f"http://localhost:{UI}", f"http://localhost:{API}")
             b.close()
         print("screenshots ->", out)
     finally:

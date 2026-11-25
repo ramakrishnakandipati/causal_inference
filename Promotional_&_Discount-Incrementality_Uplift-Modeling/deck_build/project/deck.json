@@ -1,0 +1,27 @@
+{
+  "v": 5,
+  "createdOnFiles": {"v": 1, "at": "2026-11-25T15:30:00Z"},
+  "lists": "css",
+  "format": {"v": 1, "shared": ["project/deck.css"]},
+  "title": "Hospitality Promotional Uplift (CATE) — End-to-End",
+  "order": [
+    "cover", "problem", "summary",
+    "pipeline", "causal", "data", "personas", "features", "train", "zoo", "eval", "policy", "serving",
+    "leaderboard", "qini", "glance", "upliftk", "cost", "deep", "uncertainty", "ablation", "takeaways",
+    "overall", "stages", "flowmetrics", "matrixguests", "matrixcampaign",
+    "story", "anatomy", "s1", "s2", "s3", "s4", "s5a", "s5b", "tools", "api",
+    "impact", "limits", "run"
+  ],
+  "sections": {
+    "s1": {"description": "The business problem and the headline result.", "start": "cover"},
+    "s2": {"description": "Pipeline documentation: causal framing, data, features, training, evaluation and serving.", "start": "pipeline"},
+    "s3": {"description": "All 11 estimators compared on ranking, accuracy, speed and uncertainty.", "start": "leaderboard"},
+    "s4": {"description": "Metrics at overall, stage and flow level, including every model across the flows.", "start": "overall"},
+    "s5": {"description": "Five scenarios told with Streamlit screenshots.", "start": "story"},
+    "s6": {"description": "Business impact, limitations and how to run it.", "start": "impact"}
+  },
+  "faces": {
+    "space-grotesk": {"family": "Space Grotesk", "href": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"},
+    "inter": {"family": "Inter", "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"}
+  }
+}

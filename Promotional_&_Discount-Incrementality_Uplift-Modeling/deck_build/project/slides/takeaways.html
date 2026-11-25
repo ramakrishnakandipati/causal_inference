@@ -1,0 +1,12 @@
+<section id="takeaways" data-transition="fade">
+<p class="eyebrow">Model comparison · Which one to use</p>
+<h2>Pick by constraint, not by a single metric</h2>
+<div class="grid2">
+<div class="card stripe-pers"><h3>Default: CausalForestDML</h3><p class="med">Best PEHE (14.94) and Qini (0.952 IPW, 0.949 RCT), native intervals, 2.6 s to fit. Costs 31 ms to score 1,000 guests.</p></div>
+<div class="card stripe"><h3>Latency-critical: TARNet or R-Learner</h3><p class="med">1.4 ms per 1,000 guests. PEHE 15.14 and 15.57; TARNet has the best uplift in the top 20% ($12.25).</p></div>
+<div class="card stripe-at"><h3>Uncertainty-first: LinearDML</h3><p class="med">Fastest fit (1.9 s) and best interval coverage (70.7%), but the widest intervals and the weakest ranking after UpliftRF (Qini 0.930).</p></div>
+<div class="card stripe-sd"><h3>Handle with care: UpliftRF</h3><p class="med">Built for conversion and mapped to margin with a plug-in: PEHE 17.49, Qini 0.907. In the campaign flow it mails 1,089 guests and earns +$11.6k.</p></div>
+</div>
+<p class="sub" style="margin-top:36px">In the 2,000-guest campaign, seven estimators land within $20 of +$14.2k. LinearDML, TARNet and DragonNet are $0.3–0.4k lower, UpliftRF $2.6k lower.</p>
+<aside>The practical conclusion is that the choice of estimator matters less than having any sound causal estimator with a sensible decision threshold: the policy value is nearly identical for seven of the eleven. The differences show up in accuracy of individual effect estimates, speed and uncertainty.</aside>
+</section>

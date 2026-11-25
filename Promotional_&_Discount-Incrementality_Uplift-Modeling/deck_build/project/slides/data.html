@@ -1,0 +1,18 @@
+<section id="data" data-transition="fade">
+<p class="eyebrow">Stage 1 · Data</p>
+<h2>A data process that knows both potential outcomes</h2>
+<div class="cards">
+<div class="card"><h3>Ten covariates</h3><p class="small">hist_booking_freq, days_since_last_stay, loyalty_tier, hist_price_sensitivity, avg_lead_time, avg_adr, weekend_stay_ratio, cancellation_rate, email_open_rate_90d, points_balance.</p></div>
+<div class="card"><h3>Confounded treatment</h3><p class="small">Mail probability rises with email opens, tier, price sensitivity and frequency, falls with recency, and is clipped to 0.05–0.95. A 20.3% randomized holdout is mailed with probability 0.5.</p></div>
+<div class="card"><h3>Coupled outcomes</h3><p class="small">Y(0) and Y(1) share one uniform draw. A booking earns R × 35% margin; under the offer it earns R × (35% − 20%). Truth is stored for audit: τ conv, τ margin and persona, never as a feature.</p></div>
+</div>
+<div class="row" style="margin-top:56px">
+<div class="stat" style="flex:1"><p class="num" style="font-size:56px">50,000</p><p class="k">guests</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:56px">43.7%</p><p class="k">mailed in the data</p></div>
+<div class="stat" style="flex:1"><p class="num" style="font-size:56px">20.3%</p><p class="k">randomized holdout</p></div>
+<div class="stat" style="flex:1"><p class="num neg" style="font-size:56px">−$13.64</p><p class="k">true ATE, margin</p></div>
+<div class="stat" style="flex:1"><p class="num pos" style="font-size:56px">+7.0 pp</p><p class="k">true ATE, conversion</p></div>
+</div>
+<p class="sub muted" style="margin-top:48px">The average effect on margin is negative: the 20% discount costs more than the extra bookings earn. All the value is in the heterogeneity.</p>
+<aside>Generating the full 50,000-guest data set takes well under a second. A self-check asserts that the persona effect signs are as designed before the file is written.</aside>
+</section>

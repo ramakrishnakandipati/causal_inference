@@ -1,0 +1,13 @@
+<section id="limits" data-transition="fade">
+<p class="eyebrow">Limitations</p>
+<h2>What this does not show</h2>
+<div class="grid2">
+<div class="card stripe-sd"><h3>Synthetic data, one seed</h3><p class="small">No significance tests. The nine best differ by about 1.2 PEHE points, which a new seed could reorder.</p></div>
+<div class="card stripe-sd"><h3>Tuned on this data</h3><p class="small">Persona thresholds, including the 0.06 Sleeping Dog cut-off, were set after seeing a confusion matrix.</p></div>
+<div class="card stripe-at"><h3>Intervals under-cover</h3><p class="small">The 95% intervals hold the true effect for 8–71% of guests: compare guests, do not read them as probabilities.</p></div>
+<div class="card stripe-at"><h3>The points offer is modelled</h3><p class="small">Its effect is assumed to be 80% of the discount's conversion lift with a $20 liability, not observed.</p></div>
+<div class="card stripe"><h3>Typical guests by construction</h3><p class="small">The four named flow guests are the most typical of their persona. The campaign flow shows how less typical guests fare.</p></div>
+<div class="card stripe"><h3>Explanations and tools</h3><p class="small">SHAP explains a surrogate of each estimator. The ROI tab re-prices approximately. LightGBM and UpliftRF run on CPU, as does serving.</p></div>
+</div>
+<aside>None of these change the shape of the conclusion, which is that targeting by estimated incremental effect beats mailing everyone or mailing the likely bookers. They do mean the exact dollar figures should be re-derived on real data, ideally with a randomized holdout for evaluation.</aside>
+</section>

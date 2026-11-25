@@ -1,0 +1,16 @@
+<section id="qini" data-transition="fade">
+<p class="eyebrow">Model comparison · Ranking quality</p>
+<h2>All eleven estimators beat the baselines</h2>
+<div class="two">
+<div class="col" style="width:640px;gap:26px">
+<p class="med">Every curve climbs above the <b>random</b> line and tracks the <b>oracle</b>, which ranks by the true effect.</p>
+<p class="med">They peak around the top 20–35% of the list, then fall: mailing deeper destroys margin.</p>
+<p class="med">The <b>propensity-to-buy</b> baseline ends up below random, because it picks guests who book anyway.</p>
+<p class="med">UpliftRF is the lowest of the eleven curves.</p>
+</div>
+<div class="col" style="width:976px">
+<img class="shot" src="/_blob/968e796ea34f5d38eb9b69e0dad351af" alt="Qini curves of all 11 estimators with random, propensity and oracle baselines" style="width:960px;height:647px">
+</div>
+</div>
+<aside>The vertical axis is cumulative incremental margin per guest, IPW-weighted on the 12,501-guest test set. The right-hand end of every curve is the average effect of mailing everyone, which is negative.</aside>
+</section>

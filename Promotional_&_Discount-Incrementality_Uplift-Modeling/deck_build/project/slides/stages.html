@@ -1,0 +1,16 @@
+<section id="stages" data-transition="fade">
+<p class="eyebrow">Metrics · Stage level</p>
+<h2>What each pipeline stage produced</h2>
+<table class="t s" style="margin-top:26px">
+<tr class="hd"><th style="width:15%">Stage</th><th style="width:30%">Key metrics</th><th style="width:36%">Result</th><th style="width:19%">Time</th></tr>
+<tr><td><b>1 Data</b></td><td>Guests, personas, sign self-check</td><td>50,000 · 5 personas · all checks pass</td><td>0.04 s</td></tr>
+<tr class="alt"><td><b>2 Features</b></td><td>Overlap, max |SMD|</td><td>0.13–0.85 · 0.537 → 0.009</td><td>≈1 s</td></tr>
+<tr><td><b>3 Tune</b></td><td>Trials, best R-loss</td><td>12 trials · 2,153.7</td><td>7 s</td></tr>
+<tr class="alt"><td><b>4 Train</b></td><td>Fitted, best PEHE, best Qini</td><td>11 / 11 · $14.94 · 0.952</td><td>82.7 s of fits</td></tr>
+<tr><td><b>5 Evaluate</b></td><td>Personas, policy margin, SHAP R²</td><td>94–98% · +$28.9k · ≥ 0.989</td><td>≈8 s</td></tr>
+<tr class="alt"><td><b>6 Visualize</b></td><td>Plots written</td><td>6 PNGs at 300 DPI</td><td>3.9 s</td></tr>
+<tr><td><b>7 Serve</b></td><td>Endpoints, latency, UI = API</td><td>5 · ≈0.1 ms per guest · 4 / 4</td><td>≈4 s model load</td></tr>
+</table>
+<p class="small muted" style="margin-top:26px">Stages 2 to 4 with the base-learner ablation took about 121 s in one run; evaluation and plots re-run in seconds from saved predictions. Times are on an RTX 3090 workstation.</p>
+<aside>Stage 1 time is for generating the 50,000 guests in memory, not for writing the parquet file. The SHAP R² is how well a small XGBoost surrogate reproduces each estimator's predictions, and its minimum over the eleven estimators is 0.989; it is a fidelity check for the explanations, not a model metric.</aside>
+</section>

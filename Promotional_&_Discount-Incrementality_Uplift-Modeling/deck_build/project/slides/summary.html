@@ -1,0 +1,15 @@
+<section id="summary" class="dark" data-transition="fade">
+<p class="eyebrow">Headline result</p>
+<h2>Causal targeting turns a $166k loss into a $29k gain</h2>
+<div class="cards">
+<div class="card"><p class="k">Causal uplift policy</p><p class="num pos" style="font-size:68px">+$28.9k</p><p class="small">CausalForestDML, 2,978 of 12,501 guests mailed (23.8%)</p></div>
+<div class="card"><p class="k">Mass blast</p><p class="num neg" style="font-size:68px">−$165.7k</p><p class="small">20% off to everyone. Propensity targeting at the same budget: −$127.4k</p></div>
+<div class="card"><p class="k">Persona recovery</p><p class="num blue" style="font-size:68px">94–98%</p><p class="small">of guests assigned their true persona; 97% of harmful guests left alone</p></div>
+<div class="card"><p class="k">Best estimator PEHE</p><p class="num blue" style="font-size:68px">$14.94</p><p class="small">vs $29.29 for a constant-effect guess; normalized Qini 0.952</p></div>
+</div>
+<div class="row" style="margin-top:56px;gap:48px">
+<div class="col" style="width:800px"><h3>Why it works</h3><p class="sub">Mass blast pays the discount to guests who would have booked anyway. The causal policy mails fewer guests and still captures 93% of the incremental bookings (825 vs 888).</p></div>
+<div class="col" style="width:800px"><h3>How far to trust it</h3><p class="sub">Counterfactuals come from synthetic data, the 2,000-points arm is modelled, and results are one seed with no significance tests between estimators.</p></div>
+</div>
+<aside>Every figure on this slide is from the 12,501-guest held-out test set. Policy values use the ground-truth counterfactuals in the synthetic data. The incremental-booking comparison is 824.6 for the causal policy against 888.2 for mass blast.</aside>
+</section>
