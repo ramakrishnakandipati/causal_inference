@@ -138,13 +138,14 @@ streamlit run src/app/streamlit_app.py    # 5-tab dashboard
 python scripts/capture_screenshots.py     # regenerates docs/screenshots + outputs/screenshots (+ flows)
 python scripts/run_pipeline.py --stage flows   # rebuild outputs/metrics/flows.json only
 python scripts/build_readme.py            # regenerates this README
+python presentation/build_deck.py         # rebuilds presentation/Pre_Arrival_Upsell_Uplift_End_to_End.pptx (78 slides)
 pytest tests -q
 ```
 Set `CAUSAL_OUT=<dir>` to redirect outputs. Config (seeds, N, hyper-parameters, margins, budget) lives in `config/config.yaml`.
 
 ## 8. Layout
 `src/data` DGP · `src/models` propensity/ATE, CATE learners, TARNet/DragonNet · `src/evaluation` metrics & plots · `src/serving.py` shared scoring/optimiser
-(used by both API and UI) · `src/api` FastAPI · `src/flows.py` end-to-end flows · `src/app` Streamlit · `scripts` orchestration · `tests`.
+(used by both API and UI) · `src/api` FastAPI · `src/flows.py` end-to-end flows · `src/app` Streamlit · `presentation` 78-slide deck + builder · `scripts` orchestration · `tests`.
 
 ## 9. Limitations
 - Synthetic data; unconfoundedness holds by construction. Real logs need sensitivity analysis for unmeasured confounding.

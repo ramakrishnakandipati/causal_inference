@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 .pytest_cache/
 catboost_info/
+presentation/__pycache__/

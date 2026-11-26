@@ -16,8 +16,8 @@
   "Best direct CATE model": "S-Learner (XGB)",
   "Direct PEHE (pp)": 4.1,
   "Refuters passed": "6/6",
-  "Targeted value (true $)": 92956.0,
-  "Oracle value (true $)": 94142.0,
+  "Targeted value (true $)": 92956,
+  "Oracle value (true $)": 94142,
   "Oracle capture": "98.7%",
   "Learners fitted": 21,
   "Total fit time (s)": 111.2
@@ -38,7 +38,7 @@
       "Lead (days)": 55,
       "Device": "iOS",
       "Loyalty tier": 0,
-      "Hist. spend ($)": 0.0
+      "Hist. spend ($)": 0
      },
      "reading": "Held-out reservation #15755, the most typical guest matching the scenario (nearest to the median in feature space).",
      "table": [
@@ -331,7 +331,7 @@
       "Lead (days)": 8,
       "Device": "Desktop",
       "Loyalty tier": 2,
-      "Hist. spend ($)": 187.0
+      "Hist. spend ($)": 187
      },
      "reading": "Held-out reservation #10837, the most typical guest matching the scenario (nearest to the median in feature space).",
      "table": [
@@ -1428,7 +1428,7 @@
      "metrics": {
       "Guests contacted": 5385,
       "Share of eligible": "30%",
-      "Spend ($)": 8078.0,
+      "Spend ($)": 8078,
       "Mean \u03c4\u0302 ancillary of selected ($)": 23.23,
       "Mean \u03c4\u0302 direct of selected (pp)": 14.11,
       "Persuadables among selected": "80%"
@@ -1463,10 +1463,10 @@
     {
      "name": "4 \u00b7 Policy comparison (true $)",
      "metrics": {
-      "Causal targeting": 92944.0,
-      "Random, same size": 40297.0,
-      "Oracle (true \u03c4)": 94142.0,
-      "Contact everyone": 131685.0,
+      "Causal targeting": 92944,
+      "Random, same size": 40297,
+      "Oracle (true \u03c4)": 94142,
+      "Contact everyone": 131685,
       "Capture of oracle": "98.7%",
       "Lift vs random": "2.3x"
      },
@@ -1482,10 +1482,10 @@
        "Everyone"
       ],
       "values": [
-       92944.0,
-       40297.0,
-       94142.0,
-       131685.0
+       92944,
+       40297,
+       94142,
+       131685
       ]
      },
      "status": "ok"
@@ -1494,8 +1494,8 @@
      "name": "5 \u00b7 ROI & risk",
      "metrics": {
       "True ROI": "1,151%",
-      "Estimated net value ($)": 90015.0,
-      "True net value ($)": 92944.0,
+      "Estimated net value ($)": 90015,
+      "True net value ($)": 92944,
       "Estimation error": "-3.2%",
       "Contacted with negative true value": 0,
       "Share of contacted": "0.0%"
@@ -1507,7 +1507,7 @@
     }
    ],
    "summary": {
-    "True net value ($)": 92944.0,
+    "True net value ($)": 92944,
     "Capture of oracle": "98.7%",
     "ROI": "1,151%"
    }
@@ -1581,7 +1581,7 @@
      "metrics": {
       "Guests contacted": 3442,
       "Share of eligible": "30%",
-      "Spend ($)": 5163.0,
+      "Spend ($)": 5163,
       "Mean \u03c4\u0302 ancillary of selected ($)": 24.27,
       "Mean \u03c4\u0302 direct of selected (pp)": 16.26,
       "Persuadables among selected": "92%"
@@ -1616,10 +1616,10 @@
     {
      "name": "4 \u00b7 Policy comparison (true $)",
      "metrics": {
-      "Causal targeting": 78001.0,
-      "Random, same size": 51304.0,
-      "Oracle (true \u03c4)": 79940.0,
-      "Contact everyone": 171221.0,
+      "Causal targeting": 78001,
+      "Random, same size": 51304,
+      "Oracle (true \u03c4)": 79940,
+      "Contact everyone": 171221,
       "Capture of oracle": "97.6%",
       "Lift vs random": "1.5x"
      },
@@ -1635,10 +1635,10 @@
        "Everyone"
       ],
       "values": [
-       78001.0,
-       51304.0,
-       79940.0,
-       171221.0
+       78001,
+       51304,
+       79940,
+       171221
       ]
      },
      "status": "ok"
@@ -1647,8 +1647,8 @@
      "name": "5 \u00b7 ROI & risk",
      "metrics": {
       "True ROI": "1,511%",
-      "Estimated net value ($)": 74406.0,
-      "True net value ($)": 78001.0,
+      "Estimated net value ($)": 74406,
+      "True net value ($)": 78001,
       "Estimation error": "-4.6%",
       "Contacted with negative true value": 0,
       "Share of contacted": "0.0%"
@@ -1660,10 +1660,232 @@
     }
    ],
    "summary": {
-    "True net value ($)": 78001.0,
+    "True net value ($)": 78001,
     "Capture of oracle": "97.6%",
     "ROI": "1,511%"
    }
   }
- ]
+ ],
+ "model_matrix": {
+  "Causal Forest DML": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 3.949,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 2.629,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 0.388,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 7.796,
+   "B1 cohort PEHE ancillary ($)": 2.333,
+   "B1 cohort mean err ancillary ($)": 0.009,
+   "B1 cohort PEHE direct (pp)": 4.267,
+   "B1 cohort mean err direct (pp)": 0.007,
+   "B2 cohort PEHE ancillary ($)": 1.743,
+   "B2 cohort mean err ancillary ($)": 0.695,
+   "B2 cohort PEHE direct (pp)": 5.101,
+   "B2 cohort mean err direct (pp)": 3.307,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.256,
+   "C2 mean-CATE ATE bias direct (pp)": 1.198,
+   "D1 true net value ($)": 92114,
+   "D1 capture of oracle": 0.9785,
+   "D2 true net value ($)": 77006,
+   "D2 capture of oracle": 0.9633
+  },
+  "DR-Learner": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 4.687,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 2.174,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 1.815,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 15.399,
+   "B1 cohort PEHE ancillary ($)": 2.537,
+   "B1 cohort mean err ancillary ($)": 0.033,
+   "B1 cohort PEHE direct (pp)": 8.072,
+   "B1 cohort mean err direct (pp)": 0.523,
+   "B2 cohort PEHE ancillary ($)": 3.555,
+   "B2 cohort mean err ancillary ($)": 0.764,
+   "B2 cohort PEHE direct (pp)": 9.4,
+   "B2 cohort mean err direct (pp)": 2.633,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.297,
+   "C2 mean-CATE ATE bias direct (pp)": 1.285,
+   "D1 true net value ($)": 88948,
+   "D1 capture of oracle": 0.9448,
+   "D2 true net value ($)": 74400,
+   "D2 capture of oracle": 0.9307
+  },
+  "DragonNet (PyTorch)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 4.461,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 0.224,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 0.821,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 3.75,
+   "B1 cohort PEHE ancillary ($)": 2.56,
+   "B1 cohort mean err ancillary ($)": 0.428,
+   "B1 cohort PEHE direct (pp)": 3.316,
+   "B1 cohort mean err direct (pp)": 0.703,
+   "B2 cohort PEHE ancillary ($)": 2.649,
+   "B2 cohort mean err ancillary ($)": 1.55,
+   "B2 cohort PEHE direct (pp)": 5.345,
+   "B2 cohort mean err direct (pp)": 2.249,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.833,
+   "C2 mean-CATE ATE bias direct (pp)": 1.261,
+   "D1 true net value ($)": 92229,
+   "D1 capture of oracle": 0.9797,
+   "D2 true net value ($)": 77625,
+   "D2 capture of oracle": 0.971
+  },
+  "R-Learner (NonParamDML)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 3.862,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 1.315,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 1.47,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 20.914,
+   "B1 cohort PEHE ancillary ($)": 2.319,
+   "B1 cohort mean err ancillary ($)": 0.012,
+   "B1 cohort PEHE direct (pp)": 6.37,
+   "B1 cohort mean err direct (pp)": 0.318,
+   "B2 cohort PEHE ancillary ($)": 2.877,
+   "B2 cohort mean err ancillary ($)": 0.8,
+   "B2 cohort PEHE direct (pp)": 8.888,
+   "B2 cohort mean err direct (pp)": 2.763,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.297,
+   "C2 mean-CATE ATE bias direct (pp)": 1.201,
+   "D1 true net value ($)": 89365,
+   "D1 capture of oracle": 0.9493,
+   "D2 true net value ($)": 74710,
+   "D2 capture of oracle": 0.9346
+  },
+  "S-Learner (CatBoost)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 5.217,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 0.517,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 1.171,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 6.743,
+   "B1 cohort PEHE ancillary ($)": 2.24,
+   "B1 cohort mean err ancillary ($)": -0.231,
+   "B1 cohort PEHE direct (pp)": 3.374,
+   "B1 cohort mean err direct (pp)": -0.187,
+   "B2 cohort PEHE ancillary ($)": 2.43,
+   "B2 cohort mean err ancillary ($)": 1.33,
+   "B2 cohort PEHE direct (pp)": 5.537,
+   "B2 cohort mean err direct (pp)": 3.705,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.332,
+   "C2 mean-CATE ATE bias direct (pp)": 1.217,
+   "D1 true net value ($)": 92843,
+   "D1 capture of oracle": 0.9862,
+   "D2 true net value ($)": 78023,
+   "D2 capture of oracle": 0.976
+  },
+  "S-Learner (XGB)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 10.171,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 0.423,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 4.982,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 0.391,
+   "B1 cohort PEHE ancillary ($)": 3.575,
+   "B1 cohort mean err ancillary ($)": -0.533,
+   "B1 cohort PEHE direct (pp)": 3.436,
+   "B1 cohort mean err direct (pp)": -0.28,
+   "B2 cohort PEHE ancillary ($)": 3.652,
+   "B2 cohort mean err ancillary ($)": 2.343,
+   "B2 cohort PEHE direct (pp)": 5.116,
+   "B2 cohort mean err direct (pp)": 3.822,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.505,
+   "C2 mean-CATE ATE bias direct (pp)": 1.2,
+   "D1 true net value ($)": 92354,
+   "D1 capture of oracle": 0.981,
+   "D2 true net value ($)": 77566,
+   "D2 capture of oracle": 0.9703
+  },
+  "T-Learner (LightGBM)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 2.368,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 4.556,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 5.824,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 23.692,
+   "B1 cohort PEHE ancillary ($)": 3.365,
+   "B1 cohort mean err ancillary ($)": 0.058,
+   "B1 cohort PEHE direct (pp)": 8.172,
+   "B1 cohort mean err direct (pp)": 0.455,
+   "B2 cohort PEHE ancillary ($)": 4.04,
+   "B2 cohort mean err ancillary ($)": 0.863,
+   "B2 cohort PEHE direct (pp)": 11.272,
+   "B2 cohort mean err direct (pp)": 2.788,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.348,
+   "C2 mean-CATE ATE bias direct (pp)": 1.297,
+   "D1 true net value ($)": 85495,
+   "D1 capture of oracle": 0.9081,
+   "D2 true net value ($)": 72531,
+   "D2 capture of oracle": 0.9073
+  },
+  "T-Learner (XGB)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 3.371,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 2.497,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 2.066,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 16.041,
+   "B1 cohort PEHE ancillary ($)": 2.717,
+   "B1 cohort mean err ancillary ($)": 0.05,
+   "B1 cohort PEHE direct (pp)": 5.685,
+   "B1 cohort mean err direct (pp)": 0.526,
+   "B2 cohort PEHE ancillary ($)": 3.554,
+   "B2 cohort mean err ancillary ($)": 0.718,
+   "B2 cohort PEHE direct (pp)": 8.541,
+   "B2 cohort mean err direct (pp)": 2.853,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.291,
+   "C2 mean-CATE ATE bias direct (pp)": 1.366,
+   "D1 true net value ($)": 89499,
+   "D1 capture of oracle": 0.9507,
+   "D2 true net value ($)": 75159,
+   "D2 capture of oracle": 0.9402
+  },
+  "TARNet (PyTorch)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 4.234,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 0.22,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 1.225,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 2.836,
+   "B1 cohort PEHE ancillary ($)": 2.537,
+   "B1 cohort mean err ancillary ($)": 0.488,
+   "B1 cohort PEHE direct (pp)": 3.34,
+   "B1 cohort mean err direct (pp)": 0.343,
+   "B2 cohort PEHE ancillary ($)": 2.454,
+   "B2 cohort mean err ancillary ($)": 1.228,
+   "B2 cohort PEHE direct (pp)": 5.453,
+   "B2 cohort mean err direct (pp)": 2.487,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.755,
+   "C2 mean-CATE ATE bias direct (pp)": 1.117,
+   "D1 true net value ($)": 92026,
+   "D1 capture of oracle": 0.9775,
+   "D2 true net value ($)": 77521,
+   "D2 capture of oracle": 0.9697
+  },
+  "Uplift RF (KL)": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": null,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 17.819,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": null,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 20.12,
+   "B1 cohort PEHE ancillary ($)": null,
+   "B1 cohort mean err ancillary ($)": null,
+   "B1 cohort PEHE direct (pp)": 15.52,
+   "B1 cohort mean err direct (pp)": 13.895,
+   "B2 cohort PEHE ancillary ($)": null,
+   "B2 cohort mean err ancillary ($)": null,
+   "B2 cohort PEHE direct (pp)": 21.987,
+   "B2 cohort mean err direct (pp)": 21.698,
+   "C1 mean-CATE ATE bias ancillary ($)": null,
+   "C2 mean-CATE ATE bias direct (pp)": 16.711,
+   "D1 true net value ($)": 87168,
+   "D1 capture of oracle": 0.9259,
+   "D2 true net value ($)": 70603,
+   "D2 capture of oracle": 0.8832
+  },
+  "X-Learner": {
+   "A1 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 2.986,
+   "A1 |\u03c4\u0302\u2212\u03c4| direct (pp)": 1.216,
+   "A2 |\u03c4\u0302\u2212\u03c4| ancillary ($)": 1.356,
+   "A2 |\u03c4\u0302\u2212\u03c4| direct (pp)": 14.162,
+   "B1 cohort PEHE ancillary ($)": 1.983,
+   "B1 cohort mean err ancillary ($)": 0.044,
+   "B1 cohort PEHE direct (pp)": 4.882,
+   "B1 cohort mean err direct (pp)": 0.318,
+   "B2 cohort PEHE ancillary ($)": 2.411,
+   "B2 cohort mean err ancillary ($)": 0.803,
+   "B2 cohort PEHE direct (pp)": 6.868,
+   "B2 cohort mean err direct (pp)": 2.547,
+   "C1 mean-CATE ATE bias ancillary ($)": 0.318,
+   "C2 mean-CATE ATE bias direct (pp)": 1.122,
+   "D1 true net value ($)": 91039,
+   "D1 capture of oracle": 0.967,
+   "D2 true net value ($)": 76165,
+   "D2 capture of oracle": 0.9528
+  }
+ }
 }

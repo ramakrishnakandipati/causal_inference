@@ -57,7 +57,9 @@ def _j(name):
 
 
 def _f(x, n=3):
-    return None if x is None or (isinstance(x, float) and np.isnan(x)) else round(float(x), n)
+    if x is None or (isinstance(x, float) and np.isnan(x)):
+        return None
+    return int(round(float(x))) if n == 0 else round(float(x), n)
 
 
 def stage(name, metrics, reading, table=None, chart=None, status="ok"):
@@ -317,13 +319,68 @@ def policy_flow(c: Ctx, f: dict) -> dict:
                 summary={"True net value ($)": _f(r["true_net_value"], 0), "Capture of oracle": f"{capture:.1%}" if capture else "–", "ROI": f"{r['roi_true'] * 100:,.0f}%" if r["roi_true"] is not None else "–"})
 
 
+def model_matrix(c: Ctx) -> dict:
+    """Every learner scored inside every flow (same guests / cohorts / campaigns as the flows themselves).
+
+    A: abs error of tau_hat for the flow's guest | B: cohort mean error and cohort PEHE | C: bias of the model's
+    population-mean CATE vs the true ATE | D: true net value of the model's own top-30% policy (both outcomes from the
+    same learner; Uplift RF is binary-only so it is scored on the direct outcome alone) and capture of the oracle.
+    """
+    sc = c.sc
+    b = c.cfg["business"]
+    names = sorted({n for o in ("ancillary", "direct") for n in serving.model_names(o)})
+    rows = {n: {} for n in names}
+    for f in FLOWS:
+        if f["type"] == "A":
+            g = _pick_guest(sc, f["pick"])
+            for n in names:
+                for o, truth, k in (("ancillary", g.tau_anc, 1.0), ("direct", g.tau_direct, 100.0)):
+                    col = f"cate_{o}__{slug(n)}"
+                    rows[n][f"{f['id']} |τ̂−τ| {o} ({'$' if o == 'ancillary' else 'pp'})"] = _f(abs(g[col] - truth) * k, 3) if col in sc else None
+        elif f["type"] == "B":
+            s = sc[sc.channel.isin(f["cohort"]["channels"])]
+            for n in names:
+                for o, tcol, k, u in (("ancillary", "tau_anc", 1.0, "$"), ("direct", "tau_direct", 100.0, "pp")):
+                    col = f"cate_{o}__{slug(n)}"
+                    if col in s:
+                        rows[n][f"{f['id']} cohort PEHE {o} ({u})"] = _f(np.sqrt(((s[col] - s[tcol]) ** 2).mean()) * k, 3)
+                        rows[n][f"{f['id']} cohort mean err {o} ({u})"] = _f((s[col].mean() - s[tcol].mean()) * k, 3)
+                    else:
+                        rows[n][f"{f['id']} cohort PEHE {o} ({u})"] = None
+                        rows[n][f"{f['id']} cohort mean err {o} ({u})"] = None
+        elif f["type"] == "C":
+            for n in names:
+                col = f"cate_{f['outcome']}__{slug(n)}"
+                tcol, k, u = ("tau_anc", 1.0, "$") if f["outcome"] == "ancillary" else ("tau_direct", 100.0, "pp")
+                rows[n][f"{f['id']} mean-CATE ATE bias {f['outcome']} ({u})"] = _f((sc[col].mean() - sc[tcol].mean()) * k, 3) if col in sc else None
+        else:
+            p = f["campaign"]
+            s = sc if not p["channels"] else sc[sc.channel.isin(p["channels"])]
+            vt = p["am"] * s.tau_anc + p["dm"] * s.tau_direct - p["cost"]
+            kk = int(round(p["budget_frac"] * len(s)))
+            oracle = float(np.sort(vt.values)[::-1][:kk].sum())
+            for n in names:
+                ca, cd = f"cate_ancillary__{slug(n)}", f"cate_direct__{slug(n)}"
+                if cd not in s:
+                    rows[n][f"{f['id']} true net value ($)"] = rows[n][f"{f['id']} capture of oracle"] = None
+                    continue
+                ta = s[ca] if ca in s else s["tau_hat_ancillary"]          # Uplift RF: borrow the best ancillary model
+                vh = p["am"] * ta + p["dm"] * s[cd] - p["cost"]
+                sel = np.argsort(-vh.values, kind="stable")[:kk]
+                sel = sel[vh.values[sel] > 0]
+                v = float(vt.values[sel].sum())
+                rows[n][f"{f['id']} true net value ($)"] = _f(v, 0)
+                rows[n][f"{f['id']} capture of oracle"] = _f(v / oracle, 4)
+    return rows
+
+
 def build_flows() -> dict:
     serving.load_model.cache_clear()
     c = Ctx()
     flows = []
     for f in FLOWS:
         flows.append({"A": guest_flow, "B": cohort_flow, "C": validity_flow, "D": policy_flow}[f["type"]](c, f))
-    out = dict(overall=overall_metrics(c), flows=flows)
+    out = dict(overall=overall_metrics(c), flows=flows, model_matrix=model_matrix(c))
     with open(out_dir("metrics") / "flows.json", "w", encoding="utf-8") as fh:
         json.dump(out, fh, indent=1, default=lambda o: o.item() if hasattr(o, "item") else str(o))
     return out

@@ -125,8 +125,8 @@ Open the dashboard's **tab 5 · End-to-end flows**. Pipeline: Data → Propensit
 | Best direct CATE model | S-Learner (XGB) |
 | Direct PEHE (pp) | 4.1 |
 | Refuters passed | 6/6 |
-| Targeted value (true $) | 92956.0 |
-| Oracle value (true $) | 94142.0 |
+| Targeted value (true $) | 92956 |
+| Oracle value (true $) | 94142 |
 | Oracle capture | 98.7% |
 | Learners fitted | 21 |
 | Total fit time (s) | 111.2 |
@@ -239,11 +239,11 @@ _Marketing can contact 30% of arrivals at $1.50 each. Score everyone, pick the b
 |---|---|
 | 1 · Scoring | Ancillary model: Causal Forest DML; Direct model: S-Learner (XGB); Ancillary Qini: 3.222; Direct Qini: 0.0247; Ancillary PEHE ($): 2.14 |
 | 2 · Economics & budget | Budget share: 30%; Cost / offer ($): 1.5; Ancillary margin: 0.45; Value of a direct booking ($): 55.0; Eligible channels: all |
-| 3 · Selection | Guests contacted: 5385; Share of eligible: 30%; Spend ($): 8078.0; Mean τ̂ ancillary of selected ($): 23.23; Mean τ̂ direct of selected (pp): 14.11 |
-| 4 · Policy comparison (true $) | Causal targeting: 92944.0; Random, same size: 40297.0; Oracle (true τ): 94142.0; Contact everyone: 131685.0; Capture of oracle: 98.7% |
-| 5 · ROI & risk | True ROI: 1,151%; Estimated net value ($): 90015.0; True net value ($): 92944.0; Estimation error: -3.2%; Contacted with negative true value: 0 |
+| 3 · Selection | Guests contacted: 5385; Share of eligible: 30%; Spend ($): 8078; Mean τ̂ ancillary of selected ($): 23.23; Mean τ̂ direct of selected (pp): 14.11 |
+| 4 · Policy comparison (true $) | Causal targeting: 92944; Random, same size: 40297; Oracle (true τ): 94142; Contact everyone: 131685; Capture of oracle: 98.7% |
+| 5 · ROI & risk | True ROI: 1,151%; Estimated net value ($): 90015; True net value ($): 92944; Estimation error: -3.2%; Contacted with negative true value: 0 |
 
-**Result:** True net value ($) = 92944.0, Capture of oracle = 98.7%, ROI = 1,151%
+**Result:** True net value ($) = 92944, Capture of oracle = 98.7%, ROI = 1,151%
 
 ![D1](outputs/screenshots/flows/D1.png)
 
@@ -255,11 +255,11 @@ _Revenue management wants to shift OTA guests direct: a booking is worth $75, on
 |---|---|
 | 1 · Scoring | Ancillary model: Causal Forest DML; Direct model: S-Learner (XGB); Ancillary Qini: 3.222; Direct Qini: 0.0247; Ancillary PEHE ($): 2.14 |
 | 2 · Economics & budget | Budget share: 30%; Cost / offer ($): 1.5; Ancillary margin: 0.45; Value of a direct booking ($): 75.0; Eligible channels: OTA_Expedia, OTA_Booking |
-| 3 · Selection | Guests contacted: 3442; Share of eligible: 30%; Spend ($): 5163.0; Mean τ̂ ancillary of selected ($): 24.27; Mean τ̂ direct of selected (pp): 16.26 |
-| 4 · Policy comparison (true $) | Causal targeting: 78001.0; Random, same size: 51304.0; Oracle (true τ): 79940.0; Contact everyone: 171221.0; Capture of oracle: 97.6% |
-| 5 · ROI & risk | True ROI: 1,511%; Estimated net value ($): 74406.0; True net value ($): 78001.0; Estimation error: -4.6%; Contacted with negative true value: 0 |
+| 3 · Selection | Guests contacted: 3442; Share of eligible: 30%; Spend ($): 5163; Mean τ̂ ancillary of selected ($): 24.27; Mean τ̂ direct of selected (pp): 16.26 |
+| 4 · Policy comparison (true $) | Causal targeting: 78001; Random, same size: 51304; Oracle (true τ): 79940; Contact everyone: 171221; Capture of oracle: 97.6% |
+| 5 · ROI & risk | True ROI: 1,511%; Estimated net value ($): 74406; True net value ($): 78001; Estimation error: -4.6%; Contacted with negative true value: 0 |
 
-**Result:** True net value ($) = 78001.0, Capture of oracle = 97.6%, ROI = 1,511%
+**Result:** True net value ($) = 78001, Capture of oracle = 97.6%, ROI = 1,511%
 
 ![D2](outputs/screenshots/flows/D2.png)
 
@@ -283,13 +283,14 @@ streamlit run src/app/streamlit_app.py    # 5-tab dashboard
 python scripts/capture_screenshots.py     # regenerates docs/screenshots + outputs/screenshots (+ flows)
 python scripts/run_pipeline.py --stage flows   # rebuild outputs/metrics/flows.json only
 python scripts/build_readme.py            # regenerates this README
+python presentation/build_deck.py         # rebuilds presentation/Pre_Arrival_Upsell_Uplift_End_to_End.pptx (78 slides)
 pytest tests -q
 ```
 Set `CAUSAL_OUT=<dir>` to redirect outputs. Config (seeds, N, hyper-parameters, margins, budget) lives in `config/config.yaml`.
 
 ## 8. Layout
 `src/data` DGP · `src/models` propensity/ATE, CATE learners, TARNet/DragonNet · `src/evaluation` metrics & plots · `src/serving.py` shared scoring/optimiser
-(used by both API and UI) · `src/api` FastAPI · `src/flows.py` end-to-end flows · `src/app` Streamlit · `scripts` orchestration · `tests`.
+(used by both API and UI) · `src/api` FastAPI · `src/flows.py` end-to-end flows · `src/app` Streamlit · `presentation` 78-slide deck + builder · `scripts` orchestration · `tests`.
 
 ## 9. Limitations
 - Synthetic data; unconfoundedness holds by construction. Real logs need sensitivity analysis for unmeasured confounding.

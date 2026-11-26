@@ -59,6 +59,20 @@ def capture_flows(pg, fdir):
         pg.wait_for_timeout(3000)     # let Streamlit finish re-rendering (avoid faded stale frame)
         fit_viewport(pg)
         pg.screenshot(path=str(fdir / f"{f['id']}.png"), full_page=True)
+        hb = pg.locator("h3:has-text('Programme-level metrics')").bounding_box()
+        pg.screenshot(path=str(fdir / "overall.png"), clip=dict(x=60, y=max(hb["y"] - 10, 0), width=1380, height=700))
+        # per-stage element shots at a narrower viewport (taller aspect -> larger text when placed on a slide)
+        pg.set_viewport_size({"width": 1000, "height": 6000})
+        pg.wait_for_timeout(2500)
+        sdir = fdir / "stages"; sdir.mkdir(exist_ok=True)
+        boxes = pg.locator("[data-testid=stLayoutWrapper]")
+        k = 0
+        for i in range(boxes.count()):
+            b = boxes.nth(i)
+            if b.locator("h4").count() == 1 and b.bounding_box()["height"] > 120:
+                k += 1
+                b.screenshot(path=str(sdir / f"{f['id']}_s{k}.png"))
+        assert k == len(f["stages"]), f"{f['id']}: captured {k} stage boxes, expected {len(f['stages'])}"
         if f["type"] == "A":
             r = api_post("/predict/cate", {"guests": [f["api_payload"]]})["predictions"][0]
             checks[f["id"]] = abs(r["tau_ancillary"] - f["expect"]["tau_ancillary"]) < 1e-2 and abs(r["tau_direct"] - f["expect"]["tau_direct"]) < 1e-3
