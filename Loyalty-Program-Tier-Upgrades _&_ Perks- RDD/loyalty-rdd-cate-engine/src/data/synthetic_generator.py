@@ -54,8 +54,13 @@ def generate(
     seed: Optional[int] = 42,
     r_min: int = 1,
     r_max: int = 45,
+    effect_scale: float = 1.0,
 ) -> pd.DataFrame:
-    """Generate the loyalty panel. ``regime`` is 'sharp' or 'fuzzy'."""
+    """Generate the loyalty panel. ``regime`` is 'sharp' or 'fuzzy'.
+
+    ``effect_scale`` multiplies the true effects (1.0 = +3.4 nights, +$420, +0.11); 0.0 gives a placebo
+    programme with no effect, used as a negative control in the end-to-end flows.
+    """
     if regime not in ("sharp", "fuzzy"):
         raise ValueError("regime must be 'sharp' or 'fuzzy'")
     rng = np.random.default_rng(seed)
@@ -130,9 +135,9 @@ def generate(
     def calibrated(shape: np.ndarray, target: float) -> np.ndarray:
         return target * shape / np.average(shape, weights=cal_w)
 
-    tau_rn = calibrated(h, TARGETS["next_year_room_nights"])
-    tau_anc = calibrated(h_anc, TARGETS["next_year_ancillary_spend"])
-    tau_dir = calibrated(h_dir, TARGETS["next_year_direct_booking_ratio"])
+    tau_rn = calibrated(h, TARGETS["next_year_room_nights"] * effect_scale)
+    tau_anc = calibrated(h_anc, TARGETS["next_year_ancillary_spend"] * effect_scale)
+    tau_dir = calibrated(h_dir, TARGETS["next_year_direct_booking_ratio"] * effect_scale)
 
     # ---- outcomes (smooth baseline + tau * T + noise) ----------------------------------
     rn0 = (2.0 + 0.62 * r - 0.004 * r ** 2 + 3.0 * business + 0.12 * np.minimum(tenure, 15)
@@ -174,7 +179,8 @@ def generate(
         "compliance_type": ctype,
     })
     df.attrs.update({"regime": regime, "cutoff": cutoff, "manipulation": manipulation,
-                     "targets": dict(TARGETS)})
+                     "targets": {k: v * effect_scale for k, v in TARGETS.items()},
+                     "effect_scale": effect_scale})
     return df
 
 
