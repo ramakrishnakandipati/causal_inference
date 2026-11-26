@@ -360,3 +360,95 @@ ASCM (ElasticNet)    120.49    121.63      -1.14  24.02         1.00         47.
 17:56:38 | INFO |   S-Learner             0.2s  backend=xgboost  gpu=False
 17:56:42 | INFO |   TARNet                3.9s  backend=torch    gpu=False
 17:56:44 | INFO |   CFRNet-DragonNet      2.0s  backend=torch    gpu=True
+20:01:42 | INFO | starting FastAPI and Streamlit ...
+20:01:47 | INFO | services are up
+20:02:20 | INFO | flow A1: 8 stage shots + full | UI==API: True | verdict INCREMENTAL AND PROFITABLE
+20:02:25 | INFO | flow A2: 8 stage shots + full | UI==API: False | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:02:35 | INFO | flow B1: 8 stage shots + full | UI==API: True | verdict NO DETECTABLE EFFECT
+20:02:44 | INFO | flow B2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:02:48 | INFO | flow C1: 6 stage shots + full | UI==API: True | verdict LEAN IN
+20:02:52 | INFO | flow C2: 6 stage shots + full | UI==API: True | verdict PULL BACK
+20:02:57 | INFO | flow D1: 7 stage shots + full | UI==API: True | verdict SAFE TO RUN
+20:03:01 | INFO | flow D2: 7 stage shots + full | UI==API: True | verdict DO NOT TRUST THE PROJECTION
+20:03:06 | INFO | flows UI==API: False
+20:03:07 | INFO | services stopped
+20:03:22 | INFO | starting FastAPI and Streamlit ...
+20:03:26 | INFO | services are up
+20:03:53 | INFO | flow A1: 8 stage shots + full | UI==API: True | verdict INCREMENTAL AND PROFITABLE
+20:04:04 | INFO | flow A2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:04:14 | INFO | flow B1: 8 stage shots + full | UI==API: True | verdict NO DETECTABLE EFFECT
+20:04:23 | INFO | flow B2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:04:31 | INFO | flow C1: 6 stage shots + full | UI==API: True | verdict LEAN IN
+20:04:39 | INFO | flow C2: 6 stage shots + full | UI==API: True | verdict PULL BACK
+20:04:47 | INFO | flow D1: 7 stage shots + full | UI==API: True | verdict SAFE TO RUN
+20:04:55 | INFO | flow D2: 7 stage shots + full | UI==API: True | verdict DO NOT TRUST THE PROJECTION
+20:05:02 | INFO | flows UI==API: True
+20:05:03 | INFO | services stopped
+20:05:14 | INFO | starting FastAPI and Streamlit ...
+20:05:18 | INFO | services are up
+20:05:23 | INFO | saved api_swagger_docs.png                        246 KB
+20:05:26 | INFO | saved api_cate_response.png                    (Swagger live response)
+20:05:48 | INFO | saved streamlit_tab1_executive_iroas.png          418 KB
+20:05:48 | INFO | API/UI consistency: ATT total 7,963 present in UI text: True
+20:05:54 | INFO | saved streamlit_tab2_did_event_study.png          366 KB
+20:05:59 | INFO | saved streamlit_tab3_synthetic_control.png        358 KB
+20:06:07 | INFO | saved streamlit_tab4_cate_metalearners.png        800 KB
+20:06:16 | INFO | saved streamlit_tab5_live_api.png                 608 KB
+20:06:24 | INFO | saved streamlit_preset2_las_vegas.png             419 KB
+20:06:29 | INFO | saved streamlit_preset3_new_york.png              410 KB
+20:06:33 | INFO | saved streamlit_preset4_placebo_check.png         294 KB
+20:06:53 | INFO | flow A1: 8 stage shots + full | UI==API: True | verdict INCREMENTAL AND PROFITABLE
+20:07:02 | INFO | flow A2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:07:13 | INFO | flow B1: 8 stage shots + full | UI==API: True | verdict NO DETECTABLE EFFECT
+20:07:24 | INFO | flow B2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:07:35 | INFO | flow C1: 6 stage shots + full | UI==API: True | verdict LEAN IN
+20:07:46 | INFO | flow C2: 6 stage shots + full | UI==API: True | verdict PULL BACK
+20:07:56 | INFO | flow D1: 7 stage shots + full | UI==API: True | verdict SAFE TO RUN
+20:08:07 | INFO | flow D2: 7 stage shots + full | UI==API: True | verdict DO NOT TRUST THE PROJECTION
+20:08:17 | INFO | services stopped
+20:08:41 | INFO | device: {'cuda': True, 'cuda_available': True, 'gpu_name': 'NVIDIA GeForce RTX 3090', 'torch_device': 'cuda', 'xgb_device': 'cuda', 'catboost_task': 'GPU', 'lightgbm': 'cpu (pip wheel has no CUDA build)'} | jax: {'backend': 'cpu', 'devices': ['cpu:0', 'cpu:1', 'cpu:2', 'cpu:3']}
+20:08:41 | INFO | ===== stage: verify =====
+20:08:41 | INFO | README images checked: 18, missing/empty: 0
+20:08:41 | INFO | figure 01_parallel_trends_event_study.png                 555.5 KB  dpi=300
+20:08:41 | INFO | figure 02_synthetic_control_counterfactual.png            636.2 KB  dpi=300
+20:08:41 | INFO | figure 03_donor_weights_and_covariate_balance.png         268.6 KB  dpi=300
+20:08:41 | INFO | figure 04_in_space_placebo_permutation.png                604.7 KB  dpi=300
+20:08:41 | INFO | figure 05_panel_att_estimators_comparison.png             273.2 KB  dpi=300
+20:08:41 | INFO | figure 06_cate_meta_learners_comparison.png               348.6 KB  dpi=300
+20:08:41 | INFO | figure 07_cate_heterogeneity_drivers.png                  426.2 KB  dpi=300
+20:08:41 | INFO | figure 08_pytorch_uplift_training_curves.png              323.0 KB  dpi=300
+20:08:41 | INFO | stage verify finished in 0.0s
+20:08:41 | INFO | pipeline finished in 0.1s
+20:08:57 | INFO | device: {'cuda': True, 'cuda_available': True, 'gpu_name': 'NVIDIA GeForce RTX 3090', 'torch_device': 'cuda', 'xgb_device': 'cuda', 'catboost_task': 'GPU', 'lightgbm': 'cpu (pip wheel has no CUDA build)'} | jax: {'backend': 'cpu', 'devices': ['cpu:0', 'cpu:1', 'cpu:2', 'cpu:3']}
+20:08:57 | INFO | ===== stage: verify =====
+20:08:57 | INFO | README images checked: 51, missing/empty: 0
+20:08:57 | INFO | figure 01_parallel_trends_event_study.png                 555.5 KB  dpi=300
+20:08:57 | INFO | figure 02_synthetic_control_counterfactual.png            636.2 KB  dpi=300
+20:08:57 | INFO | figure 03_donor_weights_and_covariate_balance.png         268.6 KB  dpi=300
+20:08:57 | INFO | figure 04_in_space_placebo_permutation.png                604.7 KB  dpi=300
+20:08:57 | INFO | figure 05_panel_att_estimators_comparison.png             273.2 KB  dpi=300
+20:08:57 | INFO | figure 06_cate_meta_learners_comparison.png               348.6 KB  dpi=300
+20:08:57 | INFO | figure 07_cate_heterogeneity_drivers.png                  426.2 KB  dpi=300
+20:08:57 | INFO | figure 08_pytorch_uplift_training_curves.png              323.0 KB  dpi=300
+20:08:57 | INFO | stage verify finished in 0.0s
+20:08:57 | INFO | pipeline finished in 0.1s
+20:09:03 | INFO |   S-Learner             0.2s  backend=xgboost  gpu=False
+20:09:04 | INFO |   T-Learner             0.6s  backend=catboost gpu=False
+20:09:04 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+20:09:04 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+20:09:05 | INFO |   Linear DML            0.8s  backend=xgboost  gpu=False
+20:09:05 | INFO |   S-Learner             0.1s  backend=xgboost  gpu=False
+20:09:09 | INFO |   TARNet                4.1s  backend=torch    gpu=False
+20:09:11 | INFO |   CFRNet-DragonNet      2.2s  backend=torch    gpu=True
+20:10:58 | INFO | starting FastAPI and Streamlit ...
+20:11:02 | INFO | services are up
+20:11:25 | INFO | flow A1: 8 stage shots + full | UI==API: True | verdict INCREMENTAL AND PROFITABLE
+20:11:36 | INFO | flow A2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:11:47 | INFO | flow B1: 8 stage shots + full | UI==API: True | verdict NO DETECTABLE EFFECT
+20:11:58 | INFO | flow B2: 8 stage shots + full | UI==API: True | verdict SUGGESTIVE, NOT CONCLUSIVE
+20:12:09 | INFO | flow C1: 6 stage shots + full | UI==API: True | verdict LEAN IN
+20:12:19 | INFO | flow C2: 6 stage shots + full | UI==API: True | verdict PULL BACK
+20:12:27 | INFO | flow D1: 7 stage shots + full | UI==API: True | verdict SAFE TO RUN
+20:12:35 | INFO | flow D2: 7 stage shots + full | UI==API: True | verdict DO NOT TRUST THE PROJECTION
+20:12:42 | INFO | flows UI==API: True
+20:12:43 | INFO | services stopped

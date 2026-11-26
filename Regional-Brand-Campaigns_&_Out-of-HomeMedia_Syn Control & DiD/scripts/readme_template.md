@@ -81,7 +81,7 @@ flowchart TD
     G --> K["FastAPI service<br/>/health /predict/att /predict/cate /simulate/campaign"]
     I --> K
     J --> K
-    K --> L["Streamlit workbench<br/>4 presets, 5 tabs"]
+    K --> L["Streamlit workbench<br/>4 presets, 6 tabs, 8 flows"]
     J --> L
     G --> L
     L --> M["Playwright screenshots<br/>+ generated README"]
@@ -314,6 +314,10 @@ Because the data are simulated, every plan can also be scored with the *true* re
 
 @@SHOTS@@
 
+### End-to-end flows (Streamlit tab 6, `outputs/screenshots/flows/`)
+
+@@FLOWS@@
+
 ---
 
 ## 8. Running it
@@ -324,8 +328,10 @@ python scripts/run_full_pipeline.py --quick      # fast smoke run
 python scripts/run_full_pipeline.py --no-gpu     # force CPU
 python -m uvicorn src.api.main:app --port 8000   # Swagger UI at http://127.0.0.1:8000/docs
 python -m streamlit run src/app/streamlit_app.py --server.port 8501
-python scripts/capture_screenshots.py            # starts both services, screenshots, shuts them down
+python scripts/capture_screenshots.py            # starts both services, screenshots (incl. flows), shuts them down
+python scripts/capture_screenshots.py flows      # only the end-to-end flow screenshots
 python scripts/build_readme.py                   # regenerate this file from outputs/metrics
+python scripts/build_deck.py                     # 44-slide editable deck -> presentation/Aurelia_OOH_Incrementality_End_to_End.pptx
 python -m pytest tests -q
 ```
 
@@ -349,7 +355,7 @@ curl -s -X POST http://127.0.0.1:8000/simulate/campaign -H "Content-Type: applic
 
 Sidebar presets: **1** Miami flagship (winter-peak CTV + airport vs. coastal/Sunbelt donors), **2** Las Vegas (convention and billboard blitz vs. ORL, SAN, PHX, AUS),
 **3** New York (spring-break awareness push vs. BOS, CHI, DCA), **4** negative/placebo control (TPA). Tabs: executive summary and iROAS calculator; DiD and event study;
-synthetic control and donor lab (live re-run with a custom donor pool); Geo-CATE studio with a what-if simulator and pacing optimiser; live FastAPI integration and batch scoring.
+synthetic control and donor lab (live re-run with a custom donor pool); Geo-CATE studio with a what-if simulator and pacing optimiser; live FastAPI integration and batch scoring; **End-to-End Flows** (four flow types x two examples, per-stage metrics and a scorecard).
 
 ---
 

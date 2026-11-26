@@ -81,7 +81,7 @@ flowchart TD
     G --> K["FastAPI service<br/>/health /predict/att /predict/cate /simulate/campaign"]
     I --> K
     J --> K
-    K --> L["Streamlit workbench<br/>4 presets, 5 tabs"]
+    K --> L["Streamlit workbench<br/>4 presets, 6 tabs, 8 flows"]
     J --> L
     G --> L
     L --> M["Playwright screenshots<br/>+ generated README"]
@@ -185,7 +185,7 @@ Fitted on the *estimated* daily effect (never on the truth) with the Hill shape 
 
 ## 5. GPU acceleration: setup and benchmark
 
-**Hardware used:** NVIDIA GeForce RTX 3090 (`outputs/logs/hardware_telemetry.json` holds nvidia-smi snapshots through the run; peak total GPU memory in use across all processes: 1,612 MB). `src/utils/device.py` detects CUDA once and
+**Hardware used:** NVIDIA GeForce RTX 3090 (`outputs/logs/hardware_telemetry.json` holds nvidia-smi snapshots through the run; peak total GPU memory in use across all processes: 2,444 MB). `src/utils/device.py` detects CUDA once and
 falls back to CPU automatically if CUDA is missing or `--no-gpu` is given.
 
 | Backend | GPU path | Fallback |
@@ -484,6 +484,238 @@ Because the data are simulated, every plan can also be scored with the *true* re
 
 ![Preset 4 - Tampa negative control](outputs/screenshots/streamlit_preset4_placebo_check.png)
 
+### End-to-end flows (Streamlit tab 6, `outputs/screenshots/flows/`)
+
+The **End-to-End Flows** tab (tab 6) walks four kinds of question through the engine, two worked examples each. Every flow is a sequence of stages; each stage shows its own metrics, and a scorecard on top rolls them up into a verdict. The numbers come from `src/flows.py`, the same engine the API uses, and `scripts/capture_screenshots.py` re-checks that the UI shows the number the live API returns (8/8 flows match; `outputs/screenshots/flows/flow_api_vs_ui_check.json`).
+
+```mermaid
+flowchart LR
+  A["A. Campaign read-out<br/>design, trends, DiD, SC, placebo, economics, verdict"]
+  B["B. Validity / negative control<br/>same seven stages, null and thin-pool cases"]
+  C["C. Which days work hardest<br/>conditions, learners, agreement, vs average, audit"]
+  D["D. Budget and pacing<br/>inputs, curve quality, plan, comparison, audit, verdict"]
+  A --> B --> C --> D
+```
+
+| Flow | Example | Key metrics | Verdict |
+|---|---|---|---|
+| A1 | Miami flagship, all 24 control DMAs | ATT 131/day (truth 124); p = 0.040; iROAS 1.49x (truth 1.41x) | **INCREMENTAL AND PROFITABLE** |
+| A2 | Las Vegas convention & billboard blitz | ATT 59/day (truth 91); p = 0.200; iROAS 0.86x (truth 1.31x) | **SUGGESTIVE, NOT CONCLUSIVE** |
+| B1 | Tampa: an unexposed market (true effect 0) | ATT 25/day (truth 0); p = 0.250; no spend | **NO DETECTABLE EFFECT** |
+| B2 | New York: real but small effect, three donors | ATT 108/day (truth 68); p = 0.250; iROAS 1.17x (truth 0.73x) | **SUGGESTIVE, NOT CONCLUSIVE** |
+| C1 | Holiday weekend with a flight-search surge | median lift 148 room nights/day (learners 102-178); index 1.26x the campaign average | **LEAN IN** |
+| C2 | Rainy weekday under heavy OTA promotion | median lift 80 room nights/day (learners 41-133); index 0.68x the campaign average | **PULL BACK** |
+| D1 | Weekend-weighted flight, $3M | projected +0.6% vs even, true +0.5%; projected iROAS 1.34x | **SAFE TO RUN** |
+| D2 | Curve-optimised flight, $3M | projected +8.7% vs even, true +0.2%; projected iROAS 1.45x | **DO NOT TRUST THE PROJECTION** |
+
+![](outputs/screenshots/flows/all_flows_comparison.png)
+
+### Flow A - Campaign read-out
+*Was the regional campaign incremental, and was it worth the money?*
+
+#### A1 - Miami flagship, all 24 control DMAs
+Aurelia's headline question: 60 days of CTV, airport and billboard in Miami against every other DMA in the panel. Miami's winter ramp is steeper than the average market, so a naive DiD should overstate the lift.
+
+**INCREMENTAL AND PROFITABLE** - Keep the programme; scale with a holdout re-test.
+
+| Stage | Metrics |
+|---|---|
+| 1. Experiment design | Treated market MIA; Donor DMAs 24; Pre / campaign days 180 / 60; Spend $3.0M; Smallest possible p 0.040 |
+| 2. Parallel-trends diagnostic | Pre-trend RMS 128.2; Pre-trend slope / day -26.95; Permutation p (pre-trend) 0.28; Early vs late effect 158 -> 2 |
+| 3. DiD family (assumes parallel trends) | TWFE DiD 257; Event Study 110; CS-DiD (DR) 91; Truth 124 |
+| 4. Synthetic-control family (re-weighted donors) | Pre-fit RMSPE (ASCM) 38.5; ASCM ATT / day 131; SCM ATT / day 135; SDID ATT / day 132; ASCM bias vs truth 6% |
+| 5. Placebo inference | Treated rank 1 of 25; Exact p-value 0.040; Smallest attainable p 0.040; 95% CI contains 0? no; CI covers truth? yes |
+| 6. Economics | Incremental room nights 7,855; CPIRN $382; iROAS 1.49x; True iROAS 1.41x; Break-even room nights 5,289 |
+| 7. Verdict | Headline ATT / day 131; iROAS 1.49x; Placebo p 0.040 |
+
+| Step 3 - DiD family | Step 4 - synthetic control | Step 6 - economics |
+|---|---|---|
+| ![](outputs/screenshots/flows/A1_did.png) | ![](outputs/screenshots/flows/A1_sc.png) | ![](outputs/screenshots/flows/A1_econ.png) |
+
+<details><summary>Full flow A1 (all stages)</summary>
+
+![](outputs/screenshots/flows/A1_full.png)
+
+</details>
+
+#### A2 - Las Vegas convention & billboard blitz
+A $2.2M billboard-led push against only four donors (ORL, SAN, PHX, AUS). The effect is real, but a four-donor placebo distribution cannot give a p-value below 0.20.
+
+**SUGGESTIVE, NOT CONCLUSIVE** - Point estimate is positive but interval spans zero and the donor pool is too thin to prove it; add donors or extend the test.
+
+| Stage | Metrics |
+|---|---|
+| 1. Experiment design | Treated market LAS; Donor DMAs 4; Pre / campaign days 180 / 60; Spend $2.2M; Smallest possible p 0.200 |
+| 2. Parallel-trends diagnostic | Pre-trend RMS 47.2; Pre-trend slope / day -5.49; Permutation p (pre-trend) 0.80; Early vs late effect 156 -> 93 |
+| 3. DiD family (assumes parallel trends) | TWFE DiD 85; Event Study 113; CS-DiD (DR) 71; Truth 91 |
+| 4. Synthetic-control family (re-weighted donors) | Pre-fit RMSPE (ASCM) 43.9; ASCM ATT / day 59; SCM ATT / day 59; SDID ATT / day 50; ASCM bias vs truth -34% |
+| 5. Placebo inference | Treated rank 1 of 5; Exact p-value 0.200; Smallest attainable p 0.200; 95% CI contains 0? yes; CI covers truth? yes |
+| 6. Economics | Incremental room nights 3,558; CPIRN $618; iROAS 0.86x; True iROAS 1.31x; Break-even room nights 4,122 |
+| 7. Verdict | Headline ATT / day 59; iROAS 0.86x; Placebo p 0.200 |
+
+| Step 3 - DiD family | Step 4 - synthetic control | Step 6 - economics |
+|---|---|---|
+| ![](outputs/screenshots/flows/A2_did.png) | ![](outputs/screenshots/flows/A2_sc.png) | ![](outputs/screenshots/flows/A2_econ.png) |
+
+<details><summary>Full flow A2 (all stages)</summary>
+
+![](outputs/screenshots/flows/A2_full.png)
+
+</details>
+
+### Flow B - Validity & negative control
+*Can we trust a null result, or a thin donor pool?*
+
+#### B1 - Tampa: an unexposed market (true effect 0)
+Tampa was never advertised to. A trustworthy method must report 'no effect'; any estimator that returns a significant lift here is producing false positives.
+
+**NO DETECTABLE EFFECT** - Do not credit the campaign; the market was never exposed.
+
+| Stage | Metrics |
+|---|---|
+| 1. Experiment design | Treated market TPA; Donor DMAs 7; Pre / campaign days 180 / 60; Spend $0.0M; Smallest possible p 0.125 |
+| 2. Parallel-trends diagnostic | Pre-trend RMS 40.8; Pre-trend slope / day -6.65; Permutation p (pre-trend) 0.88; Early vs late effect 39 -> 3 |
+| 3. DiD family (assumes parallel trends) | TWFE DiD 55; Event Study 14; CS-DiD (DR) 59; Truth 0 |
+| 4. Synthetic-control family (re-weighted donors) | Pre-fit RMSPE (ASCM) 36.6; ASCM ATT / day 25; SCM ATT / day 25; SDID ATT / day 30; ASCM bias vs truth n/a |
+| 5. Placebo inference | Treated rank 2 of 8; Exact p-value 0.250; Smallest attainable p 0.125; 95% CI contains 0? yes; CI covers truth? yes |
+| 6. Economics | Incremental room nights n/a; CPIRN n/a; iROAS n/a; True iROAS 0.00x; Break-even room nights n/a |
+| 7. Verdict | Headline ATT / day 25; iROAS n/a; Placebo p 0.250 |
+
+| Step 3 - DiD family | Step 4 - synthetic control | Step 6 - economics |
+|---|---|---|
+| ![](outputs/screenshots/flows/B1_did.png) | ![](outputs/screenshots/flows/B1_sc.png) | ![](outputs/screenshots/flows/B1_econ.png) |
+
+<details><summary>Full flow B1 (all stages)</summary>
+
+![](outputs/screenshots/flows/B1_full.png)
+
+</details>
+
+#### B2 - New York: real but small effect, three donors
+A modest awareness push with three donors (BOS, CHI, DCA). The point estimates are positive but the evidence cannot separate the campaign from placebo markets.
+
+**SUGGESTIVE, NOT CONCLUSIVE** - Point estimate is positive but interval spans zero and the donor pool is too thin to prove it; add donors or extend the test.
+
+| Stage | Metrics |
+|---|---|
+| 1. Experiment design | Treated market NYC; Donor DMAs 3; Pre / campaign days 180 / 60; Spend $2.6M; Smallest possible p 0.250 |
+| 2. Parallel-trends diagnostic | Pre-trend RMS 59.0; Pre-trend slope / day 5.62; Permutation p (pre-trend) 0.75; Early vs late effect 22 -> 100 |
+| 3. DiD family (assumes parallel trends) | TWFE DiD 102; Event Study 65; CS-DiD (DR) -47; Truth 68 |
+| 4. Synthetic-control family (re-weighted donors) | Pre-fit RMSPE (ASCM) 48.2; ASCM ATT / day 108; SCM ATT / day 108; SDID ATT / day 123; ASCM bias vs truth 60% |
+| 5. Placebo inference | Treated rank 1 of 4; Exact p-value 0.250; Smallest attainable p 0.250; 95% CI contains 0? yes; CI covers truth? yes |
+| 6. Economics | Incremental room nights 6,503; CPIRN $400; iROAS 1.17x; True iROAS 0.73x; Break-even room nights 5,544 |
+| 7. Verdict | Headline ATT / day 108; iROAS 1.17x; Placebo p 0.250 |
+
+| Step 3 - DiD family | Step 4 - synthetic control | Step 6 - economics |
+|---|---|---|
+| ![](outputs/screenshots/flows/B2_did.png) | ![](outputs/screenshots/flows/B2_sc.png) | ![](outputs/screenshots/flows/B2_econ.png) |
+
+<details><summary>Full flow B2 (all stages)</summary>
+
+![](outputs/screenshots/flows/B2_full.png)
+
+</details>
+
+### Flow C - Which days work hardest
+*How much lift does a specific market-day deliver?*
+
+#### C1 - Holiday weekend with a flight-search surge
+A holiday-window Saturday two weeks in: flight searches into Miami are spiking, weather is clear and OTAs are quiet.
+
+**LEAN IN** - Weight spend up on days like this (about 1.26x the campaign-average lift).
+
+| Stage | Metrics |
+|---|---|
+| 1. Market conditions | is weekend 1; is holiday window 1; flight search index 140; ota promo pressure index 22; competitor adr usd 400; days since launch 15 |
+| 2. Learner predictions | S-Learner 102; R-Learner 111; DR-Learner 106; TARNet 174; CFRNet-DragonNet 178 |
+| 3. Agreement & uncertainty | Median lift (room nights) 148; Learner spread 76; Spread / median 51%; Best learner CFRNet-DragonNet; Best-learner lift 178 |
+| 4. Versus the campaign average | Campaign-average lift 118; This day 148; Relative index 1.26x; Lift % 11.9% |
+| 5. Audit vs the nearest real day | Nearest campaign day day 194; True effect that day 233; Best-learner error -55 |
+
+| Step 2 - learners | Step 4 - vs average | Step 5 - audit |
+|---|---|---|
+| ![](outputs/screenshots/flows/C1_learners.png) | ![](outputs/screenshots/flows/C1_index.png) | ![](outputs/screenshots/flows/C1_audit.png) |
+
+<details><summary>Full flow C1 (all stages)</summary>
+
+![](outputs/screenshots/flows/C1_full.png)
+
+</details>
+
+#### C2 - Rainy weekday under heavy OTA promotion
+A stormy Tuesday late in the flight: searches are soft, OTAs are discounting hard and rivals have cut rates.
+
+**PULL BACK** - Shift spend away from days like this (about 0.68x the campaign-average lift).
+
+| Stage | Metrics |
+|---|---|
+| 1. Market conditions | flight search index 85; weather severity index 17; ota promo pressure index 75; competitor adr usd 330; days since launch 45 |
+| 2. Learner predictions | S-Learner 64; R-Learner 71; DR-Learner 76; TARNet 46; CFRNet-DragonNet 41 |
+| 3. Agreement & uncertainty | Median lift (room nights) 80; Learner spread 92; Spread / median 115%; Best learner CFRNet-DragonNet; Best-learner lift 41 |
+| 4. Versus the campaign average | Campaign-average lift 118; This day 80; Relative index 0.68x; Lift % 6.4% |
+| 5. Audit vs the nearest real day | Nearest campaign day day 227; True effect that day 57; Best-learner error -16 |
+
+| Step 2 - learners | Step 4 - vs average | Step 5 - audit |
+|---|---|---|
+| ![](outputs/screenshots/flows/C2_learners.png) | ![](outputs/screenshots/flows/C2_index.png) | ![](outputs/screenshots/flows/C2_audit.png) |
+
+<details><summary>Full flow C2 (all stages)</summary>
+
+![](outputs/screenshots/flows/C2_full.png)
+
+</details>
+
+### Flow D - Budget & pacing
+*How should a budget be flighted, and does the plan survive the truth?*
+
+#### D1 - Weekend-weighted flight, $3M
+Put more of the same $3M behind weekend days, where the CATE learners say media works hardest.
+
+**SAFE TO RUN** - Projected +0.6% and true +0.5% vs even agree within 2 points: a harmless, defensible re-weighting.
+
+| Stage | Metrics |
+|---|---|
+| 1. Plan inputs | Budget $3.00M; Strategy weekend_weighted; Campaign days 60; Net revenue / room night $562 |
+| 2. Response-curve quality | Curve R2 0.56; Adstock theta 0.90; Half-saturation K 232k; Weak fit? yes |
+| 3. Daily plan & projection | Projected incremental RN 7,156; CPIRN $419; iROAS 1.34x; Net revenue $4.02M |
+| 4. Strategy comparison | Best projected strategy optimized; Projected vs even 0.6%; Spread across plans 2,186 RN; Back-loaded vs even (true) -22.0% |
+| 5. Audit against the true response | Projected vs even 0.6%; True vs even 0.5%; Projection error 0.1 pts; True incremental RN 7,455 |
+| 6. Verdict | Projected 0.6%; True 0.5%; iROAS (projected) 1.34x |
+
+| Step 3 - plan | Step 4 - comparison | Step 5 - audit |
+|---|---|---|
+| ![](outputs/screenshots/flows/D1_plan.png) | ![](outputs/screenshots/flows/D1_compare.png) | ![](outputs/screenshots/flows/D1_audit.png) |
+
+<details><summary>Full flow D1 (all stages)</summary>
+
+![](outputs/screenshots/flows/D1_full.png)
+
+</details>
+
+#### D2 - Curve-optimised flight, $3M
+The response-curve optimiser promises a big gain. The panel is simulated, so we can check that promise against the true response.
+
+**DO NOT TRUST THE PROJECTION** - The curve projects +8.7% vs even but the true response gives +0.2%: the gain is a model artefact.
+
+| Stage | Metrics |
+|---|---|
+| 1. Plan inputs | Budget $3.00M; Strategy optimized; Campaign days 60; Net revenue / room night $562 |
+| 2. Response-curve quality | Curve R2 0.56; Adstock theta 0.90; Half-saturation K 232k; Weak fit? yes |
+| 3. Daily plan & projection | Projected incremental RN 7,734; CPIRN $388; iROAS 1.45x; Net revenue $4.35M |
+| 4. Strategy comparison | Best projected strategy optimized; Projected vs even 8.7%; Spread across plans 2,186 RN; Back-loaded vs even (true) -22.0% |
+| 5. Audit against the true response | Projected vs even 8.7%; True vs even 0.2%; Projection error 8.5 pts; True incremental RN 7,431 |
+| 6. Verdict | Projected 8.7%; True 0.2%; iROAS (projected) 1.45x |
+
+| Step 3 - plan | Step 4 - comparison | Step 5 - audit |
+|---|---|---|
+| ![](outputs/screenshots/flows/D2_plan.png) | ![](outputs/screenshots/flows/D2_compare.png) | ![](outputs/screenshots/flows/D2_audit.png) |
+
+<details><summary>Full flow D2 (all stages)</summary>
+
+![](outputs/screenshots/flows/D2_full.png)
+
+</details>
+
 ---
 
 ## 8. Running it
@@ -494,8 +726,10 @@ python scripts/run_full_pipeline.py --quick      # fast smoke run
 python scripts/run_full_pipeline.py --no-gpu     # force CPU
 python -m uvicorn src.api.main:app --port 8000   # Swagger UI at http://127.0.0.1:8000/docs
 python -m streamlit run src/app/streamlit_app.py --server.port 8501
-python scripts/capture_screenshots.py            # starts both services, screenshots, shuts them down
+python scripts/capture_screenshots.py            # starts both services, screenshots (incl. flows), shuts them down
+python scripts/capture_screenshots.py flows      # only the end-to-end flow screenshots
 python scripts/build_readme.py                   # regenerate this file from outputs/metrics
+python scripts/build_deck.py                     # 44-slide editable deck -> presentation/Aurelia_OOH_Incrementality_End_to_End.pptx
 python -m pytest tests -q
 ```
 
@@ -519,7 +753,7 @@ curl -s -X POST http://127.0.0.1:8000/simulate/campaign -H "Content-Type: applic
 
 Sidebar presets: **1** Miami flagship (winter-peak CTV + airport vs. coastal/Sunbelt donors), **2** Las Vegas (convention and billboard blitz vs. ORL, SAN, PHX, AUS),
 **3** New York (spring-break awareness push vs. BOS, CHI, DCA), **4** negative/placebo control (TPA). Tabs: executive summary and iROAS calculator; DiD and event study;
-synthetic control and donor lab (live re-run with a custom donor pool); Geo-CATE studio with a what-if simulator and pacing optimiser; live FastAPI integration and batch scoring.
+synthetic control and donor lab (live re-run with a custom donor pool); Geo-CATE studio with a what-if simulator and pacing optimiser; live FastAPI integration and batch scoring; **End-to-End Flows** (four flow types x two examples, per-stage metrics and a scorecard).
 
 ---
 

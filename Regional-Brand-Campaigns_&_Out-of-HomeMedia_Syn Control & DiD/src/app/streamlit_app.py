@@ -104,7 +104,7 @@ ser = pd.DataFrame(res["series"])
 unit = "USD" if outcome == "incremental_net_revenue_usd" else "room nights" if outcome == "room_nights_booked" else "units"
 
 tabs = st.tabs(["1. Executive Summary & iROAS", "2. DiD & Event-Study", "3. Synthetic Control & Donor Lab",
-                "4. Geo-CATE & Meta-Learner Studio", "5. Live FastAPI & Batch Scoring"])
+                "4. Geo-CATE & Meta-Learner Studio", "5. Live FastAPI & Batch Scoring", "6. End-to-End Flows"])
 
 
 def fmt(x, d=0, pre="", suf=""):
@@ -460,3 +460,19 @@ with tabs[4]:
                 st.download_button("Download scored CSV", scored.to_csv(index=False), "scored_market_days.csv", key="batch_dl")
             else:
                 st.error(rr.text)
+
+# ============================================================================ TAB 6
+with tabs[5]:
+    from src import flows as fl  # noqa: E402
+    from src.app import flows_ui  # noqa: E402
+
+    st.markdown("#### End-to-end flows")
+    st.caption("Four flow types, two worked examples each. Every stage shows its own metrics; the scorecard on top rolls them up. "
+               "All numbers come from the same engine as the API; the 'truth' columns exist only because the panel is simulated.")
+    labels = {f["id"]: f["short"] for f in fl.FLOWS}
+    pick = st.radio("Choose a flow", list(labels), format_func=labels.get, horizontal=True, key="flow_pick")
+    flows_ui.render_flow(eng, pick)
+    st.markdown("---")
+    with st.container(key="flow_compare"):
+        st.markdown("#### All eight flows side by side")
+        flows_ui.render_comparison(eng)

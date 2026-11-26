@@ -1,6 +1,7 @@
 """Start FastAPI (8000) and Streamlit (8501), capture UI/API screenshots with Playwright, shut everything down.
 
-    python scripts/capture_screenshots.py
+    python scripts/capture_screenshots.py            # everything
+    python scripts/capture_screenshots.py flows      # only the end-to-end flow screenshots
 """
 from __future__ import annotations
 
@@ -28,6 +29,7 @@ UI = f"http://127.0.0.1:{cfg['ui']['port']}"
 OUT = ensure_dir(cfg["paths"]["screenshots"])
 LOGS = ensure_dir(cfg["paths"]["logs"])
 PROCS: list[subprocess.Popen] = []
+ENGINE = None
 
 
 # ----------------------------------------------------------------------------- process management
@@ -206,7 +208,80 @@ def ui_shots(browser, api_info: dict) -> dict:
     return check
 
 
-def main() -> None:
+# ----------------------------------------------------------------------------- end-to-end flow screenshots
+def api_flow_numbers(rep: dict) -> dict:
+    """What the live API says for this flow, to compare with the numbers the UI displays."""
+    f = rep["flow"]
+    if rep["kind"] == "panel":
+        j = requests.post(API + "/predict/att", json={"scenario": rep["scenario"], "estimator": "ASCM (Ridge)", "include_series": False}, timeout=60).json()
+        return {"label": "ATT total", "api": j["att_total"], "token": f"{j['att_total']:,.0f}"}
+    if rep["kind"] == "pacing":
+        j = requests.post(API + "/simulate/campaign", json={"budget_usd": f["budget"], "strategy": f["strategy"]}, timeout=60).json()
+        v = j["totals"]["incremental_room_nights"]
+        return {"label": "projected incremental room nights", "api": v, "token": f"{v:,.0f}"}
+    from src import flows as fl
+    from src.serving import Engine
+    row = fl.cate_row(ENGINE, f["cond"])
+    learner = rep["headline"]["best_learner"]
+    j = requests.post(API + "/predict/cate", json={"rows": [row], "learner": learner}, timeout=60).json()
+    v = j["incremental_room_nights"][0]
+    return {"label": f"{learner} lift (room nights)", "api": v, "token": f"{v:,.0f}"}
+
+
+def select_flow_ready(pg, flow_id: str, timeout: float = 120) -> None:
+    """Wait until the flow just selected is fully rendered: its heading is present and nothing is still fading (stale)."""
+    pg.locator(".st-key-flow_full").get_by_text(f"Flow {flow_id} -").first.wait_for(timeout=timeout * 1000)
+    idle(pg)
+    t0 = time.time()
+    while time.time() - t0 < 30:
+        faded = pg.evaluate("""() => { let el = document.querySelector('.st-key-flow_full'); let m = 1;
+            while (el && el !== document.body) { m = Math.min(m, parseFloat(getComputedStyle(el).opacity)); el = el.parentElement; }
+            return m; }""")
+        if faded >= 0.999 and pg.locator(".st-key-flow_full img").count() >= 1:
+            break
+        time.sleep(0.5)
+    time.sleep(2.0)
+
+
+def capture_flows(browser) -> dict:
+    from src import flows as fl
+    global ENGINE
+    from src.serving import Engine
+    ENGINE = Engine()
+    fdir = ensure_dir(OUT / "flows")
+    ctx = browser.new_context(viewport={"width": 1500, "height": 5600}, device_scale_factor=1.5)
+    pg = ctx.new_page()
+    pg.goto(UI, wait_until="domcontentloaded")
+    pg.get_by_role("button", name="1. Miami Flagship").wait_for(timeout=240000)
+    pg.add_style_tag(content="header[data-testid=stHeader]{display:none !important}")
+    idle(pg)
+    click_tab(pg, "6. End-to-End")
+    checks: dict = {}
+    for f in fl.FLOWS:
+        pg.get_by_text(f["short"], exact=True).click()
+        select_flow_ready(pg, f["id"])
+        rep = fl.report(ENGINE, f)
+        pg.mouse.move(1490, 8)
+        names = ["overall"] + [s["key"] for s in rep["steps"]]
+        for n in names:
+            loc = pg.locator(f".st-key-flow_{n}" if n == "overall" else f".st-key-flowstep_{n}")
+            loc.scroll_into_view_if_needed()
+            loc.screenshot(path=str(fdir / f"{f['id']}_{n}.png"))
+        pg.locator(".st-key-flow_full").screenshot(path=str(fdir / f"{f['id']}_full.png"))
+        body = pg.locator(".st-key-flow_full").inner_text()
+        a = api_flow_numbers(rep)
+        checks[f["id"]] = {"flow": f["title"], "verdict": rep["verdict"], "api_metric": a["label"], "api_value": a["api"],
+                           "ui_shows_api_number": a["token"] in body, "ui_shows_verdict": rep["verdict"] in body}
+        log.info("flow %s: %d stage shots + full | UI==API: %s | verdict %s", f["id"], len(names), checks[f["id"]]["ui_shows_api_number"], rep["verdict"])
+    pg.get_by_text("A1 - Miami winter peak", exact=True).click()
+    select_flow_ready(pg, "A1")
+    pg.locator(".st-key-flow_compare").screenshot(path=str(fdir / "all_flows_comparison.png"))
+    save_json(checks, fdir / "flow_api_vs_ui_check.json")
+    ctx.close()
+    return checks
+
+
+def main(only: str | None = None) -> None:
     log.info("starting FastAPI and Streamlit ...")
     start([sys.executable, "-m", "uvicorn", "src.api.main:app", "--host", "127.0.0.1", "--port", str(cfg["api"]["port"])], "uvicorn.log")
     start([sys.executable, "-m", "streamlit", "run", "src/app/streamlit_app.py", "--server.port", str(cfg["ui"]["port"]),
@@ -217,14 +292,19 @@ def main() -> None:
         log.info("services are up")
         with sync_playwright() as p:
             browser = p.chromium.launch()
-            api_info = api_shots(browser)
-            check = ui_shots(browser, api_info)
+            if only == "flows":
+                checks = capture_flows(browser)
+                log.info("flows UI==API: %s", all(v["ui_shows_api_number"] and v["ui_shows_verdict"] for v in checks.values()))
+            else:
+                api_info = api_shots(browser)
+                check = ui_shots(browser, api_info)
+                check["flows"] = capture_flows(browser)
+                save_json({"api_cate": api_info, "consistency": check}, OUT / "capture_report.json")
             browser.close()
-        save_json({"api_cate": api_info, "consistency": check}, OUT / "capture_report.json")
     finally:
         stop_all()
         log.info("services stopped")
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else None)

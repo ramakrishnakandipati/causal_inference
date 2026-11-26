@@ -1,7 +1,7 @@
 # Targets mirror the pipeline stages. On Windows without GNU make, run the `python ...` command shown.
 PY ?= python
 
-.PHONY: all install data panel cate mc gpu figures readme verify quick test api ui screenshots clean
+.PHONY: all install data panel cate mc gpu figures readme verify quick test api ui screenshots deck clean
 
 all: data panel cate mc gpu figures readme verify          # python scripts/run_full_pipeline.py
 
@@ -47,6 +47,9 @@ ui:
 
 screenshots:
 	$(PY) scripts/capture_screenshots.py
+
+deck:
+	$(PY) scripts/build_deck.py
 
 clean:
 	$(PY) -c "import shutil; [shutil.rmtree(p, ignore_errors=True) for p in ('outputs/models','outputs/metrics','outputs/figures','.pytest_cache')]"

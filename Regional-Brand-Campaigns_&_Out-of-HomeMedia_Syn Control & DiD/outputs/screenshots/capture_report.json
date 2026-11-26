@@ -5,19 +5,19 @@
       "learner": "Causal Forest DML",
       "n": 2,
       "lift_pct": [
-        7.228624712594833,
-        7.325754653311363
+        7.22862471259483,
+        7.325754653311361
       ],
       "incremental_room_nights": [
-        108.4293706889225,
-        109.88631979967045
+        108.42937068892246,
+        109.88631979967042
       ],
       "baseline_room_nights": 1500.0,
-      "mean_lift_pct": 7.2771896829530975,
+      "mean_lift_pct": 7.277189682953096,
       "ci": {
         "level": 0.95,
         "lift_pct_lo": [
-          5.863762143874099,
+          5.863762143874101,
           5.805033952108853
         ],
         "lift_pct_hi": [
@@ -25,7 +25,7 @@
           8.846475354513874
         ],
         "incremental_room_nights_lo": [
-          87.95643215811148,
+          87.95643215811153,
           87.07550928163279
         ],
         "incremental_room_nights_hi": [
@@ -37,6 +37,72 @@
   },
   "consistency": {
     "api_att_total_ascm_mia_flagship": 7962.965679126068,
-    "ui_shows_same_total": true
+    "ui_shows_same_total": true,
+    "flows": {
+      "A1": {
+        "flow": "Miami flagship, all 24 control DMAs",
+        "verdict": "INCREMENTAL AND PROFITABLE",
+        "api_metric": "ATT total",
+        "api_value": 7855.234297133816,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "A2": {
+        "flow": "Las Vegas convention & billboard blitz",
+        "verdict": "SUGGESTIVE, NOT CONCLUSIVE",
+        "api_metric": "ATT total",
+        "api_value": 3558.200917892177,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "B1": {
+        "flow": "Tampa: an unexposed market (true effect 0)",
+        "verdict": "NO DETECTABLE EFFECT",
+        "api_metric": "ATT total",
+        "api_value": 1529.7966817066758,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "B2": {
+        "flow": "New York: real but small effect, three donors",
+        "verdict": "SUGGESTIVE, NOT CONCLUSIVE",
+        "api_metric": "ATT total",
+        "api_value": 6503.261362561779,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "C1": {
+        "flow": "Holiday weekend with a flight-search surge",
+        "verdict": "LEAN IN",
+        "api_metric": "CFRNet-DragonNet lift (room nights)",
+        "api_value": 177.88522191207045,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "C2": {
+        "flow": "Rainy weekday under heavy OTA promotion",
+        "verdict": "PULL BACK",
+        "api_metric": "CFRNet-DragonNet lift (room nights)",
+        "api_value": 40.76328706591707,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "D1": {
+        "flow": "Weekend-weighted flight, $3M",
+        "verdict": "SAFE TO RUN",
+        "api_metric": "projected incremental room nights",
+        "api_value": 7155.973583542827,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      },
+      "D2": {
+        "flow": "Curve-optimised flight, $3M",
+        "verdict": "DO NOT TRUST THE PROJECTION",
+        "api_metric": "projected incremental room nights",
+        "api_value": 7734.324692562508,
+        "ui_shows_api_number": true,
+        "ui_shows_verdict": true
+      }
+    }
   }
 }

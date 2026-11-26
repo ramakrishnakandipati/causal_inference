@@ -235,6 +235,53 @@ def mc_val(est: str, col: str, fmt_: str) -> str:
     return fmt_.format(mcx.loc[est, col]) if len(mcx) and est in mcx.index else "n/a"
 
 
+# ----------------------------------------------------------------------------- end-to-end flows section (from src/flows.py)
+from src import flows as fl  # noqa: E402
+from src.serving import Engine  # noqa: E402
+
+_eng = Engine()
+_KEY = {"panel": ["did", "sc", "econ"], "cate": ["learners", "index", "audit"], "pacing": ["plan", "compare", "audit"]}
+_KEYN = {"did": "Step 3 - DiD family", "sc": "Step 4 - synthetic control", "econ": "Step 6 - economics", "learners": "Step 2 - learners",
+         "index": "Step 4 - vs average", "audit": "Step 5 - audit", "plan": "Step 3 - plan", "compare": "Step 4 - comparison"}
+_chk_p = ROOT / "outputs" / "screenshots" / "flows" / "flow_api_vs_ui_check.json"
+_chk = read_json(_chk_p) if _chk_p.exists() else {}
+_reps = {fx["id"]: fl.report(_eng, fx) for fx in fl.FLOWS}
+FL = ["The **End-to-End Flows** tab (tab 6) walks four kinds of question through the engine, two worked examples each. Every flow is a sequence of stages; each stage "
+      "shows its own metrics, and a scorecard on top rolls them up into a verdict. The numbers come from `src/flows.py`, the same engine the API uses, and "
+      f"`scripts/capture_screenshots.py` re-checks that the UI shows the number the live API returns ({sum(v['ui_shows_api_number'] for v in _chk.values())}/{len(_chk)} flows match; "
+      "`outputs/screenshots/flows/flow_api_vs_ui_check.json`).", "",
+      "```mermaid", "flowchart LR",
+      '  A["A. Campaign read-out<br/>design, trends, DiD, SC, placebo, economics, verdict"]', '  B["B. Validity / negative control<br/>same seven stages, null and thin-pool cases"]',
+      '  C["C. Which days work hardest<br/>conditions, learners, agreement, vs average, audit"]', '  D["D. Budget and pacing<br/>inputs, curve quality, plan, comparison, audit, verdict"]',
+      "  A --> B --> C --> D", "```", "",
+      "| Flow | Example | Key metrics | Verdict |", "|---|---|---|---|"]
+for fx in fl.FLOWS:
+    r = _reps[fx["id"]]
+    h = r["headline"]
+    if r["kind"] == "panel":
+        km = (f"ATT {h['att_mean']:,.0f}/day (truth {h['truth']:,.0f}); p = {h['p']:.3f}; iROAS {h['iroas']:.2f}x (truth {h['true_iroas']:.2f}x)" if r["has_econ"]
+              else f"ATT {h['att_mean']:,.0f}/day (truth 0); p = {h['p']:.3f}; no spend")
+    elif r["kind"] == "cate":
+        km = f"median lift {h['median']:,.0f} room nights/day (learners {h['lo']:,.0f}-{h['hi']:,.0f}); index {h['index']:.2f}x the campaign average"
+    else:
+        km = f"projected {h['projected']:+.1f}% vs even, true {h['true']:+.1f}%; projected iROAS {h['iroas']:.2f}x"
+    FL.append(f"| {fx['id']} | {fx['title']} | {km} | **{r['verdict']}** |")
+FL.append("")
+FL.append("![](outputs/screenshots/flows/all_flows_comparison.png)")
+for ftype, info in fl.FLOW_TYPES.items():
+    FL += ["", f"### Flow {ftype} - {info['title']}", f"*{info['question']}*"]
+    for fx in [x for x in fl.FLOWS if x["type"] == ftype]:
+        r = _reps[fx["id"]]
+        FL += ["", f"#### {fx['id']} - {fx['title']}", fx["story"], "", f"**{r['verdict']}** - {r['action']}", "", "| Stage | Metrics |", "|---|---|"]
+        for stp in r["steps"]:
+            FL.append(f"| {stp['title']} | " + "; ".join(f"{m['label']} {m['value']}" for m in stp["metrics"] if m["label"] != "Verdict") + " |")
+        FL.append("")
+        FL.append("| " + " | ".join(_KEYN[k] for k in _KEY[r["kind"]]) + " |")
+        FL.append("|" + "|".join(["---"] * 3) + "|")
+        FL.append("| " + " | ".join(f"![](outputs/screenshots/flows/{fx['id']}_{k}.png)" for k in _KEY[r["kind"]]) + " |")
+        FL += ["", f"<details><summary>Full flow {fx['id']} (all stages)</summary>", "", f"![](outputs/screenshots/flows/{fx['id']}_full.png)", "", "</details>"]
+FLOWS_MD = "\n".join(FL)
+
 PH = {
     "@@GPUC_NOTE@@": GPUC_NOTE,
     "@@IT_NOTE@@": IT_NOTE, "@@QINI_RANGE@@": QINI_RANGE, "@@TPA_NOTE@@": TPA_NOTE, "@@LODO_SCM@@": LODO_SCM,
@@ -255,7 +302,7 @@ PH = {
     "@@BAY_RHAT@@": f"{bay_h.rhat_max:.3f}", "@@BAY_ESS@@": f"{bay_h.ess_min:,.0f}", "@@BAY_DIV@@": str(int(bay_h.divergences)),
     "@@BAY_PPC@@": f"{100 * bay_h.ppc_pre_coverage:.0f}%", "@@BAY_BACKEND@@": str(bay_h.jax_backend),
     "@@LODO_MIN@@": f"{lodo_asc.att_mean.min():,.0f}", "@@LODO_MAX@@": f"{lodo_asc.att_mean.max():,.0f}",
-    "@@FLL@@": f"{fll_row.att_mean.iloc[0]:,.0f}" if len(fll_row) else "n/a", "@@VIS@@": vis, "@@SHOTS@@": shots,
+    "@@FLL@@": f"{fll_row.att_mean.iloc[0]:,.0f}" if len(fll_row) else "n/a", "@@FLOWS@@": FLOWS_MD, "@@VIS@@": vis, "@@SHOTS@@": shots,
     "@@BEST@@": best_cate.learner, "@@BEST_PEHE@@": f"{best_cate.pehe:.1f}", "@@CONST@@": f"{cp.pehe:.1f}", "@@ORACLE@@": f"{orc.pehe:.1f}",
     "@@NBEAT@@": str(n_beat), "@@NSEEDS@@": str(int(CATE.n_seeds.max())), "@@CRV_THETA@@": f"{curve['fitted']['theta']:.2f}",
     "@@CRV_K@@": f"{curve['fitted']['K']:.0f}", "@@CRV_R2@@": f"{curve['fitted']['r2']:.2f}",

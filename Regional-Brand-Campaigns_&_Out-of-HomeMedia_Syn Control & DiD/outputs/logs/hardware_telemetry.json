@@ -1,7 +1,7 @@
 [
   {
     "tag": "start",
-    "timestamp": "2026-11-25 17:56:30",
+    "timestamp": "2026-11-25 20:08:57",
     "platform": "Windows-11-10.0.26300-SP0",
     "python": "3.12.16",
     "cpu_count": 24,
@@ -17,11 +17,11 @@
     "gpu": {
       "gpu_name": "NVIDIA GeForce RTX 3090",
       "driver": "610.60",
-      "util_pct": 0.0,
-      "mem_used_mb": 1612.0,
+      "util_pct": 17.0,
+      "mem_used_mb": 2444.0,
       "mem_total_mb": 24576.0,
       "temp_c": 44.0,
-      "power_w": 31.99
+      "power_w": 35.18
     },
     "jax": {
       "backend": "cpu",
@@ -38,7 +38,7 @@
   },
   {
     "tag": "end",
-    "timestamp": "2026-11-25 17:56:31",
+    "timestamp": "2026-11-25 20:08:57",
     "platform": "Windows-11-10.0.26300-SP0",
     "python": "3.12.16",
     "cpu_count": 24,
@@ -54,11 +54,11 @@
     "gpu": {
       "gpu_name": "NVIDIA GeForce RTX 3090",
       "driver": "610.60",
-      "util_pct": 0.0,
-      "mem_used_mb": 1612.0,
+      "util_pct": 17.0,
+      "mem_used_mb": 2444.0,
       "mem_total_mb": 24576.0,
       "temp_c": 44.0,
-      "power_w": 31.99
+      "power_w": 35.18
     },
     "jax": {
       "backend": "cpu",
