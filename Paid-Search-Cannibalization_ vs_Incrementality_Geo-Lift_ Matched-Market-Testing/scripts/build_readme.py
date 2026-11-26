@@ -32,6 +32,25 @@ def img(rel, alt):
     return f"![{alt}](outputs/{rel})" if (ROOT / "outputs" / rel).exists() else f"*(missing: {rel})*"
 
 
+def flows_md() -> str:
+    """Programme scorecard, roll-up and per-stage metrics of the 8 end-to-end flows (from outputs/metrics/flows.json)."""
+    d = rj("flows.json")
+    out = ["### Programme scorecard (overall metrics)", ""]
+    sc = [{"group": g["group"], "metrics": "; ".join(f"{m['label']}: **{m['value']}**" for m in g["metrics"])} for g in d["programme"]["groups"]]
+    out.append(md(pd.DataFrame(sc)))
+    out += ["", "### Flow roll-up (4 flow types x 2 examples)", "", md(pd.DataFrame(d["programme"]["rollup"])), ""]
+    for fid in d["order"]:
+        f = d["flows"][fid]
+        out += [f"#### {f['id']} - {f['title']}", "", f"*{f['type_title']}: {f['question']}* {f['story']}", "",
+                f"**Verdict: {f['verdict']}.** {f['action']}", "",
+                md(pd.DataFrame([{"stage": st["title"], "status": (st.get("flag") or "").upper(),
+                                  "metrics": "; ".join(f"{m['label']}: {m['value']}" for m in st["metrics"])} for st in f["stages"]])), ""]
+        shot = sorted(S.glob(f"*_streamlit_flow_{fid}.png"))
+        if shot:
+            out += [f"![{fid}](outputs/screenshots/{shot[0].name})", ""]
+    return "\n".join(out)
+
+
 def main():
     mac, prog, val = rj("macro_results.json"), rj("programme_economics.json"), rj("policy_value.json")
     hw, meta = rj("hardware.json"), rj("experiment_meta.json")
@@ -63,12 +82,13 @@ def main():
     bytier = pd.read_csv(M / "policy_by_tier.csv")
     bal = pd.read_csv(M / "balance_table.csv")
     shots = sorted(S.glob("*.png"))
-    shot_md = "\n\n".join(f"**{p.stem}**\n\n![{p.stem}](outputs/screenshots/{p.name})" for p in shots) or "*(run `make verify`)*"
+    shot_md = "\n\n".join(f"**{p.stem}**\n\n![{p.stem}](outputs/screenshots/{p.name})" for p in shots if '_streamlit_flow_' not in p.name) or "*(run `make verify`)*"
     sdid_d = mac["direct_bookings"]["SDID"]
     best_d = lbd[lbd.model != "Constant ATE (DiD)"].iloc[0]
     const_d = lbd[lbd.model == "Constant ATE (DiD)"].iloc[0]
     n_better = int((lbd[lbd.model != "Constant ATE (DiD)"].pehe_norm < const_d.pehe_norm).sum())
 
+    flows = flows_md()
     readme = f"""# Paid Search Cannibalization vs. Incrementality Engine
 **Grand Horizon Hotels & Resorts** - does bidding on our own brand terms buy bookings, or does it just rent traffic we would
 have received for free while keeping OTAs (Expedia, Booking.com) off the top of the results page?
@@ -113,8 +133,13 @@ flowchart LR
   F --> CT[CATE suite<br/>S T X R DR - LinearDML CausalForestDML - TARNet DragonNet]
   MG --> E[cannibalization_roi<br/>iROAS, commission, policy]
   CT --> E
+  E --> FL[flows.py<br/>8 flows, stage + programme metrics]
+  MG --> FL
+  CT --> FL
+  FL --> UI
+  FL --> API
   E --> API[FastAPI<br/>/predict /simulate /metrics]
-  E --> UI[Streamlit<br/>4 tabs, 3 presets]
+  E --> UI[Streamlit<br/>5 tabs, 3 presets, 8 flows]
   API --> PW[Playwright e2e]
   UI --> PW
 ```
@@ -202,10 +227,26 @@ True value of pausing by tier (negative = pausing loses money):
 
 {img('plots/policy_by_dma.png', 'policy by DMA')}
 
+## End-to-end flows (Streamlit tab 5, `GET /flows`)
+
+Four flow types, **two worked examples each**. Every flow is a sequence of stages and every stage reports its own metrics, followed by flow-level metrics and
+a verdict; the programme scorecard rolls the whole engine up. Statuses: PASS / CAUTION / FAIL are rule-based (interval covers truth, placebo
+covers zero, Monte-Carlo bias, value against always-keep), not judgement. Built by `src/flows.py` (`make flows`) into `outputs/metrics/flows.json`, which the
+dashboard, the API and this README all read.
+
+| flow type | question | example 1 | example 2 |
+|---|---|---|---|
+| A. Holdout read-out | incremental and worth the money? | A1 all 10 holdout DMAs | A2 the two Tier-1 hubs (thin evidence) |
+| B. Validity & refutation | which estimator can we trust? | B1 direct bookings | B2 OTA bookings |
+| C. DMA what-if (CATE) | what does pausing do in one market? | C1 Miami Beach (Tier 1) | C2 Asheville (Tier 3) |
+| D. Bidding policy | which DMAs pause, and does the rule pay? | D1 evidence margin k=1 | D2 naive k=0 |
+
+{flows}
+
 ## Interfaces
 
-* **FastAPI** (`make serve`, Swagger at `/docs`): `GET /health`, `POST /predict/dma-cate`, `POST /simulate/holdout-policy`, `GET /metrics/summary`.
-* **Streamlit** (`make app`): Tab 1 geo-lift & cannibalization (DMA selector, counterfactual bands, last-click ROAS vs iROAS); Tab 2 leaderboard, interactive Qini and importance; Tab 3 policy simulator with 3 one-click presets (Miami Beach Tier 1 / Nashville Tier 2 / Asheville Tier 3); Tab 4 policy table and refutations.
+* **FastAPI** (`make serve`, Swagger at `/docs`): `GET /health`, `POST /predict/dma-cate`, `POST /simulate/holdout-policy`, `GET /metrics/summary`, plus `GET /flows` and `GET /flows/{{id}}` for the end-to-end flows.
+* **Streamlit** (`make app`): Tab 1 geo-lift & cannibalization (DMA selector, counterfactual bands, last-click ROAS vs iROAS); Tab 2 leaderboard, interactive Qini and importance; Tab 3 policy simulator with 3 one-click presets (Miami Beach Tier 1 / Nashville Tier 2 / Asheville Tier 3); Tab 4 policy table and refutations; **Tab 5 end-to-end flows** (programme scorecard + 8 flows with stage-by-stage metrics).
 * Dashboard and API call the same functions (`src/api/service.py`); the Playwright test asserts the UI equals the API for every preset.
 
 {shot_md}
@@ -214,7 +255,8 @@ True value of pausing by tier (negative = pausing loses money):
 
 ```bash
 make setup      # pip install -r requirements.txt && playwright install chromium
-make train      # scripts/run_full_pipeline.py: panel -> macro -> cate -> econ -> plots   (~15 min on an RTX 3090)
+make train      # scripts/run_full_pipeline.py: panel -> macro -> cate -> econ -> plots -> flows   (~15 min on an RTX 3090)
+make flows      # rebuild only the 8 end-to-end flows + scorecard (~2 min)
 make test       # unit tests
 make verify     # Playwright e2e (API + Streamlit screenshots) + artefact checks
 make readme     # regenerate this file

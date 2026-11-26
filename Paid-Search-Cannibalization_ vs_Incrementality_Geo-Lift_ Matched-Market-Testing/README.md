@@ -42,8 +42,13 @@ flowchart LR
   F --> CT[CATE suite<br/>S T X R DR - LinearDML CausalForestDML - TARNet DragonNet]
   MG --> E[cannibalization_roi<br/>iROAS, commission, policy]
   CT --> E
+  E --> FL[flows.py<br/>8 flows, stage + programme metrics]
+  MG --> FL
+  CT --> FL
+  FL --> UI
+  FL --> API
   E --> API[FastAPI<br/>/predict /simulate /metrics]
-  E --> UI[Streamlit<br/>4 tabs, 3 presets]
+  E --> UI[Streamlit<br/>5 tabs, 3 presets, 8 flows]
   API --> PW[Playwright e2e]
   UI --> PW
 ```
@@ -194,10 +199,188 @@ True value of pausing by tier (negative = pausing loses money):
 
 ![policy by DMA](outputs/plots/policy_by_dma.png)
 
+## End-to-end flows (Streamlit tab 5, `GET /flows`)
+
+Four flow types, **two worked examples each**. Every flow is a sequence of stages and every stage reports its own metrics, followed by flow-level metrics and
+a verdict; the programme scorecard rolls the whole engine up. Statuses: PASS / CAUTION / FAIL are rule-based (interval covers truth, placebo
+covers zero, Monte-Carlo bias, value against always-keep), not judgement. Built by `src/flows.py` (`make flows`) into `outputs/metrics/flows.json`, which the
+dashboard, the API and this README all read.
+
+| flow type | question | example 1 | example 2 |
+|---|---|---|---|
+| A. Holdout read-out | incremental and worth the money? | A1 all 10 holdout DMAs | A2 the two Tier-1 hubs (thin evidence) |
+| B. Validity & refutation | which estimator can we trust? | B1 direct bookings | B2 OTA bookings |
+| C. DMA what-if (CATE) | what does pausing do in one market? | C1 Miami Beach (Tier 1) | C2 Asheville (Tier 3) |
+| D. Bidding policy | which DMAs pause, and does the rule pay? | D1 evidence margin k=1 | D2 naive k=0 |
+
+### Programme scorecard (overall metrics)
+
+| group | metrics |
+|---|---|
+| Experiment | DMAs / holdout: **50 / 10**; Window: **20 wk pre + 4 wk pause**; Device (torch): **cuda** |
+| Macro lift (direct bookings / DMA-day) | Truth: **-2.47**; SDID: **-2.82**; MMT: **-3.25**; BSTS: **-0.80** |
+| Macro lift (OTA bookings / DMA-day) | Truth: **1.64**; SDID: **1.59**; MMT: **1.58**; BSTS: **3.30** |
+| Economics (10 holdout DMAs, 4 wk) | Last-click ROAS: **5.8x**; iROAS (SDID / truth): **2.2x / 2.0x**; Cannibalization: **62% / 66%**; Net value of keeping SEM: **$46,139**; OTA commission leakage: **$46,229** |
+| Validity | MMT status (direct): **CAUTION**; SDID status (direct): **PASS**; BSTS status (direct): **FAIL**; Estimators passing (OTA): **2 / 3** |
+| CATE (direct lift) | Best learner: **S-Learner**; Best PEHE / sd: **1.34**; Constant-ATE PEHE / sd: **1.07**; Learners beating constant: **0 / 9**; Best rank corr: **0.56** |
+| Policy | Rule value (k=1): **-$9,371**; Oracle: **$56,202**; Always pause: **-$220,267**; Decision accuracy: **62%** |
+
+### Flow roll-up (4 flow types x 2 examples)
+
+| flow | type | scenario | verdict | headline |
+|---|---|---|---|---|
+| A1 | Holdout read-out | A1 - Full holdout (10 DMAs) | KEEP (LEAN), RE-TEST | Net value of keeping SEM (4 wk): $46,139 | iROAS (vs last-click): 2.2x (5.8x) |
+| A2 | Holdout read-out | A2 - Tier-1 hubs only (2 DMAs) | INCONCLUSIVE: TOO FEW HOLDOUT DMAS | Net value of keeping SEM (4 wk): $163,655 | iROAS (vs last-click): 3.2x (5.8x) |
+| B1 | Validity & refutation | B1 - Validity: direct bookings | TRUST SDID | Estimators passing: 1 / 3 | Placebo-space sd: 0.66 |
+| B2 | Validity & refutation | B2 - Validity: OTA bookings | TRUST MMT + SDID | Estimators passing: 2 / 3 | Placebo-space sd: 0.45 |
+| C1 | DMA what-if (CATE) | C1 - Miami Beach flagship | KEEP BRANDED SEARCH | Structural net change if paused: -$59,847 | CATE net change if paused: -$160,501 |
+| C2 | DMA what-if (CATE) | C2 - Asheville drive-to | PAUSE BRANDED SEARCH | Structural net change if paused: $3,200 | CATE net change if paused: $7,370 |
+| D1 | Bidding policy | D1 - Evidence-margin rule (k=1) | DO NOT ADOPT: KEEP EVERYWHERE | Rule value (4 wk): -$9,371 | Pauses: 11 |
+| D2 | Bidding policy | D2 - Naive rule (k=0) | DO NOT ADOPT: KEEP EVERYWHERE | Rule value (4 wk): -$32,890 | Pauses: 30 |
+
+#### A1 - Programme read-out: all 10 holdout DMAs
+
+*Holdout read-out: Was branded paid search incremental, and was it worth its spend?* The headline question: 4 weeks with branded paid search paused in 10 stratified-random DMAs (2 hubs, 4 regional, 4 drive-to), against 40 controls. All three macro estimators, then dollars.
+
+**Verdict: KEEP (LEAN), RE-TEST.** The direct loss is significant, but net value's interval spans zero: cannibalization is too uncertain to be decisive.
+
+| stage | status | metrics |
+|---|---|---|
+| 1. Experiment design |  | Holdout DMAs: 10; Tier mix: T1:2 / T2:4 / T3:4; Matched pairs: 10; Mean DTW / Mahalanobis: 0.28 / 1.98; Branded spend (4 wk): $204,920; Smallest possible exact p: 0.002 |
+| 2. Pre-period fit & placebo-in-time | WARN | MMT pre-fit error: 8.8%; SDID pre-fit error: 6.6%; Placebo-in-time MMT: -0.95; Placebo-in-time SDID: -1.03; Worst placebo drift: 1.03 |
+| 3. Matched-market test (MMT) | PASS | Direct ATT / DMA-day: -3.25; Exact permutation p: 0.027; Bias vs truth: -32%; OTA ATT / DMA-day: 1.58 |
+| 4. Synthetic DiD (SDID) | PASS | Direct ATT / DMA-day: -2.82; Placebo-space p: 0.005; Bias vs truth: -14%; OTA ATT / DMA-day: 1.59 |
+| 5. Bayesian structural time series (BSTS) | WARN | Direct ATT / DMA-day: -0.80; P(effect < 0): 0.70; Max R-hat: 1.006; Bias vs truth: 68%; OTA ATT / DMA-day: 3.30 |
+| 6. Economics (headline: SDID) | WARN | Last-click ROAS: 5.8x; Incremental ROAS: 2.2x; Cannibalization: 62%; OTA commission leakage: $46,229; Branded spend avoided: $204,920; Net value of keeping SEM: $46,139 |
+| 7. Verdict | WARN | Decision: KEEP (LEAN), RE-TEST; Direct loss significant?: yes; Net value of keeping: $46,139; iROAS vs last-click: 2.2x vs 5.8x |
+
+![A1](outputs/screenshots/10_streamlit_flow_A1.png)
+
+#### A2 - Read-out for the two Tier-1 hub holdouts
+
+*Holdout read-out: Was branded paid search incremental, and was it worth its spend?* Same experiment, but only the two major hubs, the markets where OTA conquesting is fiercest. Two treated DMAs can never produce a permutation p below 0.5, so the stage metrics show what thin evidence looks like.
+
+**Verdict: INCONCLUSIVE: TOO FEW HOLDOUT DMAS.** With 2 treated DMAs the exact permutation test cannot go below p = 0.50, and the three estimators disagree (-8.9 to -7.9 per DMA-day). The point estimate leans KEEP ($163,655); the simulated truth, -$5,127, shows why not to act on it.
+
+| stage | status | metrics |
+|---|---|---|
+| 1. Experiment design |  | Holdout DMAs: 2; Tier mix: T1:2; Matched pairs: 2; Mean DTW / Mahalanobis: 0.26 / 2.26; Branded spend (4 wk): $107,986; Smallest possible exact p: 0.500 |
+| 2. Pre-period fit & placebo-in-time | WARN | MMT pre-fit error: 14.8%; SDID pre-fit error: 12.2%; Placebo-in-time MMT: -0.72; Placebo-in-time SDID: -1.85; Worst placebo drift: 1.85 |
+| 3. Matched-market test (MMT) | PASS | Direct ATT / DMA-day: -8.88; Exact permutation p: 0.500; Bias vs truth: -65%; OTA ATT / DMA-day: 2.02 |
+| 4. Synthetic DiD (SDID) | FAIL | Direct ATT / DMA-day: -8.53; Placebo-space p: 0.007; Bias vs truth: -59%; OTA ATT / DMA-day: 2.35 |
+| 5. Bayesian structural time series (BSTS) | WARN | Direct ATT / DMA-day: -7.89; P(effect < 0): 0.98; Max R-hat: 1.007; Bias vs truth: -47%; OTA ATT / DMA-day: 5.34 |
+| 6. Economics (headline: SDID) | PASS | Last-click ROAS: 5.8x; Incremental ROAS: 3.2x; Cannibalization: 46%; OTA commission leakage: $18,017; Branded spend avoided: $107,986; Net value of keeping SEM: $163,655 |
+| 7. Verdict | WARN | Decision: INCONCLUSIVE: TOO FEW HOLDOUT DMAS; Direct loss significant?: yes; Net value of keeping: $163,655; iROAS vs last-click: 3.2x vs 5.8x |
+
+![A2](outputs/screenshots/11_streamlit_flow_A2.png)
+
+#### B1 - Refutation suite on direct bookings
+
+*Validity & refutation: Can we trust these estimates, and which estimator should we believe?* Placebo-in-time, placebo-in-space and a Monte-Carlo over fresh experiments, to decide which of MMT, SDID and BSTS to believe.
+
+**Verdict: TRUST SDID.** MMT: CAUTION (placebo-in-time finds a false effect); SDID: PASS; BSTS: FAIL (Monte-Carlo bias +2.12 is large vs truth -2.47; CI coverage only 60%)
+
+| stage | status | metrics |
+|---|---|---|
+| 1. What is being refuted |  | Outcome: direct bookings / DMA-day; Truth: -2.47; Estimators on trial: MMT / SDID / BSTS; Refutations: placebo-time, placebo-space, Monte-Carlo |
+| 2. Placebo-in-time (pause 4 weeks early, pre-data only) | WARN | MMT placebo ATT: -0.95; SDID placebo ATT: -1.03; BSTS placebo ATT: -1.37 |
+| 3. Placebo-in-space (fake-treat control DMAs) | PASS | Placebo ATT sd: 0.66; p (SDID estimate): 0.003; p (MMT estimate): 0.003; Real SDID / sd: -4.2 sd |
+| 4. Monte-Carlo over fresh experiments | WARN | MMT bias / RMSE: +0.04 / 0.20; SDID bias / RMSE: -0.22 / 0.52; BSTS bias / RMSE: +2.12 / 2.45 |
+| 5. Headline seed against truth |  | MMT (covers truth: yes): -3.25; SDID (covers truth: yes): -2.82; BSTS (covers truth: yes): -0.80 |
+| 6. Verdict | PASS | Estimator status: MMT: CAUTION; Estimator status: SDID: PASS; Estimator status: BSTS: FAIL; Decision: TRUST SDID |
+
+![B1](outputs/screenshots/12_streamlit_flow_B1.png)
+
+#### B2 - Refutation suite on OTA bookings
+
+*Validity & refutation: Can we trust these estimates, and which estimator should we believe?* The same suite on the OTA-diversion outcome. OTA volume is smaller and noisier, so the placebo bands are wider.
+
+**Verdict: TRUST MMT + SDID.** MMT: PASS; SDID: PASS; BSTS: CAUTION (no Monte-Carlo run; headline-seed error +1.66 (102% of truth))
+
+| stage | status | metrics |
+|---|---|---|
+| 1. What is being refuted |  | Outcome: OTA bookings / DMA-day; Truth: 1.64; Estimators on trial: MMT / SDID / BSTS; Refutations: placebo-time, placebo-space, Monte-Carlo |
+| 2. Placebo-in-time (pause 4 weeks early, pre-data only) | PASS | MMT placebo ATT: 0.14; SDID placebo ATT: 0.15; BSTS placebo ATT: 0.76 |
+| 3. Placebo-in-space (fake-treat control DMAs) | PASS | Placebo ATT sd: 0.45; p (SDID estimate): 0.007; p (MMT estimate): 0.010; Real SDID / sd: 3.5 sd |
+| 4. Monte-Carlo over fresh experiments | PASS | MMT bias / RMSE: -0.07 / 0.39; SDID bias / RMSE: -0.01 / 0.44 |
+| 5. Headline seed against truth |  | MMT (covers truth: yes): 1.58; SDID (covers truth: yes): 1.59; BSTS (covers truth: yes): 3.30 |
+| 6. Verdict | PASS | Estimator status: MMT: PASS; Estimator status: SDID: PASS; Estimator status: BSTS: CAUTION; Decision: TRUST MMT + SDID |
+
+![B2](outputs/screenshots/13_streamlit_flow_B2.png)
+
+#### C1 - What if Miami Beach (Tier 1) paused?
+
+*DMA what-if (CATE): What does pausing branded search do in one specific market?* Heavy OTA conquesting, modest organic cannibalization: the profile where pausing is most likely to leak bookings to OTAs.
+
+**Verdict: KEEP BRANDED SEARCH.** The structural simulator and the nine CATE learners agree.
+
+| stage | status | metrics |
+|---|---|---|
+| 1. DMA profile |  | Market: Miami Beach flagship; Tier: 1; Baseline direct bookings / day: 58; OTA : direct ratio: 0.85; OTA auction pressure: 0.75; Organic SERP rank: 2.6; ADR / commission: $285 / 20.0% |
+| 2. Structural simulation (experiment-calibrated) | PASS | Last-click ROAS: 5.3x; Incremental ROAS: 3.7x; Cannibalization: 55%; Break-even cannibalization: 86%; Net margin change if paused (28d): -$59,847; OTA commission leakage: $30,392 |
+| 3. Nine CATE learners (relative lift if paused) | PASS | Direct lift, mean of 9: -26.0%; OTA lift, mean of 9: 8.6%; Learners predicting a direct loss: 9 / 9; Top-3 direct lift: -16.1%; Learner disagreement (sd): 16.3 pts |
+| 4. How reliable are DMA-level CATEs? | WARN | Top-3 PEHE / sd(true CATE): 1.53; Constant-ATE reference: 1.07; Top-3 rank correlation: 0.41; Best learner (direct): S-Learner |
+| 5. Dollars over 28 days (CATE route) |  | Direct bookings change / day: -15.1; OTA bookings change / day: 4.3; Branded spend saved: $66,519; Net margin change if paused: -$160,501; OTA commission leakage: $15,491 |
+| 6. Verdict | PASS | Structural: Keep; CATE (9 learners): Keep; Agreement: yes; Decision: KEEP BRANDED SEARCH |
+
+![C1](outputs/screenshots/14_streamlit_flow_C1.png)
+
+#### C2 - What if Asheville (Tier 3) paused?
+
+*DMA what-if (CATE): What does pausing branded search do in one specific market?* Top organic rank and almost no OTA pressure: nearly every branded click would have arrived for free.
+
+**Verdict: PAUSE BRANDED SEARCH.** The structural simulator and the nine CATE learners agree.
+
+| stage | status | metrics |
+|---|---|---|
+| 1. DMA profile |  | Market: Asheville drive-to; Tier: 3; Baseline direct bookings / day: 10; OTA : direct ratio: 0.42; OTA auction pressure: 0.12; Organic SERP rank: 1.3; ADR / commission: $165 / 15.0% |
+| 2. Structural simulation (experiment-calibrated) | PASS | Last-click ROAS: 6.6x; Incremental ROAS: 0.8x; Cannibalization: 93%; Break-even cannibalization: 78%; Net margin change if paused (28d): $3,200; OTA commission leakage: $414 |
+| 3. Nine CATE learners (relative lift if paused) | WARN | Direct lift, mean of 9: -2.8%; OTA lift, mean of 9: 14.5%; Learners predicting a direct loss: 6 / 9; Top-3 direct lift: -4.8%; Learner disagreement (sd): 8.3 pts |
+| 4. How reliable are DMA-level CATEs? | WARN | Top-3 PEHE / sd(true CATE): 1.53; Constant-ATE reference: 1.07; Top-3 rank correlation: 0.41; Best learner (direct): S-Learner |
+| 5. Dollars over 28 days (CATE route) |  | Direct bookings change / day: -0.3; OTA bookings change / day: 0.6; Branded spend saved: $5,040; Net margin change if paused: $7,370; OTA commission leakage: $961 |
+| 6. Verdict | PASS | Structural: Pause; CATE (9 learners): Pause; Agreement: yes; Decision: PAUSE BRANDED SEARCH |
+
+![C2](outputs/screenshots/15_streamlit_flow_C2.png)
+
+#### D1 - Pause iff gain > 1 x learner disagreement
+
+*Bidding policy: Which DMAs should pause, and does the rule actually pay?* The default policy, with its margin fixed before looking at the truth: pause a DMA only when the nine learners' mean gain exceeds one standard deviation of their disagreement.
+
+**Verdict: DO NOT ADOPT: KEEP EVERYWHERE.** The rule loses $9,371 against always-keep ($0); the experiment-level answer (keep branded search) is safer.
+
+| stage | status | metrics |
+|---|---|---|
+| 1. Rule definition |  | Rule: pause iff mean gain - 1 x sd > 0; Learners in ensemble: 9; Out-of-fold: DMA-grouped; k fixed: a priori |
+| 2. Learner agreement |  | Mean disagreement (sd, $/day): $1,037; Unanimous on sign: 14%; Mean predicted gain ($/day): -$330; DMAs with positive mean gain: 30 / 50 |
+| 3. Decisions |  | DMAs to pause: 11 / 50; Oracle would pause: 20; Tier 1 paused: 0 of 10; Tier 2 paused: 4 of 20; Tier 3 paused: 7 of 20 |
+| 4. Realised value vs benchmarks (4 weeks, ground truth) | FAIL | Rule value: -$9,371; Always keep: $0; Always pause: -$220,267; Oracle: $56,202; Decision accuracy: 62%; Share of oracle captured: -17% |
+| 5. Cost of being wrong |  | False pauses: 5; Money lost to false pauses: -$15,654; Missed pauses: 14; Margin forgone on missed pauses: $49,920 |
+| 6. Verdict | FAIL | Decision: DO NOT ADOPT: KEEP EVERYWHERE; Rule value: -$9,371; Always keep: $0; Oracle: $56,202 |
+
+![D1](outputs/screenshots/16_streamlit_flow_D1.png)
+
+#### D2 - Pause iff the mean prediction is positive
+
+*Bidding policy: Which DMAs should pause, and does the rule actually pay?* The tempting rule: trust the ensemble mean with no margin. Noisy DMA-level CATEs turn into confident-looking mistakes.
+
+**Verdict: DO NOT ADOPT: KEEP EVERYWHERE.** The rule loses $32,890 against always-keep ($0); the experiment-level answer (keep branded search) is safer.
+
+| stage | status | metrics |
+|---|---|---|
+| 1. Rule definition |  | Rule: pause iff mean gain - 0 x sd > 0; Learners in ensemble: 9; Out-of-fold: DMA-grouped; k fixed: naive baseline |
+| 2. Learner agreement |  | Mean disagreement (sd, $/day): $1,037; Unanimous on sign: 14%; Mean predicted gain ($/day): -$330; DMAs with positive mean gain: 30 / 50 |
+| 3. Decisions |  | DMAs to pause: 30 / 50; Oracle would pause: 20; Tier 1 paused: 1 of 10; Tier 2 paused: 12 of 20; Tier 3 paused: 17 of 20 |
+| 4. Realised value vs benchmarks (4 weeks, ground truth) | FAIL | Rule value: -$32,890; Always keep: $0; Always pause: -$220,267; Oracle: $56,202; Decision accuracy: 64%; Share of oracle captured: -59% |
+| 5. Cost of being wrong |  | False pauses: 14; Money lost to false pauses: -$62,264; Missed pauses: 4; Margin forgone on missed pauses: $26,828 |
+| 6. Verdict | FAIL | Decision: DO NOT ADOPT: KEEP EVERYWHERE; Rule value: -$32,890; Always keep: $0; Oracle: $56,202 |
+
+![D2](outputs/screenshots/17_streamlit_flow_D2.png)
+
+
 ## Interfaces
 
-* **FastAPI** (`make serve`, Swagger at `/docs`): `GET /health`, `POST /predict/dma-cate`, `POST /simulate/holdout-policy`, `GET /metrics/summary`.
-* **Streamlit** (`make app`): Tab 1 geo-lift & cannibalization (DMA selector, counterfactual bands, last-click ROAS vs iROAS); Tab 2 leaderboard, interactive Qini and importance; Tab 3 policy simulator with 3 one-click presets (Miami Beach Tier 1 / Nashville Tier 2 / Asheville Tier 3); Tab 4 policy table and refutations.
+* **FastAPI** (`make serve`, Swagger at `/docs`): `GET /health`, `POST /predict/dma-cate`, `POST /simulate/holdout-policy`, `GET /metrics/summary`, plus `GET /flows` and `GET /flows/{id}` for the end-to-end flows.
+* **Streamlit** (`make app`): Tab 1 geo-lift & cannibalization (DMA selector, counterfactual bands, last-click ROAS vs iROAS); Tab 2 leaderboard, interactive Qini and importance; Tab 3 policy simulator with 3 one-click presets (Miami Beach Tier 1 / Nashville Tier 2 / Asheville Tier 3); Tab 4 policy table and refutations; **Tab 5 end-to-end flows** (programme scorecard + 8 flows with stage-by-stage metrics).
 * Dashboard and API call the same functions (`src/api/service.py`); the Playwright test asserts the UI equals the API for every preset.
 
 **01_fastapi_swagger**
@@ -232,11 +415,16 @@ True value of pausing by tier (negative = pausing loses money):
 
 ![08_streamlit_tab4_policy_refutation](outputs/screenshots/08_streamlit_tab4_policy_refutation.png)
 
+**09_streamlit_tab5_programme_scorecard**
+
+![09_streamlit_tab5_programme_scorecard](outputs/screenshots/09_streamlit_tab5_programme_scorecard.png)
+
 ## Reproduce
 
 ```bash
 make setup      # pip install -r requirements.txt && playwright install chromium
-make train      # scripts/run_full_pipeline.py: panel -> macro -> cate -> econ -> plots   (~15 min on an RTX 3090)
+make train      # scripts/run_full_pipeline.py: panel -> macro -> cate -> econ -> plots -> flows   (~15 min on an RTX 3090)
+make flows      # rebuild only the 8 end-to-end flows + scorecard (~2 min)
 make test       # unit tests
 make verify     # Playwright e2e (API + Streamlit screenshots) + artefact checks
 make readme     # regenerate this file

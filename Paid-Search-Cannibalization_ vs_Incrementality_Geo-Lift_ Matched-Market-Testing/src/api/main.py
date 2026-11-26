@@ -68,3 +68,18 @@ def simulate_holdout_policy(body: SimulationInputs):
 @app.get("/metrics/summary")
 def metrics_summary():
     return service.metrics_summary()
+
+
+@app.get("/flows")
+def flows_index():
+    """Programme scorecard and the 8 end-to-end flows (4 types x 2 examples) with their verdicts."""
+    return service.flows_index()
+
+
+@app.get("/flows/{flow_id}")
+def flow_report(flow_id: str):
+    """One flow with the metrics of every stage (e.g. A1, A2, B1, B2, C1, C2, D1, D2)."""
+    r = service.flow_report(flow_id)
+    if r is None:
+        raise HTTPException(404, f"unknown flow {flow_id}")
+    return r

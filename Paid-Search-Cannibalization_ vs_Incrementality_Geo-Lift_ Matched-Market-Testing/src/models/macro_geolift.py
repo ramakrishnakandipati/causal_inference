@@ -133,8 +133,9 @@ def sdid_att(Ytr_mean, Yco, cut, n_tr, zeta_scale=1.0):
     return (tr_post - tr_pre) - (co_post - co_pre), omega, lam
 
 
-def sdid(gd: GeoData, cut: int, end: int | None = None, n_placebo: int = 200, seed: int = 0, zeta_scale: float = 1.0):
-    s = gd.split(cut, end)
+def sdid(gd: GeoData, cut: int, end: int | None = None, n_placebo: int = 200, seed: int = 0, zeta_scale: float = 1.0,
+         treated: np.ndarray | None = None):
+    s = gd.split(cut, end, treated=treated)
     n_tr = int(s["tr"].sum())
     att, omega, lam = sdid_att(s["y"], s["Yco"], cut, n_tr, zeta_scale)
     # placebo-in-space standard error: fake-treat random control subsets, re-estimate
@@ -175,7 +176,7 @@ def _design(s, gd: GeoData, k_pc: int = 4):
 
 
 def bsts(gd: GeoData, cut: int, end: int | None = None, seed: int = 0, num_warmup: int | None = None,
-         num_samples: int | None = None, num_chains: int | None = None):
+         num_samples: int | None = None, num_chains: int | None = None, treated: np.ndarray | None = None):
     import jax
     import jax.numpy as jnp
     import numpyro
@@ -186,7 +187,7 @@ def bsts(gd: GeoData, cut: int, end: int | None = None, seed: int = 0, num_warmu
     num_samples = num_samples or cfg["num_samples"]
     num_chains = num_chains or cfg["num_chains"]
     end = end or gd.T
-    s = gd.split(cut, end)
+    s = gd.split(cut, end, treated=treated)
     y = s["y"]
     X = _design(s, gd)
     ym, ys = y[:cut].mean(), y[:cut].std()

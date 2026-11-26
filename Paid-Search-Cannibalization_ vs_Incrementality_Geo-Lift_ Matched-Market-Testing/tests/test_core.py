@@ -104,3 +104,15 @@ def test_tarnet_and_dragonnet_fit_runs(gp):
     for cls in (TARNet, DragonNet):
         m = cls(seed=0, epochs=5).fit(X, d["T"].values.astype(int), d.Y.values, d.dma_id.values)
         assert np.isfinite(m.predict(X)).all()
+
+
+def test_flows_json_structure():
+    from src import flows
+    d = flows.load()
+    assert d["order"] == ["A1", "A2", "B1", "B2", "C1", "C2", "D1", "D2"]
+    for t in "ABCD":
+        assert sum(d["flows"][i]["type"] == t for i in d["order"]) == 2          # two examples per flow type
+    for f in d["flows"].values():
+        assert len(f["stages"]) >= 5 and f["verdict"] and f["flow_metrics"]
+        assert all(s["metrics"] for s in f["stages"])                              # metrics at every stage
+    assert len(d["programme"]["groups"]) >= 6 and len(d["programme"]["rollup"]) == 8

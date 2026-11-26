@@ -93,3 +93,16 @@ def metrics_summary() -> dict:
 
 def archetypes() -> dict:
     return _read_json("archetypes.json") or {}
+
+
+def flows_index() -> dict:
+    """Programme scorecard plus one line per end-to-end flow (full stage detail: flow_report)."""
+    from src import flows
+    d = flows.load()
+    return {"programme": d["programme"], "flows": [{k: d["flows"][i][k] for k in ("id", "type", "type_title", "short", "verdict", "flow_metrics")}
+                                                    for i in d["order"]]}
+
+
+def flow_report(flow_id: str) -> dict | None:
+    from src import flows
+    return flows.load()["flows"].get(flow_id.upper())

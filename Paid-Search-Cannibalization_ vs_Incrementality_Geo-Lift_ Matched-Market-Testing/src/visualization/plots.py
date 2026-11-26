@@ -221,7 +221,7 @@ def verify_outputs() -> bool:
         if p.stat().st_size == 0 or round(dpi) < 299:
             log.error("bad figure %s dpi=%s", p.name, dpi); ok = False
     need = ["cate_leaderboard_direct.csv", "cate_leaderboard_ota.csv", "macro_results.json", "dma_policy_recommendations.csv",
-            "placebo_in_time.csv", "programme_economics.json", "policy_value.json"]
+            "placebo_in_time.csv", "programme_economics.json", "policy_value.json", "flows.json"]
     for n in need:
         if not (path("metrics") / n).exists():
             log.error("missing metric %s", n); ok = False

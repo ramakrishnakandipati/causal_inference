@@ -3,7 +3,7 @@
     python scripts/run_full_pipeline.py                 # all stages
     python scripts/run_full_pipeline.py --stage macro   # one stage
 
-Stages (in order): panel, macro, cate, econ, plots, verify.
+Stages (in order): panel, macro, cate, econ, plots, flows, verify.
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ from src.utils.device import get_hardware  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 log = logging.getLogger("pipeline")
-STAGES = ["panel", "macro", "cate", "econ", "plots", "verify"]
+STAGES = ["panel", "macro", "cate", "econ", "plots", "flows", "verify"]
 
 
 def _jsonable(o):
@@ -182,6 +182,11 @@ def stage_econ():
 def stage_plots():
     from src.visualization import plots
     plots.make_all()
+
+
+def stage_flows():
+    from src import flows
+    flows.build_all()
 
 
 def stage_verify():

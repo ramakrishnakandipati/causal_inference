@@ -48,8 +48,8 @@ hw = read_json("hardware.json")
 st.sidebar.markdown("**Active hardware**")
 st.sidebar.json(hw)
 
-tab1, tab2, tab3, tab4 = st.tabs(["1. Geo-Lift & Cannibalization", "2. CATE Leaderboard & Uplift",
-                                  "3. Policy Simulator", "4. Refutation & DMA Policy"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["1. Geo-Lift & Cannibalization", "2. CATE Leaderboard & Uplift",
+                                        "3. Policy Simulator", "4. Refutation & DMA Policy", "5. End-to-End Flows"])
 
 # ------------------------------------------------------------------------------------------- tab 1
 with tab1:
@@ -238,3 +238,70 @@ with tab4:
     st.image(str(PLOTS / "placebo_tests.png"), width="stretch")
     st.image(str(PLOTS / "montecarlo_error.png"), width="stretch")
     st.image(str(PLOTS / "balance_smd.png"), width="stretch")
+
+
+# ------------------------------------------------------------------------------------------- tab 5
+from src import flows as flows_mod  # noqa: E402
+
+
+@st.cache_data
+def flows_data():
+    return flows_mod.load()
+
+
+def metric_row(metrics, per_row=4):
+    for i in range(0, len(metrics), per_row):
+        chunk = metrics[i:i + per_row]
+        cols = st.columns(per_row)
+        for c, m in zip(cols, chunk):
+            c.metric(m["label"], m["value"], help=m.get("help"))
+
+
+def draw_chart(ch):
+    if not ch:
+        return
+    if ch["kind"] == "line":
+        df = pd.DataFrame(ch["series"], index=ch["x"])
+        st.markdown(f"**{ch['title']}** - pause begins day {ch['cut']}")
+        st.line_chart(df, height=240)
+    elif ch["kind"] == "bar":
+        st.markdown(f"**{ch['title']}**")
+        st.bar_chart(pd.Series(ch["y"], index=ch["x"]), height=220)
+    elif ch["kind"] == "hist":
+        st.markdown("**Placebo-in-space distribution of effects on fake holdouts** (real estimates: "
+                    + ", ".join(f"{k} {v:.2f}" for k, v in ch["marks"].items()) + ")")
+        st.bar_chart(pd.Series(ch["y"], index=ch["x"]), height=200)
+
+
+FLAG = {"pass": "PASS", "warn": "CAUTION", "fail": "FAIL", None: ""}
+
+with tab5:
+    D = flows_data()
+    st.subheader("Programme scorecard")
+    st.caption("Overall metrics for the whole engine (macro lift, economics, validity, CATE, policy). Every number is read from `outputs/metrics/flows.json`, "
+               "the same file served by `GET /flows`.")
+    for g in D["programme"]["groups"]:
+        st.markdown(f"**{g['group']}**")
+        metric_row(g["metrics"], per_row=max(len(g["metrics"]), 1) if len(g["metrics"]) <= 5 else 5)
+    st.markdown("**Flow roll-up** (4 flow types x 2 examples)")
+    st.dataframe(pd.DataFrame(D["programme"]["rollup"]), width="stretch", hide_index=True)
+
+    st.subheader("End-to-end flow")
+    fid = st.radio("Choose a flow", D["order"], horizontal=True, key="flow_sel",
+                   format_func=lambda i: D["flows"][i]["short"])
+    F = D["flows"][fid]
+    st.markdown(f"### {F['id']}: {F['title']}")
+    st.caption(f"Flow type {F['type']} - {F['type_title']}: {F['question']}")
+    st.write(F["story"])
+    last = F["stages"][-1].get("flag")
+    (st.success if last == "pass" else st.error if last == "fail" else st.warning)(f"Flow verdict: **{F['verdict']}**")
+    st.caption(F["action"])
+    st.markdown("**Flow metrics**")
+    metric_row(F["flow_metrics"], per_row=min(len(F["flow_metrics"]), 6))
+    for stg in F["stages"]:
+        badge = f"  `{FLAG[stg.get('flag')]}`" if stg.get("flag") else ""
+        st.markdown(f"#### {stg['title']}{badge}")
+        metric_row(stg["metrics"], per_row=4)
+        if stg.get("note"):
+            st.caption(stg["note"])
+        draw_chart(stg.get("chart"))

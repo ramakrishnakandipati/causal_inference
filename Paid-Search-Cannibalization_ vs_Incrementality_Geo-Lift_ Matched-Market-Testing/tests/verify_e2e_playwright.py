@@ -61,6 +61,9 @@ def main():
         assert ms["cate_leaderboard"]["direct"] and ms["macro_geolift"]["direct_bookings"]["SDID"]
         cate = requests.post(f"{API}/predict/dma-cate", json={"tier": 2}).json()
         assert "decision" in cate and len(cate["per_model"]["direct"]) >= 9, cate
+        fl = requests.get(f"{API}/flows").json()
+        assert len(fl["flows"]) == 8 and {f["type"] for f in fl["flows"]} == {"A", "B", "C", "D"}, fl
+        assert requests.get(f"{API}/flows/ZZ").status_code == 404
         from playwright.sync_api import sync_playwright
         with sync_playwright() as pw:
             br = pw.chromium.launch()
@@ -101,6 +104,23 @@ def main():
             page.get_by_role("tab", name=re.compile("4\\. Refutation")).click()
             page.wait_for_selector("text=Optimal bidding policy by DMA"); settle(page)
             page.screenshot(path=str(SHOTS / "08_streamlit_tab4_policy_refutation.png"), full_page=True)
+            # ---- end-to-end flows tab: every flow's verdict and first metric must equal GET /flows/{id}
+            page.get_by_role("tab", name=re.compile(r"5\. End-to-End")).click()
+            page.set_viewport_size({"width": 1500, "height": 5200})      # tall: Streamlit scrolls inside its own container
+            page.wait_for_selector("text=Programme scorecard"); settle(page)
+            page.screenshot(path=str(SHOTS / "09_streamlit_tab5_programme_scorecard.png"), full_page=True)
+            for i, f in enumerate(fl["flows"]):
+                rep = requests.get(f"{API}/flows/{f['id']}").json()
+                page.locator('[data-testid="stRadio"]').get_by_text(rep["short"], exact=True).click()
+                page.wait_for_selector(f"text={rep['id']}: {rep['title']}"); settle(page)
+                body = page.inner_text("body")
+                m0 = rep["flow_metrics"][0]
+                ok = (f"Flow verdict: {rep['verdict']}" in body and m0["value"] in body
+                      and all(st_["title"] in body for st_ in rep["stages"]))
+                print(f"flow {rep['id']}: {rep['verdict']} | {m0['label']} {m0['value']} -> {'OK' if ok else 'MISMATCH'}")
+                if not ok:
+                    failures.append(f"flow {rep['id']}")
+                page.screenshot(path=str(SHOTS / f"{10 + i}_streamlit_flow_{rep['id']}.png"), full_page=True)
             br.close()
     finally:
         for p in procs:
