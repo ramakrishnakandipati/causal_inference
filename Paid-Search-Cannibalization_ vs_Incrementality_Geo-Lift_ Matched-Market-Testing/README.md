@@ -12,9 +12,9 @@ data-generating process, so every estimate can be checked against ground truth.*
   **1.6 per DMA-day** to OTAs (truth 1.6).
 * Last-click ROAS says **5.8x**; the incremental ROAS is **2.2x**
   (truth 2.0x). Cannibalization rate **62%** (truth 66%).
-* Pausing would have cost **$46,139** of net contribution margin over the 4 weeks
+* Pausing would have cost **$46,139** of net contribution margin by the SDID estimate over the 4 weeks
   across the 10 holdout DMAs (truth $-15,771), including
-  $46,229 of OTA commission leakage. On average, **keep branded search**.
+  $46,229 of OTA commission leakage. This net figure is **near break-even and uncertain** (its interval spans zero, and the simulated truth is on the other side of zero), so the evidence neither supports pausing on average nor shows branded search is highly profitable; re-test before changing budgets.
 * **DMA-level pause lists are not reliable with this design.** Average effects are recovered well; heterogeneity is not
   (see CATE section). The best individual learner has PEHE/sd(true CATE) = 1.34
   (S-Learner), and only 0 of 9 learners beat simply predicting the average effect (ratio 1.07). Realised
@@ -377,6 +377,10 @@ dashboard, the API and this README all read.
 ![D2](outputs/screenshots/17_streamlit_flow_D2.png)
 
 
+## Presentation
+
+`presentation/Paid_Search_Incrementality_End_to_End.pptx` (built by `presentation/build_deck.py`, `make deck`): documentation of the end-to-end uplift flow, the overall programme scorecard, a profile and metrics for all 12 models (3 macro estimators + 9 CATE learners), model-by-flow comparison matrices, flow-level and stage-level metrics for the 8 flows, and the Streamlit screenshots as scenario stories. Every number is read from `outputs/`.
+
 ## Interfaces
 
 * **FastAPI** (`make serve`, Swagger at `/docs`): `GET /health`, `POST /predict/dma-cate`, `POST /simulate/holdout-policy`, `GET /metrics/summary`, plus `GET /flows` and `GET /flows/{id}` for the end-to-end flows.
@@ -427,6 +431,7 @@ make train      # scripts/run_full_pipeline.py: panel -> macro -> cate -> econ -
 make flows      # rebuild only the 8 end-to-end flows + scorecard (~2 min)
 make test       # unit tests
 make verify     # Playwright e2e (API + Streamlit screenshots) + artefact checks
+make deck       # rebuild the 74-slide presentation in presentation/
 make readme     # regenerate this file
 ```
 

@@ -262,7 +262,15 @@ def panel_flow(flow, gp, pairs, reuse_saved):
     flow_metrics = [_m("Net value of keeping SEM (4 wk)", _usd(nv)), _m("iROAS (vs last-click)", f"{e['iroas']:.1f}x ({e['last_click_roas']:.1f}x)"),
                     _m("Cannibalization", f"{e['cannibalization_rate']:.0%}"), _m("Direct ATT (SDID)", _f(h["att"], 2)),
                     _m("Truth", _f(t_d, 2)), _m("Smallest possible p", _f(pmin, 3))]
-    return stages, verdict, action, flow_metrics, {"direct_att": h["att"], "truth": t_d, "net_value_keep_usd": nv, "iroas": e["iroas"]}
+    by_est = {}
+    for k in ("MMT", "SDID", "BSTS"):
+        ek = econ.programme_economics(gp.panel, d2, rd[k]["att"], ro[k]["att"], label=k)
+        by_est[k] = {"direct_att": rd[k]["att"], "ci_low": rd[k]["ci_low"], "ci_high": rd[k]["ci_high"], "covers_truth": rd[k]["covers_truth"],
+                     "bias_pct": bias(rd[k], t_d), "ota_att": ro[k]["att"], "ota_truth": t_o, "iroas": ek["iroas"],
+                     "cannibalization": ek["cannibalization_rate"], "net_value_keep_usd": ek["net_value_of_branded_search_usd"]}
+    return stages, verdict, action, flow_metrics, {"direct_att": h["att"], "truth": t_d, "net_value_keep_usd": nv, "iroas": e["iroas"],
+                                                   "truth_net_value_keep_usd": et["net_value_of_branded_search_usd"], "truth_iroas": et["iroas"],
+                                                   "by_estimator": by_est}
 
 
 # ----------------------------------------------------------------------------- B: validity
@@ -347,7 +355,13 @@ def validity_flow(flow, gp):
     ]
     fm = [_m("Estimators passing", f"{len(passing)} / {len(methods)}"), _m("Placebo-space sd", _f(sd, 2)),
           *[_m(f"{m} MC bias", f"{mcs.loc[m, 'bias']:+.2f}") for m in methods if m in mcs.index]]
-    return stages, verdict, action, fm, {"passing": passing, "status": {m: status[m][0] for m in methods}}
+    return stages, verdict, action, fm, {"passing": passing, "status": {m: status[m][0] for m in methods}, "truth": truth,
+                                         "att": {m: mac[m]["att"] for m in methods},
+                                         "mc": {m: {"bias": float(mcs.loc[m, "bias"]), "rmse": float(mcs.loc[m, "rmse"]), "coverage": float(mcs.loc[m, "cov"])}
+                                                for m in methods if m in mcs.index},
+                                         "placebo_time": {m: {"att": float(pit.loc[m, "placebo_att"]), "covers_zero": bool(pit.loc[m, "covers_zero"])}
+                                                          for m in methods if m in pit.index},
+                                         "placebo_space_p": rank_p}
 
 
 # ----------------------------------------------------------------------------- C: DMA what-if

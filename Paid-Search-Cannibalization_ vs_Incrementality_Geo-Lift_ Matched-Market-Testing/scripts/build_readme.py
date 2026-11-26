@@ -103,9 +103,9 @@ data-generating process, so every estimate can be checked against ground truth.*
   **{mac['ota_bookings']['SDID']['att']:.1f} per DMA-day** to OTAs (truth {mac['ota_bookings']['truth']:.1f}).
 * Last-click ROAS says **{prog['SDID']['last_click_roas']:.1f}x**; the incremental ROAS is **{prog['SDID']['iroas']:.1f}x**
   (truth {prog['Truth']['iroas']:.1f}x). Cannibalization rate **{prog['SDID']['cannibalization_rate']:.0%}** (truth {prog['Truth']['cannibalization_rate']:.0%}).
-* Pausing would have cost **{usd(-prog['SDID']['net_margin_change_if_paused_usd'])}** of net contribution margin over the 4 weeks
+* Pausing would have cost **{usd(-prog['SDID']['net_margin_change_if_paused_usd'])}** of net contribution margin by the SDID estimate over the 4 weeks
   across the 10 holdout DMAs (truth {usd(-prog['Truth']['net_margin_change_if_paused_usd'])}), including
-  {usd(prog['SDID']['ota_commission_leakage_usd'])} of OTA commission leakage. On average, **keep branded search**.
+  {usd(prog['SDID']['ota_commission_leakage_usd'])} of OTA commission leakage. This net figure is **near break-even and uncertain** (its interval spans zero, and the simulated truth is on the other side of zero), so the evidence neither supports pausing on average nor shows branded search is highly profitable; re-test before changing budgets.
 * **DMA-level pause lists are not reliable with this design.** Average effects are recovered well; heterogeneity is not
   (see CATE section). The best individual learner has PEHE/sd(true CATE) = {best_d.pehe_norm:.2f}
   ({best_d['model']}), and only {n_better} of 9 learners beat simply predicting the average effect (ratio {const_d.pehe_norm:.2f}). Realised
@@ -243,6 +243,10 @@ dashboard, the API and this README all read.
 
 {flows}
 
+## Presentation
+
+`presentation/Paid_Search_Incrementality_End_to_End.pptx` (built by `presentation/build_deck.py`, `make deck`): documentation of the end-to-end uplift flow, the overall programme scorecard, a profile and metrics for all 12 models (3 macro estimators + 9 CATE learners), model-by-flow comparison matrices, flow-level and stage-level metrics for the 8 flows, and the Streamlit screenshots as scenario stories. Every number is read from `outputs/`.
+
 ## Interfaces
 
 * **FastAPI** (`make serve`, Swagger at `/docs`): `GET /health`, `POST /predict/dma-cate`, `POST /simulate/holdout-policy`, `GET /metrics/summary`, plus `GET /flows` and `GET /flows/{{id}}` for the end-to-end flows.
@@ -259,6 +263,7 @@ make train      # scripts/run_full_pipeline.py: panel -> macro -> cate -> econ -
 make flows      # rebuild only the 8 end-to-end flows + scorecard (~2 min)
 make test       # unit tests
 make verify     # Playwright e2e (API + Streamlit screenshots) + artefact checks
+make deck       # rebuild the 74-slide presentation in presentation/
 make readme     # regenerate this file
 ```
 

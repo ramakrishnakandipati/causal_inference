@@ -1,7 +1,7 @@
 # Use the causal-gpu interpreter: the base conda python has old xgboost/streamlit and cannot load the saved models.
 PY ?= C:/Users/RamaKrishna/anaconda3/envs/causal-gpu/python.exe
 
-.PHONY: setup train flows serve app verify test readme all
+.PHONY: setup train flows deck serve app verify test readme all
 
 setup:
 	$(PY) -m pip install -r requirements.txt
@@ -12,6 +12,9 @@ train:            ## data -> macro geo-lift -> 9 CATE models (x2 outcomes) -> ec
 
 flows:            ## rebuild the 8 end-to-end flows + programme scorecard (outputs/metrics/flows.json)
 	$(PY) scripts/build_flows.py
+
+deck:             ## rebuild presentation/Paid_Search_Incrementality_End_to_End.pptx from outputs/
+	$(PY) presentation/build_deck.py
 
 serve:            ## FastAPI on :8000 (Swagger at /docs)
 	$(PY) -m uvicorn src.api.main:app --host 127.0.0.1 --port 8000
