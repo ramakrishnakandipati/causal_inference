@@ -1,0 +1,38 @@
+{
+  "mccrary_p_value": 0.2641760280312129,
+  "mccrary_passes": true,
+  "covariates_balanced": true,
+  "min_holm_p": 0.2947815501477735,
+  "placebo_all_null": true,
+  "placebo_rejection_share": 0.0,
+  "bandwidths": {
+    "cct": 4.973282911024758,
+    "ik": 2.878024524718898,
+    "used": 4.973282911024758
+  },
+  "mccrary": {
+    "log_density_ratio": 0.037773410875647784,
+    "se": 0.03382970808486705,
+    "z": 1.1165751351116404,
+    "p_value": 0.2641760280312129,
+    "density_left": 1870.0196428571962,
+    "density_right": 1942.0077214453167,
+    "bandwidth": 10.0,
+    "reject_continuity_5pct": false
+  },
+  "true_local_late": {
+    "next_year_room_nights": 3.4000000000000004,
+    "next_year_ancillary_spend": 419.99999999999994,
+    "next_year_direct_booking_ratio": 0.11000000000000001
+  },
+  "mccrary_with_simulated_manipulation": {
+    "log_density_ratio": 1.5519845629263997,
+    "se": 0.0524527334517268,
+    "z": 29.58824947330379,
+    "p_value": 0.0,
+    "density_left": 760.8950216450453,
+    "density_right": 3592.0557983684726,
+    "bandwidth": 10.0,
+    "reject_continuity_5pct": true
+  }
+}
