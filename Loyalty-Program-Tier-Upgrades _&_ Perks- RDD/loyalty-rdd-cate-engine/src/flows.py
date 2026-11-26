@@ -713,6 +713,59 @@ def programme_report(reports: List[dict], svc, assump: dict) -> dict:
     return {"groups": groups, "compare": compare, "models": models}
 
 
+# ============================================================================= model x flow comparison
+def model_flow_matrix(svc, assump: dict) -> dict:
+    """Every learner measured against the population each model-driven flow is about.
+
+    Populations (out-of-fold predictions, so no learner has seen the guests it is scored on):
+      C1 / C2  guests who look like the two personas (business share +-0.12, ADR +-25%)
+      D1 / D2  guests whose Gold eligibility the threshold flows would change (17-19 nights, 20-23 nights)
+    For each learner: estimated average effect, true average effect (known because the data are synthetic) and the error.
+    D1 / D2 also get each learner's net value (margin-adjusted) from the same simulator the API uses.
+    """
+    margin = float(assump["contribution_margin"])
+    oof = pd.read_csv(svc.out / "metrics" / "oof_cate_room_nights.csv.gz")
+    learners = [l for l in svc.learners("room_nights") if l in oof.columns]
+    pops = {}
+    for fid, persona in (("C1", "Bleisure couple"), ("C2", "Corporate road warrior")):
+        p = PERSONAS[persona]
+        pops[fid] = oof[(np.abs(oof["business_travel_ratio"] - p["business_travel_ratio"]) <= 0.12) &
+                        (np.abs(oof["historical_adr"] - p["historical_adr"]) <= 0.25 * p["historical_adr"])]
+    c = int(svc.cutoff)
+    for f in FLOWS:
+        if f["type"] == "D":
+            nc = int(f["new_cutoff"])
+            lo, hi = (nc, c - 1) if nc < c else (c, nc - 1)
+            pops[f["id"]] = oof[(oof["r"] >= lo) & (oof["r"] <= hi)]
+    out = {"learners": learners, "populations": {}, "est": {l: {} for l in learners}, "err": {l: {} for l in learners}, "net": {l: {} for l in learners}}
+    for fid, rows in pops.items():
+        out["populations"][fid] = {"n": int(len(rows)), "true": float(rows["tau_true"].mean())}
+        for l in learners:
+            est = float(rows[l].mean())
+            out["est"][l][fid] = est
+            out["err"][l][fid] = est - out["populations"][fid]["true"]
+    for f in FLOWS:
+        if f["type"] != "D":
+            continue
+        for l in learners:
+            s = svc.simulate_threshold(int(f["new_cutoff"]), "room_nights", l, float(f["perk_cost"]))
+            out["net"][l][f["id"]] = float((s["incremental_revenue_usd"] or 0.0) * margin - s["perk_cost_usd"])
+    summary = {}
+    for l in learners:
+        errs = [abs(v) for v in out["err"][l].values()]
+        nets = out["net"][l]
+        summary[l] = {"mean_abs_err": float(np.mean(errs)), "max_abs_err": float(np.max(errs)),
+                      "d_signs": {k: int(np.sign(v)) for k, v in nets.items()}}
+    ranked = sorted(summary, key=lambda l: summary[l]["mean_abs_err"])
+    for i, l in enumerate(ranked, 1):
+        summary[l]["rank"] = i
+    ref = {fid: float(np.median([out["net"][l][fid] for l in learners])) for fid in ("D1", "D2")}
+    for l in learners:
+        summary[l]["net_vs_median_pct"] = {fid: (out["net"][l][fid] / ref[fid] - 1.0) * 100 if ref[fid] else 0.0 for fid in ref}
+    out["summary"], out["median_net"] = summary, ref
+    return out
+
+
 # ============================================================================= orchestration
 def build_flow(flow: dict, svc, assump: dict) -> dict:
     kind = FLOW_TYPES[flow["type"]]["kind"]
@@ -725,7 +778,8 @@ def build_all(svc) -> dict:
     assump = load_assumptions()
     reports = [build_flow(f, svc, assump) for f in FLOWS]
     return _py({"assumptions": assump, "flow_types": FLOW_TYPES, "flows": reports,
-                "programme": programme_report(reports, svc, assump)})
+                "programme": programme_report(reports, svc, assump),
+                "model_flow": model_flow_matrix(svc, assump)})
 
 
 def save(report: dict, outputs: Path) -> Path:
