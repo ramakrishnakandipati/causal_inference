@@ -1,0 +1,171 @@
+# Aurelia Hotels & Resorts - Regional Brand / OOH incrementality engine
+# Single source of truth for every tunable. All paths are relative to the repo root.
+
+seed: 2026
+
+panel:
+  n_days: 240
+  pre_days: 180                 # days 1..180 pre-period, 181..240 campaign
+  start_date: "2025-07-01"      # day 1 -> campaign window is 28 Dec 2025 - 25 Feb 2026 (Miami winter peak)
+  treated_dma: MIA
+  campaign_start_day: 181
+  parquet_path: data/hospitality_geo_panel.parquet
+  csv_path: data/hospitality_geo_panel.csv
+  scenario_dir: data/scenarios
+
+dgp:
+  noise_sd_frac: 0.020          # idiosyncratic AR(1) noise sd as a fraction of DMA mean level
+  noise_ar: 0.50
+  local_trend_sd_frac: 0.012    # slow-moving DMA-specific drift (breaks exact parallel trends)
+  local_trend_ar: 0.97
+  derived_level_shift_frac: 0.015   # treated-candidate markets run slightly above their donor mix (SCM cannot absorb this, ASCM/SDID can)
+  covariate_effect_scale: 1.0   # multiplier on covariate -> demand sensitivities
+  # Treated-candidate markets are built as a convex combination of donor demand structure (planted weights).
+  planted:
+    MIA: {FLL: 0.30, TPA: 0.20, ORL: 0.15, HNL: 0.12, PHX: 0.08, SAN: 0.08, MSY: 0.07}
+    LAS: {PHX: 0.30, ORL: 0.30, SAN: 0.20, AUS: 0.20}
+    NYC: {BOS: 0.35, CHI: 0.35, DCA: 0.30}
+  # campaign response (room nights); web / search have their own faster, larger responses
+  adstock_theta: {room_nights_booked: 0.75, direct_web_sessions: 0.62, branded_search_index: 0.45}
+  hill: {K: 150.0, s: 1.3}      # K in $k of adstock; s = shape (diminishing returns)
+  target_mean_lift: {room_nights_booked: 0.085, direct_web_sessions: 0.165, branded_search_index: 0.32}
+  # multiplicative effect modifiers: tau_it ~ S(A_t) * exp(sum coef * driver)
+  interactions:
+    is_weekend: 0.18
+    is_holiday_window: 0.22
+    flight_search_z: 0.16       # regional flight-search surge amplifies lift
+    competitor_compression_z: -0.12  # z-score of rival ADR compression; rivals cutting rate steals share, so lift falls
+    weather_severity_z: -0.14
+    ota_promo_z: -0.10
+  # economics for revenue outcome / iROAS
+  economics:
+    ancillary_uplift: 0.38      # F&B, spa, resort fees per room revenue
+    distribution_cost: 0.10     # OTA / GDS commissions
+    total_spend_usd: 3000000
+  scenarios:
+    mia_flagship:
+      label: "Miami Flagship Resort - Winter Peak CTV + Airport Campaign"
+      treated: MIA
+      donors: [FLL, TPA, ORL, SAN, PHX, LAS, HNL, MSY, CHS, SAV]
+      start_day: 181
+      total_spend_usd: 3000000
+      target_mean_lift: 0.085
+      pattern: winter_airport
+    las_convention:
+      label: "Las Vegas Strip Property - Convention & Billboard Blitz"
+      treated: LAS
+      donors: [ORL, SAN, PHX, AUS]
+      start_day: 181
+      total_spend_usd: 2200000
+      target_mean_lift: 0.070
+      pattern: convention_billboard
+    nyc_spring_break:
+      label: "New York Feeder Market - Spring Break Awareness Push"
+      treated: NYC
+      donors: [BOS, CHI, DCA]
+      start_day: 181
+      total_spend_usd: 2600000
+      target_mean_lift: 0.055
+      pattern: awareness_push
+    tpa_placebo:
+      label: "Negative / Placebo Control - Unexposed Market (TPA)"
+      treated: TPA
+      donors: [FLL, ORL, CHS, SAV, MSY, SAN, PHX]
+      start_day: 181
+      total_spend_usd: 0
+      target_mean_lift: 0.0
+      pattern: none
+
+estimators:
+  calendar_adjust: true         # DiD family: remove unit-specific weekend / holiday effects estimated on the pre-period
+  scm:
+    use_covariates: false       # classic path matching on the pre-period outcome; covariate balance is reported as a diagnostic
+    covariate_weight: 0.02      # share of the predictor loss given to standardised covariate means when enabled
+    max_iter: 500
+  ascm:
+    ridge_grid: [0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]
+    elasticnet: {alpha: 0.05, l1_ratio: 0.5}
+  sdid:
+    zeta_scale: 1.0             # multiplier on the default regularisation (T_post^0.25 * sd of first differences)
+    placebo_reps: 50
+  event_study:
+    k_min: -14
+    k_max: 59                   # the panel has 60 campaign days -> k = 0..59
+    reference_k: -1
+  csdid:
+    boot_reps: 500
+    propensity_c: 5.0           # inverse regularisation of the (nearly degenerate) propensity model
+  bayes:
+    chains: 4
+    warmup: 600
+    samples: 600
+    ar1: true
+    ar_order: 1                 # 1 = AR(1) residuals (default); 2 = AR(2), available but not better in validation
+    rho_max: 0.98
+    dirichlet_conc: 0.5         # <1 = sparsity-inducing prior on donor weights (chosen on validation seeds 1000-1007)
+    intercept_sd: 0.05          # prior sd of the level shift, in units of the pre-period mean
+    target_accept: 0.97
+    outcomes_full: [room_nights_booked, direct_web_sessions, branded_search_index]
+    run_other_scenarios: true
+    ci_level: 0.95
+
+diagnostics:
+  mc_seeds: 12                  # Monte-Carlo replications of the whole panel (bias / RMSE / CI coverage)
+  mc_base_seed: 5000
+  placebo_day: 120              # in-time placebo: pretend the campaign started on day 120
+  rmspe_filter_multiple: 3.0    # placebo units whose pre-RMSPE exceeds 3x treated are dropped in the filtered variant
+  exclude_adjacent: [FLL]       # SUTVA / spillover sensitivity
+
+cate:
+  window_only: true         # learn tau(x) on the campaign window only (pre-window rows have no treated market -> no overlap)
+  n_seeds: 5                    # Monte Carlo noise draws for benchmark mean +/- sd
+  crossfit_folds: 4
+  propensity_clip: [0.01, 0.99]
+  dr_trim: 0.10                 # AIPW overlap trimming: only ~4% of rows are treated, so raw 1/e weights explode
+  features: [competitor_adr_usd, flight_search_index, temp_max_f, precipitation_in, weather_severity_index,
+             is_weekend, is_holiday_window, seasonality_sin, seasonality_cos, ota_promo_pressure_index]
+  linear_dml_drivers: [is_weekend, is_holiday_window, flight_search_index, competitor_adr_usd, weather_severity_index, ota_promo_pressure_index]
+  backends:                     # which GPU/CPU gradient-boosting backend each learner uses
+    s: xgboost
+    t: catboost
+    x: lightgbm
+    r: xgboost
+    dr: xgboost
+    cf_dml_nuisance: xgboost
+    linear_dml_nuisance: xgboost
+    da: lightgbm
+  nn:
+    hidden: 96
+    rep_layers: 2
+    epochs: 220
+    batch_size: 512
+    lr: 0.002
+    weight_decay: 0.0001
+    patience: 25
+    amp: false
+    cfr_alpha: 0.6              # weight on the MMD representation-balancing term
+    dragon_alpha: 0.5           # weight on the propensity-head loss
+    dragon_beta: 0.3            # weight on targeted regularisation
+  n_estimators: 250
+
+gpu:
+  enabled: true
+  benchmark_sizes: [6000, 120000, 1200000]
+  catboost_task_type: GPU
+
+economics:
+  default_net_revenue_per_room_night: 605.0
+
+api:
+  host: 127.0.0.1
+  port: 8000
+
+ui:
+  port: 8501
+
+paths:
+  models: outputs/models
+  metrics: outputs/metrics
+  figures: outputs/figures
+  logs: outputs/logs
+  screenshots: outputs/screenshots

@@ -1,0 +1,362 @@
+17:41:46 | INFO | device: {'cuda': True, 'cuda_available': True, 'gpu_name': 'NVIDIA GeForce RTX 3090', 'torch_device': 'cuda', 'xgb_device': 'cuda', 'catboost_task': 'GPU', 'lightgbm': 'cpu (pip wheel has no CUDA build)'} | jax: {'backend': 'cpu', 'devices': ['cpu:0', 'cpu:1', 'cpu:2', 'cpu:3']}
+17:41:46 | INFO | ===== stage: data =====
+17:41:47 | INFO | panel: 6000 rows (25 DMAs x 240 days) -> data/hospitality_geo_panel.parquet
+17:41:47 | INFO | MIA campaign: spend $3.00M, mean true ATT 124.0 room nights/day (8.5% of counterfactual), total 7441 room nights
+17:41:47 | INFO | stage data finished in 0.4s
+17:41:47 | INFO | ===== stage: panel =====
+17:41:48 | INFO | scenario mia_all24        treated=MIA donors=24 outcomes=4
+17:41:48 | INFO |   TWFE DiD      ATT    256.92/day  (SE 125.21)  pre-RMSPE 104.1
+17:42:07 | INFO |   Event Study   ATT    110.12/day  (SE 98.21)  pre-RMSPE 183.4
+17:42:07 | INFO |   CS-DiD (DR)   ATT     90.75/day  (SE 58.54)  pre-RMSPE 89.6
+17:42:07 | INFO |   SCM           ATT    134.50/day  (SE 53.09)  pre-RMSPE 38.5
+17:42:07 | INFO |   ASCM (Ridge)  ATT    130.92/day  (SE 23.74)  pre-RMSPE 38.5
+17:42:09 | INFO |   SDID          ATT    131.68/day  (SE 29.37)  pre-RMSPE 90.6
+17:42:15 | INFO |   Bayesian SC   ATT    146.37/day  (SE 15.10)  pre-RMSPE 41.0
+17:42:21 | INFO |   TWFE DiD      ATT  12201.17/day  (SE 4332.27)  pre-RMSPE 3851.7
+17:42:39 | INFO |   Event Study   ATT   5347.11/day  (SE 3735.64)  pre-RMSPE 8001.6
+17:42:39 | INFO |   CS-DiD (DR)   ATT   4541.34/day  (SE 2318.55)  pre-RMSPE 5479.1
+17:42:39 | INFO |   SCM           ATT   7909.95/day  (SE 2125.36)  pre-RMSPE 2170.6
+17:42:39 | INFO |   ASCM (Ridge)  ATT   7847.62/day  (SE 1020.25)  pre-RMSPE 2170.6
+17:42:41 | INFO |   SDID          ATT   9478.68/day  (SE 1219.42)  pre-RMSPE 2936.8
+17:42:47 | INFO |   Bayesian SC   ATT   8988.10/day  (SE 1015.83)  pre-RMSPE 2395.4
+17:42:50 | INFO |   TWFE DiD      ATT     50.62/day  (SE 13.27)  pre-RMSPE 11.2
+17:43:10 | INFO |   Event Study   ATT     32.49/day  (SE 11.99)  pre-RMSPE 21.8
+17:43:10 | INFO |   CS-DiD (DR)   ATT     29.27/day  (SE 9.00)  pre-RMSPE 13.7
+17:43:10 | INFO |   SCM           ATT     38.44/day  (SE 6.81)  pre-RMSPE 5.6
+17:43:10 | INFO |   ASCM (Ridge)  ATT     38.08/day  (SE 2.99)  pre-RMSPE 5.6
+17:43:12 | INFO |   SDID          ATT     38.04/day  (SE 3.83)  pre-RMSPE 11.1
+17:43:17 | INFO |   Bayesian SC   ATT     39.39/day  (SE 2.15)  pre-RMSPE 5.9
+17:43:20 | INFO |   TWFE DiD      ATT 165139.17/day  (SE 88042.28)  pre-RMSPE 77371.1
+17:43:39 | INFO |   Event Study   ATT  39111.59/day  (SE 68352.61)  pre-RMSPE 150356.1
+17:43:39 | INFO |   CS-DiD (DR)   ATT  52395.97/day  (SE 39547.82)  pre-RMSPE 58257.4
+17:43:39 | INFO |   SCM           ATT  69558.82/day  (SE 38905.59)  pre-RMSPE 29864.7
+17:43:39 | INFO |   ASCM (Ridge)  ATT  66814.30/day  (SE 18622.53)  pre-RMSPE 29864.7
+17:43:40 | INFO |   SDID          ATT  57481.26/day  (SE 22315.97)  pre-RMSPE 78360.0
+17:43:45 | INFO |   Bayesian SC   ATT  84447.90/day  (SE 13568.29)  pre-RMSPE 32207.2
+17:43:50 | INFO | scenario mia_flagship     treated=MIA donors=10 outcomes=1
+17:43:50 | INFO |   TWFE DiD      ATT    210.98/day  (SE 77.46)  pre-RMSPE 59.5
+17:43:54 | INFO |   Event Study   ATT     56.75/day  (SE 54.45)  pre-RMSPE 170.4
+17:43:54 | INFO |   CS-DiD (DR)   ATT    102.37/day  (SE 36.18)  pre-RMSPE 102.1
+17:43:54 | INFO |   SCM           ATT    134.50/day  (SE 79.38)  pre-RMSPE 38.5
+17:43:54 | INFO |   ASCM (Ridge)  ATT    132.72/day  (SE 23.54)  pre-RMSPE 38.5
+17:43:55 | INFO |   SDID          ATT     92.40/day  (SE 33.50)  pre-RMSPE 108.9
+17:44:00 | INFO |   Bayesian SC   ATT    141.53/day  (SE 14.26)  pre-RMSPE 39.0
+17:44:01 | INFO | scenario las_convention   treated=LAS donors=4 outcomes=1
+17:44:01 | INFO |   TWFE DiD      ATT     85.08/day  (SE 55.62)  pre-RMSPE 36.1
+17:44:03 | INFO |   Event Study   ATT    113.47/day  (SE 75.52)  pre-RMSPE 64.9
+17:44:03 | INFO |   CS-DiD (DR)   ATT     70.84/day  (SE 79.01)  pre-RMSPE 98.7
+17:44:03 | INFO |   SCM           ATT     59.30/day  (SE 425.28)  pre-RMSPE 43.9
+17:44:03 | INFO |   ASCM (Ridge)  ATT     59.30/day  (SE 166.99)  pre-RMSPE 43.9
+17:44:03 | INFO |   SDID          ATT     50.15/day  (SE 139.32)  pre-RMSPE 55.7
+17:44:07 | INFO |   Bayesian SC   ATT     63.20/day  (SE 16.65)  pre-RMSPE 40.1
+17:44:07 | INFO | scenario nyc_spring_break treated=NYC donors=3 outcomes=1
+17:44:07 | INFO |   TWFE DiD      ATT    102.29/day  (SE 141.59)  pre-RMSPE 35.1
+17:44:07 | INFO |   Event Study   ATT     64.85/day  (SE 75.18)  pre-RMSPE 59.2
+17:44:08 | INFO |   CS-DiD (DR)   ATT    -47.39/day  (SE 293.92)  pre-RMSPE 226.2
+17:44:08 | INFO |   SCM           ATT    108.39/day  (SE 136.66)  pre-RMSPE 48.2
+17:44:08 | INFO |   ASCM (Ridge)  ATT    108.39/day  (SE 133.48)  pre-RMSPE 48.2
+17:44:08 | INFO |   SDID          ATT    122.89/day  (SE 143.93)  pre-RMSPE 69.0
+17:44:12 | INFO |   Bayesian SC   ATT     83.61/day  (SE 18.37)  pre-RMSPE 48.9
+17:44:12 | INFO | scenario tpa_placebo      treated=TPA donors=7 outcomes=1
+17:44:12 | INFO |   TWFE DiD      ATT     54.51/day  (SE 90.97)  pre-RMSPE 34.6
+17:44:14 | INFO |   Event Study   ATT     13.53/day  (SE 66.90)  pre-RMSPE 57.9
+17:44:14 | INFO |   CS-DiD (DR)   ATT     58.61/day  (SE 52.96)  pre-RMSPE 44.7
+17:44:14 | INFO |   SCM           ATT     25.36/day  (SE 89.49)  pre-RMSPE 36.6
+17:44:14 | INFO |   ASCM (Ridge)  ATT     25.50/day  (SE 33.16)  pre-RMSPE 36.6
+17:44:16 | INFO |   SDID          ATT     29.67/day  (SE 38.53)  pre-RMSPE 74.1
+17:44:21 | INFO |   Bayesian SC   ATT     39.46/day  (SE 16.13)  pre-RMSPE 37.5
+17:44:24 | INFO | in-time placebo (day 120): TWFE DiD +6.6%; CS-DiD (DR) +2.8%; SCM +1.8%; ASCM (Ridge) +1.4%; SDID +6.8%
+17:44:24 | INFO | LODO ATT range (ASCM): 129.4 .. 135.0
+17:44:24 | INFO | stage panel finished in 157.3s
+17:44:24 | INFO | ===== stage: cate =====
+17:44:25 | INFO | CATE seed 2026 (1/5): 1500 rows, 60 treated
+17:44:25 | INFO |   S-Learner             0.6s  backend=xgboost  gpu=True
+17:44:29 | INFO |   T-Learner             3.6s  backend=catboost gpu=True
+17:44:29 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:44:31 | INFO |   R-Learner             2.3s  backend=xgboost  gpu=True
+17:44:36 | INFO |   DR-Learner            5.0s  backend=xgboost  gpu=True
+17:44:40 | INFO |   Causal Forest DML     4.1s  backend=xgboost  gpu=True
+17:44:43 | INFO |   Linear DML            2.5s  backend=xgboost  gpu=True
+17:44:43 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:44:46 | INFO |   TARNet                3.0s  backend=torch    gpu=True
+17:44:48 | INFO |   CFRNet-DragonNet      1.9s  backend=torch    gpu=True
+17:44:49 | INFO | CATE seed 2126 (2/5): 1500 rows, 60 treated
+17:44:50 | INFO |   S-Learner             0.8s  backend=xgboost  gpu=True
+17:44:53 | INFO |   T-Learner             3.1s  backend=catboost gpu=True
+17:44:53 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:44:56 | INFO |   R-Learner             2.4s  backend=xgboost  gpu=True
+17:45:01 | INFO |   DR-Learner            5.2s  backend=xgboost  gpu=True
+17:45:05 | INFO |   Causal Forest DML     4.0s  backend=xgboost  gpu=True
+17:45:07 | INFO |   Linear DML            2.5s  backend=xgboost  gpu=True
+17:45:08 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:45:11 | INFO |   TARNet                2.9s  backend=torch    gpu=True
+17:45:16 | INFO |   CFRNet-DragonNet      5.7s  backend=torch    gpu=True
+17:45:17 | INFO | CATE seed 2226 (3/5): 1500 rows, 60 treated
+17:45:18 | INFO |   S-Learner             0.7s  backend=xgboost  gpu=True
+17:45:21 | INFO |   T-Learner             3.1s  backend=catboost gpu=True
+17:45:21 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:45:24 | INFO |   R-Learner             2.3s  backend=xgboost  gpu=True
+17:45:29 | INFO |   DR-Learner            5.1s  backend=xgboost  gpu=True
+17:45:33 | INFO |   Causal Forest DML     3.9s  backend=xgboost  gpu=True
+17:45:35 | INFO |   Linear DML            2.6s  backend=xgboost  gpu=True
+17:45:35 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:45:37 | INFO |   TARNet                1.4s  backend=torch    gpu=True
+17:45:41 | INFO |   CFRNet-DragonNet      4.1s  backend=torch    gpu=True
+17:45:42 | INFO | CATE seed 2326 (4/5): 1500 rows, 60 treated
+17:45:42 | INFO |   S-Learner             0.6s  backend=xgboost  gpu=True
+17:45:45 | INFO |   T-Learner             3.0s  backend=catboost gpu=True
+17:45:46 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:45:48 | INFO |   R-Learner             2.4s  backend=xgboost  gpu=True
+17:45:53 | INFO |   DR-Learner            5.1s  backend=xgboost  gpu=True
+17:45:57 | INFO |   Causal Forest DML     3.8s  backend=xgboost  gpu=True
+17:46:00 | INFO |   Linear DML            2.8s  backend=xgboost  gpu=True
+17:46:00 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:46:00 | INFO |   TARNet                0.6s  backend=torch    gpu=True
+17:46:02 | INFO |   CFRNet-DragonNet      1.9s  backend=torch    gpu=True
+17:46:03 | INFO | CATE seed 2426 (5/5): 1500 rows, 60 treated
+17:46:04 | INFO |   S-Learner             0.7s  backend=xgboost  gpu=True
+17:46:07 | INFO |   T-Learner             3.1s  backend=catboost gpu=True
+17:46:07 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:46:10 | INFO |   R-Learner             2.5s  backend=xgboost  gpu=True
+17:46:15 | INFO |   DR-Learner            5.4s  backend=xgboost  gpu=True
+17:46:19 | INFO |   Causal Forest DML     3.9s  backend=xgboost  gpu=True
+17:46:22 | INFO |   Linear DML            2.7s  backend=xgboost  gpu=True
+17:46:22 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:46:22 | INFO |   TARNet                0.4s  backend=torch    gpu=True
+17:46:25 | INFO |   CFRNet-DragonNet      2.6s  backend=torch    gpu=True
+17:46:27 | INFO | response curve: theta=0.90 K=232 c=0.13 R2=0.56 (multiplier from CFRNet-DragonNet)
+17:46:28 | INFO | pacing validation (projected vs true, % vs even):
+                   strategy  projected_vs_even_pct  true_vs_even_pct
+                       even                    0.0               0.0
+               front_loaded                    5.9              -2.9
+                back_loaded                  -22.0             -22.0
+          pulsed_7_on_7_off                    1.9              -6.1
+           holiday_weighted                    5.1              -0.8
+           weekend_weighted                    0.6               0.5
+              cate_weighted                    3.1              -1.1
+                  optimized                    8.7               0.2
+actual campaign (reference)                    5.8               0.3
+17:46:28 | INFO | CATE benchmark (mean over 5 seeds):
+                 learner  pehe  att_bias  corr  qini_oracle  seconds
+   Constant ATE (oracle) 41.95      0.00   NaN         0.00     0.00
+Oracle X-regression (CV) 30.81     -3.02  0.65         0.68     0.00
+               S-Learner 44.87    -29.18  0.79         0.80     0.66
+               T-Learner 43.22    -23.09  0.78         0.79     3.16
+               X-Learner 39.36    -22.87  0.73         0.75     0.21
+               R-Learner 54.29    -28.43  0.71         0.73     2.40
+              DR-Learner 92.08    -11.69  0.61         0.67     5.14
+       Causal Forest DML 45.92    -27.58  0.61         0.65     3.93
+              Linear DML 49.57    -30.15  0.62         0.61     2.62
+       Domain Adaptation 43.43    -25.91  0.75         0.76     0.20
+                  TARNet 36.41     -9.79  0.76         0.79     1.67
+        CFRNet-DragonNet 36.20    -16.36  0.79         0.83     3.24
+17:46:28 | INFO | stage cate finished in 124.0s
+17:46:28 | INFO | ===== stage: mc =====
+17:46:28 | INFO |   TWFE DiD      ATT    144.64/day  (SE 134.18)  pre-RMSPE 94.7
+17:46:46 | INFO |   Event Study   ATT    260.60/day  (SE 155.27)  pre-RMSPE 153.4
+17:46:47 | INFO |   CS-DiD (DR)   ATT    112.74/day  (SE 112.70)  pre-RMSPE 104.5
+17:46:47 | INFO |   SCM           ATT    137.59/day  (SE 54.02)  pre-RMSPE 40.9
+17:46:47 | INFO |   ASCM (Ridge)  ATT    131.70/day  (SE 24.69)  pre-RMSPE 40.9
+17:46:48 | INFO |   SDID          ATT    101.84/day  (SE 26.48)  pre-RMSPE 103.6
+17:46:53 | INFO |   Bayesian SC   ATT    140.40/day  (SE 14.73)  pre-RMSPE 41.2
+17:46:57 | INFO | MC 1/12 done (29s)
+17:46:57 | INFO |   TWFE DiD      ATT    160.26/day  (SE 100.79)  pre-RMSPE 113.4
+17:47:15 | INFO |   Event Study   ATT    241.87/day  (SE 85.09)  pre-RMSPE 148.1
+17:47:16 | INFO |   CS-DiD (DR)   ATT    127.11/day  (SE 88.35)  pre-RMSPE 119.1
+17:47:16 | INFO |   SCM           ATT     87.10/day  (SE 66.28)  pre-RMSPE 38.8
+17:47:16 | INFO |   ASCM (Ridge)  ATT     79.50/day  (SE 22.00)  pre-RMSPE 38.8
+17:47:16 | INFO |   SDID          ATT     56.41/day  (SE 27.25)  pre-RMSPE 146.2
+17:47:22 | INFO |   Bayesian SC   ATT    105.46/day  (SE 17.82)  pre-RMSPE 41.7
+17:47:25 | INFO | MC 2/12 done (57s)
+17:47:25 | INFO |   TWFE DiD      ATT    203.94/day  (SE 106.67)  pre-RMSPE 100.7
+17:47:44 | INFO |   Event Study   ATT    372.48/day  (SE 170.14)  pre-RMSPE 201.3
+17:47:44 | INFO |   CS-DiD (DR)   ATT    155.61/day  (SE 57.04)  pre-RMSPE 94.9
+17:47:44 | INFO |   SCM           ATT    136.42/day  (SE 46.71)  pre-RMSPE 41.0
+17:47:44 | INFO |   ASCM (Ridge)  ATT    136.42/day  (SE 46.56)  pre-RMSPE 41.0
+17:47:45 | INFO |   SDID          ATT    151.13/day  (SE 25.29)  pre-RMSPE 58.5
+17:47:51 | INFO |   Bayesian SC   ATT    139.24/day  (SE 16.15)  pre-RMSPE 43.0
+17:47:58 | INFO | MC 3/12 done (90s)
+17:47:58 | INFO |   TWFE DiD      ATT    160.87/day  (SE 60.54)  pre-RMSPE 104.0
+17:48:16 | INFO |   Event Study   ATT     55.78/day  (SE 125.63)  pre-RMSPE 151.7
+17:48:16 | INFO |   CS-DiD (DR)   ATT     40.19/day  (SE 106.91)  pre-RMSPE 156.8
+17:48:17 | INFO |   SCM           ATT    113.96/day  (SE 43.24)  pre-RMSPE 38.5
+17:48:17 | INFO |   ASCM (Ridge)  ATT    115.10/day  (SE 28.54)  pre-RMSPE 38.5
+17:48:18 | INFO |   SDID          ATT    141.29/day  (SE 31.91)  pre-RMSPE 66.3
+17:48:23 | INFO |   Bayesian SC   ATT    109.60/day  (SE 15.22)  pre-RMSPE 42.1
+17:48:32 | INFO | MC 4/12 done (124s)
+17:48:32 | INFO |   TWFE DiD      ATT    199.47/day  (SE 136.24)  pre-RMSPE 107.0
+17:48:50 | INFO |   Event Study   ATT    235.45/day  (SE 119.50)  pre-RMSPE 118.0
+17:48:50 | INFO |   CS-DiD (DR)   ATT    127.79/day  (SE 63.60)  pre-RMSPE 70.1
+17:48:50 | INFO |   SCM           ATT    132.33/day  (SE 47.37)  pre-RMSPE 46.1
+17:48:50 | INFO |   ASCM (Ridge)  ATT    124.80/day  (SE 23.59)  pre-RMSPE 46.1
+17:48:52 | INFO |   SDID          ATT    122.58/day  (SE 28.08)  pre-RMSPE 87.5
+17:48:57 | INFO |   Bayesian SC   ATT    142.98/day  (SE 21.73)  pre-RMSPE 49.8
+17:49:01 | INFO | MC 5/12 done (153s)
+17:49:02 | INFO |   TWFE DiD      ATT    211.65/day  (SE 166.16)  pre-RMSPE 82.4
+17:49:20 | INFO |   Event Study   ATT    267.56/day  (SE 168.40)  pre-RMSPE 104.4
+17:49:20 | INFO |   CS-DiD (DR)   ATT    299.29/day  (SE 70.81)  pre-RMSPE 149.0
+17:49:20 | INFO |   SCM           ATT    156.96/day  (SE 76.87)  pre-RMSPE 37.3
+17:49:20 | INFO |   ASCM (Ridge)  ATT    156.95/day  (SE 76.82)  pre-RMSPE 37.3
+17:49:21 | INFO |   SDID          ATT    120.16/day  (SE 70.22)  pre-RMSPE 133.3
+17:49:26 | INFO |   Bayesian SC   ATT    173.65/day  (SE 19.77)  pre-RMSPE 39.4
+17:49:29 | INFO | MC 6/12 done (181s)
+17:49:29 | INFO |   TWFE DiD      ATT    131.18/day  (SE 185.43)  pre-RMSPE 117.5
+17:49:47 | INFO |   Event Study   ATT     72.77/day  (SE 135.48)  pre-RMSPE 137.8
+17:49:47 | INFO |   CS-DiD (DR)   ATT    110.39/day  (SE 84.64)  pre-RMSPE 161.6
+17:49:47 | INFO |   SCM           ATT    130.29/day  (SE 82.84)  pre-RMSPE 44.2
+17:49:47 | INFO |   ASCM (Ridge)  ATT    121.83/day  (SE 30.11)  pre-RMSPE 44.2
+17:49:48 | INFO |   SDID          ATT     91.07/day  (SE 40.53)  pre-RMSPE 124.3
+17:49:54 | INFO |   Bayesian SC   ATT    138.67/day  (SE 22.10)  pre-RMSPE 46.7
+17:49:57 | INFO | MC 7/12 done (209s)
+17:49:57 | INFO |   TWFE DiD      ATT    131.71/day  (SE 83.24)  pre-RMSPE 115.7
+17:50:15 | INFO |   Event Study   ATT    137.77/day  (SE 93.79)  pre-RMSPE 121.2
+17:50:15 | INFO |   CS-DiD (DR)   ATT    121.02/day  (SE 102.36)  pre-RMSPE 245.1
+17:50:15 | INFO |   SCM           ATT    131.83/day  (SE 54.62)  pre-RMSPE 46.2
+17:50:15 | INFO |   ASCM (Ridge)  ATT    126.23/day  (SE 23.27)  pre-RMSPE 46.2
+17:50:18 | INFO |   SDID          ATT    131.26/day  (SE 22.51)  pre-RMSPE 98.6
+17:50:23 | INFO |   Bayesian SC   ATT    160.74/day  (SE 26.63)  pre-RMSPE 53.6
+17:50:30 | INFO | MC 8/12 done (242s)
+17:50:30 | INFO |   TWFE DiD      ATT    188.90/day  (SE 106.07)  pre-RMSPE 112.8
+17:50:48 | INFO |   Event Study   ATT    258.49/day  (SE 99.86)  pre-RMSPE 140.0
+17:50:48 | INFO |   CS-DiD (DR)   ATT     90.13/day  (SE 36.51)  pre-RMSPE 54.5
+17:50:48 | INFO |   SCM           ATT     87.95/day  (SE 55.79)  pre-RMSPE 41.9
+17:50:48 | INFO |   ASCM (Ridge)  ATT     84.54/day  (SE 26.53)  pre-RMSPE 41.9
+17:50:50 | INFO |   SDID          ATT     74.58/day  (SE 31.34)  pre-RMSPE 116.8
+17:50:56 | INFO |   Bayesian SC   ATT    108.15/day  (SE 18.12)  pre-RMSPE 43.8
+17:51:00 | INFO | MC 9/12 done (272s)
+17:51:00 | INFO |   TWFE DiD      ATT    119.97/day  (SE 133.47)  pre-RMSPE 120.2
+17:51:18 | INFO |   Event Study   ATT    255.36/day  (SE 106.58)  pre-RMSPE 187.4
+17:51:18 | INFO |   CS-DiD (DR)   ATT    148.37/day  (SE 61.30)  pre-RMSPE 117.7
+17:51:18 | INFO |   SCM           ATT    140.43/day  (SE 57.83)  pre-RMSPE 45.3
+17:51:19 | INFO |   ASCM (Ridge)  ATT    137.60/day  (SE 17.19)  pre-RMSPE 45.3
+17:51:20 | INFO |   SDID          ATT    136.62/day  (SE 19.68)  pre-RMSPE 97.6
+17:51:25 | INFO |   Bayesian SC   ATT    156.47/day  (SE 27.87)  pre-RMSPE 53.5
+17:51:29 | INFO | MC 10/12 done (301s)
+17:51:29 | INFO |   TWFE DiD      ATT    171.27/day  (SE 174.42)  pre-RMSPE 103.2
+17:51:47 | INFO |   Event Study   ATT    112.43/day  (SE 76.26)  pre-RMSPE 122.7
+17:51:47 | INFO |   CS-DiD (DR)   ATT    172.91/day  (SE 39.64)  pre-RMSPE 70.1
+17:51:47 | INFO |   SCM           ATT    142.93/day  (SE 56.70)  pre-RMSPE 48.2
+17:51:47 | INFO |   ASCM (Ridge)  ATT    136.46/day  (SE 35.82)  pre-RMSPE 48.2
+17:51:48 | INFO |   SDID          ATT    137.83/day  (SE 16.78)  pre-RMSPE 67.1
+17:51:54 | INFO |   Bayesian SC   ATT    147.60/day  (SE 22.61)  pre-RMSPE 52.7
+17:51:58 | INFO | MC 11/12 done (330s)
+17:51:58 | INFO |   TWFE DiD      ATT    167.83/day  (SE 185.26)  pre-RMSPE 108.4
+17:52:16 | INFO |   Event Study   ATT    162.92/day  (SE 105.43)  pre-RMSPE 113.7
+17:52:16 | INFO |   CS-DiD (DR)   ATT     48.87/day  (SE 96.04)  pre-RMSPE 238.6
+17:52:16 | INFO |   SCM           ATT    139.61/day  (SE 72.00)  pre-RMSPE 50.2
+17:52:17 | INFO |   ASCM (Ridge)  ATT    139.38/day  (SE 28.53)  pre-RMSPE 50.2
+17:52:18 | INFO |   SDID          ATT    108.21/day  (SE 38.77)  pre-RMSPE 115.0
+17:52:24 | INFO |   Bayesian SC   ATT    160.49/day  (SE 26.59)  pre-RMSPE 54.0
+17:52:28 | INFO | MC 12/12 done (360s)
+17:52:28 | INFO | panel Monte-Carlo:
+        estimator  mean_att  true_att  mean_bias   rmse  ci_coverage  cf_rmse_post  mean_se  power_p05  bias_pct
+         TWFE DiD    165.97    121.63      44.35  53.25         1.00         63.04   131.04       0.33     36.46
+      Event Study    202.79    121.63      81.16 119.60         1.00        147.20   120.12       0.25     66.73
+      CS-DiD (DR)    129.54    121.63       7.91  62.83         0.92         77.44    76.66       0.33      6.50
+              SCM    128.12    121.63       6.49  23.50         1.00         46.64    59.52       1.00      5.33
+     ASCM (Ridge)    124.21    121.63       2.58  23.74         0.92         46.29    31.97       1.00      2.12
+             SDID    114.42    121.63      -7.21  31.73         0.92         54.55    31.57       0.58     -5.93
+      Bayesian SC    140.29    121.63      18.66  28.74         0.92         48.98    20.78       0.00     15.34
+ASCM (ElasticNet)    120.49    121.63      -1.14  24.02         1.00         47.53    37.98       1.00     -0.94
+17:52:28 | INFO | stage mc finished in 359.8s
+17:52:28 | INFO | ===== stage: gpu =====
+17:52:29 | INFO |   XGBoost (hist, depth 6)    n=    6000  cpu    0.21s  gpu    0.61s  speedup 0.35x
+17:52:31 | INFO |   CatBoost (depth 6)         n=    6000  cpu    0.62s  gpu    1.97s  speedup 0.31x
+17:52:31 | INFO |   PyTorch MLP (3 epochs)     n=    6000  cpu    0.09s  gpu    0.02s  speedup 4.51x
+17:52:34 | INFO |   XGBoost (hist, depth 6)    n=  120000  cpu    0.90s  gpu    0.76s  speedup 1.18x
+17:52:37 | INFO |   CatBoost (depth 6)         n=  120000  cpu    1.50s  gpu    1.60s  speedup 0.94x
+17:52:39 | INFO |   PyTorch MLP (3 epochs)     n=  120000  cpu    1.33s  gpu    0.27s  speedup 4.96x
+17:52:47 | INFO |   XGBoost (hist, depth 6)    n= 1200000  cpu    5.73s  gpu    1.36s  speedup 4.20x
+17:53:02 | INFO |   CatBoost (depth 6)         n= 1200000  cpu   11.51s  gpu    3.00s  speedup 3.84x
+17:53:17 | INFO |   PyTorch MLP (3 epochs)     n= 1200000  cpu   12.76s  gpu    2.53s  speedup 5.04x
+17:53:22 | INFO |   S-Learner             0.2s  backend=xgboost  gpu=False
+17:53:22 | INFO |   T-Learner             0.4s  backend=catboost gpu=False
+17:53:22 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:53:23 | INFO |   R-Learner             0.9s  backend=xgboost  gpu=False
+17:53:25 | INFO |   DR-Learner            1.7s  backend=xgboost  gpu=False
+17:53:27 | INFO |   Causal Forest DML     2.2s  backend=xgboost  gpu=False
+17:53:28 | INFO |   Linear DML            0.9s  backend=xgboost  gpu=False
+17:53:28 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:53:29 | INFO |   TARNet                0.9s  backend=torch    gpu=False
+17:53:31 | INFO |   CFRNet-DragonNet      2.3s  backend=torch    gpu=False
+17:53:32 | INFO |   S-Learner             0.8s  backend=xgboost  gpu=True
+17:53:35 | INFO |   T-Learner             2.9s  backend=catboost gpu=True
+17:53:35 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:53:38 | INFO |   R-Learner             2.4s  backend=xgboost  gpu=True
+17:53:43 | INFO |   DR-Learner            4.7s  backend=xgboost  gpu=True
+17:53:46 | INFO |   Causal Forest DML     3.9s  backend=xgboost  gpu=True
+17:53:49 | INFO |   Linear DML            2.5s  backend=xgboost  gpu=True
+17:53:49 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:53:50 | INFO |   TARNet                0.7s  backend=torch    gpu=True
+17:53:52 | INFO |   CFRNet-DragonNet      1.8s  backend=torch    gpu=True
+17:53:52 | INFO | stage gpu finished in 83.9s
+17:53:52 | INFO | ===== stage: figures =====
+17:53:53 | INFO | figure 01 written
+17:53:54 | INFO | figure 02 written
+17:53:55 | INFO | figure 03 written
+17:53:56 | INFO | figure 04 written
+17:53:56 | INFO | figure 05 written
+17:53:57 | INFO | figure 06 written
+17:53:58 | INFO | figure 07 written
+17:53:59 | INFO | figure 08 written
+17:53:59 | INFO | stage figures finished in 7.7s
+17:53:59 | INFO | ===== stage: verify =====
+17:53:59 | INFO | README.md not written yet - skipping link check
+17:53:59 | INFO | figure 01_parallel_trends_event_study.png                 555.5 KB  dpi=300
+17:53:59 | INFO | figure 02_synthetic_control_counterfactual.png            636.2 KB  dpi=300
+17:53:59 | INFO | figure 03_donor_weights_and_covariate_balance.png         268.6 KB  dpi=300
+17:53:59 | INFO | figure 04_in_space_placebo_permutation.png                604.7 KB  dpi=300
+17:53:59 | INFO | figure 05_panel_att_estimators_comparison.png             273.2 KB  dpi=300
+17:53:59 | INFO | figure 06_cate_meta_learners_comparison.png               348.6 KB  dpi=300
+17:53:59 | INFO | figure 07_cate_heterogeneity_drivers.png                  426.2 KB  dpi=300
+17:53:59 | INFO | figure 08_pytorch_uplift_training_curves.png              323.0 KB  dpi=300
+17:53:59 | INFO | stage verify finished in 0.0s
+17:53:59 | INFO | pipeline finished in 733.2s
+17:54:10 | INFO | starting FastAPI and Streamlit ...
+17:54:14 | INFO | services are up
+17:54:19 | INFO | saved api_swagger_docs.png                        246 KB
+17:54:22 | INFO | saved api_cate_response.png                    (Swagger live response)
+17:54:45 | INFO | saved streamlit_tab1_executive_iroas.png          417 KB
+17:54:45 | INFO | API/UI consistency: ATT total 7,963 present in UI text: True
+17:54:51 | INFO | saved streamlit_tab2_did_event_study.png          365 KB
+17:54:56 | INFO | saved streamlit_tab3_synthetic_control.png        357 KB
+17:55:04 | INFO | saved streamlit_tab4_cate_metalearners.png        798 KB
+17:55:14 | INFO | saved streamlit_tab5_live_api.png                 606 KB
+17:55:22 | INFO | saved streamlit_preset2_las_vegas.png             418 KB
+17:55:26 | INFO | saved streamlit_preset3_new_york.png              409 KB
+17:55:31 | INFO | saved streamlit_preset4_placebo_check.png         300 KB
+17:55:31 | INFO | services stopped
+17:55:37 | INFO | device: {'cuda': True, 'cuda_available': True, 'gpu_name': 'NVIDIA GeForce RTX 3090', 'torch_device': 'cuda', 'xgb_device': 'cuda', 'catboost_task': 'GPU', 'lightgbm': 'cpu (pip wheel has no CUDA build)'} | jax: {'backend': 'cpu', 'devices': ['cpu:0', 'cpu:1', 'cpu:2', 'cpu:3']}
+17:55:37 | INFO | ===== stage: verify =====
+17:55:37 | INFO | README images checked: 18, missing/empty: 0
+17:55:37 | INFO | figure 01_parallel_trends_event_study.png                 555.5 KB  dpi=300
+17:55:37 | INFO | figure 02_synthetic_control_counterfactual.png            636.2 KB  dpi=300
+17:55:37 | INFO | figure 03_donor_weights_and_covariate_balance.png         268.6 KB  dpi=300
+17:55:37 | INFO | figure 04_in_space_placebo_permutation.png                604.7 KB  dpi=300
+17:55:37 | INFO | figure 05_panel_att_estimators_comparison.png             273.2 KB  dpi=300
+17:55:37 | INFO | figure 06_cate_meta_learners_comparison.png               348.6 KB  dpi=300
+17:55:37 | INFO | figure 07_cate_heterogeneity_drivers.png                  426.2 KB  dpi=300
+17:55:37 | INFO | figure 08_pytorch_uplift_training_curves.png              323.0 KB  dpi=300
+17:55:37 | INFO | stage verify finished in 0.0s
+17:55:37 | INFO | pipeline finished in 0.1s
+17:56:30 | INFO | device: {'cuda': True, 'cuda_available': True, 'gpu_name': 'NVIDIA GeForce RTX 3090', 'torch_device': 'cuda', 'xgb_device': 'cuda', 'catboost_task': 'GPU', 'lightgbm': 'cpu (pip wheel has no CUDA build)'} | jax: {'backend': 'cpu', 'devices': ['cpu:0', 'cpu:1', 'cpu:2', 'cpu:3']}
+17:56:31 | INFO | ===== stage: verify =====
+17:56:31 | INFO | README images checked: 18, missing/empty: 0
+17:56:31 | INFO | figure 01_parallel_trends_event_study.png                 555.5 KB  dpi=300
+17:56:31 | INFO | figure 02_synthetic_control_counterfactual.png            636.2 KB  dpi=300
+17:56:31 | INFO | figure 03_donor_weights_and_covariate_balance.png         268.6 KB  dpi=300
+17:56:31 | INFO | figure 04_in_space_placebo_permutation.png                604.7 KB  dpi=300
+17:56:31 | INFO | figure 05_panel_att_estimators_comparison.png             273.2 KB  dpi=300
+17:56:31 | INFO | figure 06_cate_meta_learners_comparison.png               348.6 KB  dpi=300
+17:56:31 | INFO | figure 07_cate_heterogeneity_drivers.png                  426.2 KB  dpi=300
+17:56:31 | INFO | figure 08_pytorch_uplift_training_curves.png              323.0 KB  dpi=300
+17:56:31 | INFO | stage verify finished in 0.0s
+17:56:31 | INFO | pipeline finished in 0.1s
+17:56:36 | INFO |   S-Learner             0.2s  backend=xgboost  gpu=False
+17:56:37 | INFO |   T-Learner             0.6s  backend=catboost gpu=False
+17:56:37 | INFO |   X-Learner             0.2s  backend=lightgbm gpu=False
+17:56:37 | INFO |   Domain Adaptation     0.2s  backend=lightgbm gpu=False
+17:56:38 | INFO |   Linear DML            0.8s  backend=xgboost  gpu=False
+17:56:38 | INFO |   S-Learner             0.2s  backend=xgboost  gpu=False
+17:56:42 | INFO |   TARNet                3.9s  backend=torch    gpu=False
+17:56:44 | INFO |   CFRNet-DragonNet      2.0s  backend=torch    gpu=True

@@ -1,0 +1,66 @@
+{
+  "mia_flagship": {
+    "label": "Miami Flagship Resort - Winter Peak CTV + Airport Campaign",
+    "treated": "MIA",
+    "donors": [
+      "FLL",
+      "TPA",
+      "ORL",
+      "SAN",
+      "PHX",
+      "LAS",
+      "HNL",
+      "MSY",
+      "CHS",
+      "SAV"
+    ],
+    "start_day": 181,
+    "total_spend_usd": 3000000,
+    "target_mean_lift": 0.085,
+    "pattern": "winter_airport"
+  },
+  "las_convention": {
+    "label": "Las Vegas Strip Property - Convention & Billboard Blitz",
+    "treated": "LAS",
+    "donors": [
+      "ORL",
+      "SAN",
+      "PHX",
+      "AUS"
+    ],
+    "start_day": 181,
+    "total_spend_usd": 2200000,
+    "target_mean_lift": 0.07,
+    "pattern": "convention_billboard"
+  },
+  "nyc_spring_break": {
+    "label": "New York Feeder Market - Spring Break Awareness Push",
+    "treated": "NYC",
+    "donors": [
+      "BOS",
+      "CHI",
+      "DCA"
+    ],
+    "start_day": 181,
+    "total_spend_usd": 2600000,
+    "target_mean_lift": 0.055,
+    "pattern": "awareness_push"
+  },
+  "tpa_placebo": {
+    "label": "Negative / Placebo Control - Unexposed Market (TPA)",
+    "treated": "TPA",
+    "donors": [
+      "FLL",
+      "ORL",
+      "CHS",
+      "SAV",
+      "MSY",
+      "SAN",
+      "PHX"
+    ],
+    "start_day": 181,
+    "total_spend_usd": 0,
+    "target_mean_lift": 0.0,
+    "pattern": "none"
+  }
+}
