@@ -18,6 +18,7 @@ import pandas as pd  # noqa: E402
 import plotly.graph_objects as go  # noqa: E402
 import streamlit as st  # noqa: E402
 
+from src.optimization.flows import run_all_flows  # noqa: E402
 from src.optimization.revenue_optimizer import (build_profile_df, compare_policies, crm_segments, rack_rate,  # noqa: E402
                                                 revpar_curve, truth_curve)
 from src.utils.gpu_utils import cuda_available, load_config  # noqa: E402
@@ -43,6 +44,11 @@ def get_bookings() -> pd.DataFrame:
 
 
 cfg, models = get_assets()
+
+
+@_cache
+def get_flows():
+    return run_all_flows(models, cfg)
 if not models:
     st.error("No trained models found in outputs/models. Run `make train` (or `bash run_all.sh`) first.")
     st.stop()
@@ -86,8 +92,8 @@ st.sidebar.caption(f"Compute: {'CUDA GPU' if cuda_available() else 'CPU fallback
 st.title("Dynamic Pricing & Price Elasticity under Endogeneity")
 st.caption(f"**Scenario {scn_key} - {scn['name']}**")
 
-tab1, tab2, tab3, tab4 = st.tabs(["1 · EDA & Endogeneity Lab", "2 · Price & RevPAR Optimizer",
-                                  "3 · CATE & Deep Causal Arena", "4 · Batch CRM Targeting"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["1 · EDA & Endogeneity Lab", "2 · Price & RevPAR Optimizer",
+                                        "3 · CATE & Deep Causal Arena", "4 · Batch CRM Targeting", "5 · End-to-End Flows"])
 
 # ----------------------------------------------------------------------------------------------------------- tab 1
 with tab1:
@@ -251,3 +257,49 @@ with tab4:
                f"blanket-discounting everyone changes it by \${scored['net_value_usd'].sum():,.0f}.")
     st.dataframe(scored.head(100), width=1100)
     st.download_button("⬇ Download optimal promo offers (CSV)", scored.to_csv(index=False).encode("utf-8"), "optimal_promo_offers.csv", "text/csv")
+
+
+# ----------------------------------------------------------------------------------------------------------- tab 5
+with tab5:
+    flows = get_flows()
+    st.markdown("### End-to-end decision flows")
+    st.caption("Four flows, each run on several worked examples. Every stage reports its own metrics, every flow reports "
+               "overall metrics, and every estimate is checked against the synthetic ground truth. "
+               "These examples are fixed and do not depend on the sidebar scenario.")
+    diag = load_json("iv_first_stage_diagnostics.json")
+    bench = load_benchmark()
+    st.markdown("#### Programme scorecard")
+    sc = flows["scorecard"]
+    cols = st.columns(4)
+    for col, key in zip(cols, ["elasticity", "pricing", "promo", "crm"]):
+        col.markdown(f"**{flows[key]['title']}**")
+        for lab, val in sc[key].items():
+            col.metric(lab, val)
+    if diag and not bench.empty:
+        b = bench.dropna(subset=["elasticity_rmse"])
+        best = b.sort_values("elasticity_rmse").iloc[0]
+        g = st.columns(4)
+        g[0].metric("Models benchmarked", f"{len(b)}")
+        g[1].metric("Best elasticity RMSE", f"{best['elasticity_rmse']:.2f}", best["model"], delta_color="off")
+        g[2].metric("Naive OLS elasticity RMSE", f"{float(b[b['model'] == 'Naive OLS']['elasticity_rmse'].iloc[0]):.2f}")
+        g[3].metric("First-stage F", f"{diag['first_stage']['f_statistic_robust']:,.0f}")
+
+    keys = ["elasticity", "pricing", "promo", "crm"]
+    pick = st.radio("Choose a flow", keys, format_func=lambda k: flows[k]["title"], key="flow_pick")
+    flow = flows[pick]
+    st.markdown(f"#### {flow['title']}")
+    st.info(flow["question"])
+    for ex in flow["examples"]:
+        st.markdown(f"**Example: {ex['label']}**")
+        scols = st.columns(len(ex["stages"]))
+        for col, stg in zip(scols, ex["stages"]):
+            col.markdown(f"**{stg['name']}**")
+            col.caption(stg["detail"])
+            for m in stg["metrics"]:
+                col.metric(m["label"], m["value"])
+        st.success(ex["headline"])
+        st.markdown("---")
+    ov = pd.DataFrame([{"Example": e["label"], **{k.replace("_", " "): (round(v, 3) if isinstance(v, float) else v) for k, v in e["overall"].items()}}
+                       for e in flow["examples"]])
+    st.markdown("**Overall metrics for this flow**")
+    st.dataframe(ov, width=1100)

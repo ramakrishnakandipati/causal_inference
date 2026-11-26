@@ -43,3 +43,14 @@ def test_optimizer_and_iv_beat_naive():
     res = compare_policies({k: m[k] for k in ["Naive OLS", "DeepIV (PyTorch)"]}, row, cfg, 0.0)
     assert res["per_model"]["Naive OLS"]["estimated_elasticity"] > 0 > res["per_model"]["DeepIV (PyTorch)"]["estimated_elasticity"]
     assert res["revpar_lift_pct_causal_vs_naive"] > 0
+
+
+@pytest.mark.skipif(not load_models(), reason="models not trained")
+def test_flows_have_examples_stage_metrics_and_overall():
+    from src.optimization.flows import run_all_flows
+    f = run_all_flows(load_models(), load_config())
+    for key in ["elasticity", "pricing", "promo", "crm"]:
+        assert len(f[key]["examples"]) >= 2
+        for ex in f[key]["examples"]:
+            assert len(ex["stages"]) == 5 and all(s["metrics"] for s in ex["stages"]) and ex["overall"]
+    assert all(x["iv_error"] < x["naive_error"] for x in f["raw_overall"]["elasticity"])

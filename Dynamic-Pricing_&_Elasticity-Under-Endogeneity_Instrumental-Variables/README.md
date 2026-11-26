@@ -136,7 +136,7 @@ config/config.yaml            hyperparameters, DGP parameters, scenarios, GPU fl
 data/generate_hospitality_data.py
 src/utils/{gpu_utils,logger,metrics,structural,registry,plotstyle}.py
 src/models/{base,baselines,iv_econometric,deep_iv_pytorch,cate_metalearners,deep_cate_pytorch}.py
-src/optimization/revenue_optimizer.py
+src/optimization/{revenue_optimizer,flows}.py
 src/pipelines/{eda_visualizations,train_benchmark,evaluate_plots}.py
 src/api/main.py   app/streamlit_app.py   scripts/capture_screenshots.py   tests/test_smoke.py
 outputs/data/           hospitality_bookings.parquet, ground_truth_counterfactuals.parquet, dgp_summary_stats.json
@@ -202,6 +202,77 @@ Scenario A is the instructive one: when the surge actually materialises, chargin
 the shock the naive model cannot see; the same model also charges $650 on ordinary nights, where it loses. The instrument in
 scenario C moves the *market* rate but not structural demand, so the optimal price is unchanged while a market-following manager under-prices.
 
+### End-to-end flows (Streamlit tab 5)
+
+Four decision flows, each run on 2 to 3 worked examples. Every flow has five stages with their own metrics, per-flow
+overall metrics, and a programme scorecard (`src/optimization/flows.py`; examples are fixed and independent of the sidebar scenario).
+All "truth" columns come from the synthetic data-generating process.
+
+```mermaid
+flowchart LR
+    subgraph F1["Flow 1 Elasticity identification"]
+      a1["Context"] --> a2["Instrument relevance<br/>F, partial R2"] --> a3["Naive estimate"] --> a4["IV estimate"] --> a5["Validation vs truth"]
+    end
+    subgraph F2["Flow 2 Price optimisation"]
+      b1["Elasticity"] --> b2["Demand at rack"] --> b3["ADR sweep"] --> b4["Prescription"] --> b5["Realised RevPAR"]
+    end
+    subgraph F3["Flow 3 Promo CATE decision"]
+      c1["Baseline"] --> c2["CATE ensemble (12 models)"] --> c3["Conversion uplift"] --> c4["Economics"] --> c5["Offer decision"]
+    end
+    subgraph F4["Flow 4 Batch CRM targeting"]
+      d1["Ingest"] --> d2["Score"] --> d3["Segment"] --> d4["Value"] --> d5["Targeting quality"]
+    end
+    F1 --> F2 --> F3 --> F4
+```
+
+**Flow 1: elasticity identification.** Naive |error| vs IV |error| (IV = median of 2SLS, DML-IV, DR-IV, DeepIV).
+
+| Example | True ε | Naive OLS ε | IV median ε | Naive |err| | IV |err| | Bias removed |
+|---|---|---|---|---|---|---|
+| A convention surge (group) | -1.72 | +0.34 | -1.52 | 2.06 | 0.20 | 90 % |
+| B1 leisure early-bird | -2.81 | +0.34 | -2.47 | 3.15 | 0.34 | 89 % |
+| B2 corporate traveller | -0.32 | +0.34 | -0.41 | 0.66 | 0.10 | 85 % |
+
+Stage metrics: context (segment, reference ADR, hidden shock U); instrument relevance (first-stage F 6,838, partial R² 0.23,
+rate shift caused by Z alone, e.g. +56 % in A); naive estimates (OLS, XGBoost, rate shift including U, +123 % in A); IV estimates; validation.
+
+**Flow 2: price optimisation.** Realised RevPAR is evaluated on the true demand, averaged over U.
+
+| Example | Naive ADR / DeepIV ADR / true optimum | Naive RevPAR | DeepIV RevPAR | Best possible | Lift vs naive |
+|---|---|---|---|---|---|
+| A convention surge | $650 / $424 / $452 | $157 | $165 | $166 | +5 % |
+| B1 leisure shoulder season | $650 / $300 / $246 | $45 | $115 | $116 | +155 % |
+| C airline -25 % seats | $650 / $387 / $387 | $153 | $185 | $185 | +20 % |
+
+Programme metrics: median lift vs naive +20 %, DeepIV captures 99 % of the best achievable RevPAR on average.
+
+**Flow 3: promo CATE decision.** Median CATE of 12 causal models (S/T/X/R/DR, Causal Forest, Uplift RF, TARNet, DragonNet, CEVAE, DeepIV, DR-IV) for a 15 % discount.
+
+| Example | Median CATE (truth) | Model spread | Uplift est. / true | Net value est. / true | Decision |
+|---|---|---|---|---|---|
+| B1 leisure early-bird | +0.390 (+0.456) | ±0.147 | +13.6 / +14.3 pp | +2.5 / +6.1 | Offer, correct |
+| B2 corporate | +0.109 (+0.051) | ±0.109 | +3.8 / +1.6 pp | -22.8 / -29.5 | Withhold, correct |
+| C leisure, airline cut | +0.345 (+0.353) | ±0.144 | +11.8 / +11.0 pp | -5.5 / -5.5 | Withhold, correct |
+
+Programme metrics: 3/3 correct decisions, mean CATE |error| 0.044. Note that a large conversion uplift does not by itself justify a discount (example C).
+
+**Flow 4: batch CRM targeting.** Value is the *true* net RevPAR change of each policy, computed from the ground truth.
+
+| Batch / model | Persuadables | Target Persuadables | Discount everyone | Oracle targeting | Precision | Oracle value captured |
+|---|---|---|---|---|---|---|
+| 500 mixed, Causal Forest DML | 47 | +27 | -8,979 | +328 | 60 % | 8 % |
+| 400 leisure, DragonNet | 69 | +207 | -2,260 | +778 | 59 % | 27 % |
+
+Targeting beats blanket discounting by a wide margin (+9,006 and +2,467), because a blanket 15 % discount loses money for most guests.
+It captures only a small share of the oracle value, though: precision is about 60 %, the rank correlation with the true value is 0.45 to 0.75,
+and the "Persuadable" rule is conservative. The "Sure Things" quadrant is empty in both batches, since almost every guest has a negative net value
+from the promotion. Treat the CRM flow as clearly better than discounting everyone, not as near-optimal.
+
+![Flow 1](outputs/screenshots/streamlit/05_streamlit_end_to_end_flows_elasticity.png)
+![Flow 2](outputs/screenshots/streamlit/05b_streamlit_flow_price_optimisation.png)
+![Flow 3](outputs/screenshots/streamlit/05c_streamlit_flow_promo_cate.png)
+![Flow 4](outputs/screenshots/streamlit/05d_streamlit_flow_batch_crm.png)
+
 ### Gallery
 
 **EDA**
@@ -233,3 +304,4 @@ scenario C moves the *market* rate but not structural demand, so the optimal pri
 ![Scenario B segment contrast](outputs/screenshots/streamlit/02b_streamlit_scenario_b_segment_contrast.png)
 ![CATE arena](outputs/screenshots/streamlit/03_streamlit_cate_metalearner_arena.png)
 ![Batch CRM targeting](outputs/screenshots/streamlit/04_streamlit_batch_crm_targeting.png)
+![End-to-end flows](outputs/screenshots/streamlit/05_streamlit_end_to_end_flows_elasticity.png)

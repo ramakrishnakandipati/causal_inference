@@ -113,6 +113,14 @@ async def streamlit_flow(browser) -> None:
     await tab(2, "03_streamlit_cate_metalearner_arena.png")
     await scenario("C")
     await tab(3, "04_streamlit_batch_crm_targeting.png")
+    await scenario("A")
+    await tab(4, "05_streamlit_end_to_end_flows_elasticity.png", charts=False)
+    for letter, fname in [("Flow 2", "05b_streamlit_flow_price_optimisation.png"), ("Flow 3", "05c_streamlit_flow_promo_cate.png"),
+                          ("Flow 4", "05d_streamlit_flow_batch_crm.png")]:
+        await page.locator("label", has_text=letter).first.click()
+        await st_wait_idle(page, 2500)
+        await page.screenshot(path=str(SHOTS / "streamlit" / fname), full_page=True)
+        log.info("saved %s", fname)
     exc = await page.locator("[data-testid='stException']").count()
     log.info("Streamlit exception blocks on final page: %d", exc)
     await page.close()
