@@ -1,0 +1,59 @@
+seed: 42
+
+data:
+  n: 50000
+  regime: fuzzy          # sharp | fuzzy
+  manipulation: false    # true adds bunching just above the cutoff
+  r_min: 1
+  r_max: 45
+
+rdd:
+  cutoff: 20
+  kernels: [triangular, epanechnikov, uniform]
+  default_kernel: triangular
+  polynomial_orders: [1, 2]
+  bandwidth_grid: [3, 5, 7, 10, 12]
+  placebo_cutoffs: [12, 15, 25, 30]
+  donut: [19, 20]
+  outcomes: [next_year_room_nights, next_year_ancillary_spend, next_year_direct_booking_ratio]
+  primary_outcome: next_year_room_nights
+
+cate:
+  bandwidth: 10          # window |R - c| <= h used for the learners; null = use CCT optimum
+  kernel: triangular
+  cv_folds: 3            # out-of-fold predictions feed the uplift metrics
+  tune_val_frac: 0.25    # validation share used by Optuna (R-loss)
+  outcomes: [next_year_room_nights]   # add the other two to train learners for every outcome
+  learners:
+    - s_learner
+    - t_learner
+    - x_learner
+    - r_learner
+    - dr_learner
+    - linear_dml
+    - nonparam_dml
+    - causal_forest_dml
+    - orthogonal_forest
+    - dmliv
+    - tarnet
+    - dragonnet
+
+gpu:
+  use_gpu: true
+  xgboost: true
+  catboost: true
+  lightgbm: false        # pip wheel is CPU-only; histogram mode is used
+  torch: true
+  rapids: false          # optional cuml/cupy
+
+optuna:
+  n_trials: 8
+  timeout_sec: 300
+
+nn:
+  epochs: 150
+  patience: 15
+  batch_size: 1024
+
+paths:
+  outputs: outputs
