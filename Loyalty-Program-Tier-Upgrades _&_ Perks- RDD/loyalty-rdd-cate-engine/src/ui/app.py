@@ -20,28 +20,13 @@ from plotly.subplots import make_subplots
 
 from src.api.service import ModelService, ModelsNotTrained, SHORT_TO_OUTCOME, UNITS
 from src.evaluation.visualizer import local_poly_curve
+from src.flows import PERSONAS
+from src.ui import flows_ui
 
 BLUE, ORANGE, AQUA, GREY, INK = "#257de0", "#f47230", "#00b894", "#666666", "#191919"
 OUT_LABEL = {"next_year_room_nights": "Room nights", "next_year_ancillary_spend": "Ancillary spend (USD)",
              "next_year_direct_booking_ratio": "Direct-booking ratio"}
 
-PERSONAS = {
-    "Leisure family traveller": dict(historical_adr=170.0, business_travel_ratio=0.08, lead_time_avg=70.0, ancillary_spend_t=900.0,
-                                     direct_booking_ratio_t=0.30, tenure_years=5.0, co_brand_card_holder=False,
-                                     home_region="North America", age_group="40-49", weekend_stay_ratio=0.55),
-    "Bleisure couple": dict(historical_adr=175.0, business_travel_ratio=0.40, lead_time_avg=40.0, ancillary_spend_t=700.0,
-                            direct_booking_ratio_t=0.35, tenure_years=4.0, co_brand_card_holder=False,
-                            home_region="Europe", age_group="30-39", weekend_stay_ratio=0.40),
-    "Corporate road warrior": dict(historical_adr=210.0, business_travel_ratio=0.88, lead_time_avg=8.0, ancillary_spend_t=350.0,
-                                   direct_booking_ratio_t=0.40, tenure_years=9.0, co_brand_card_holder=True,
-                                   home_region="North America", age_group="40-49", weekend_stay_ratio=0.05),
-    "Budget solo explorer": dict(historical_adr=75.0, business_travel_ratio=0.10, lead_time_avg=25.0, ancillary_spend_t=150.0,
-                                 direct_booking_ratio_t=0.15, tenure_years=1.5, co_brand_card_holder=False,
-                                 home_region="Asia-Pacific", age_group="18-29", weekend_stay_ratio=0.45),
-    "Luxury resort loyalist": dict(historical_adr=420.0, business_travel_ratio=0.20, lead_time_avg=90.0, ancillary_spend_t=2600.0,
-                                   direct_booking_ratio_t=0.60, tenure_years=12.0, co_brand_card_holder=True,
-                                   home_region="Middle East & Africa", age_group="50-64", weekend_stay_ratio=0.50),
-}
 
 st.set_page_config(page_title="Loyalty Tier RDD + CATE", page_icon="🏨", layout="wide")
 
@@ -82,8 +67,8 @@ st.title("Does reaching Gold change how guests behave?")
 st.caption(f"Regression discontinuity at {c:.0f} qualifying nights plus heterogeneous-effect learners · "
            f"{svc.regime} design · {len(svc.panel):,} synthetic loyalty members")
 
-tab_rdd, tab_valid, tab_cate, tab_sim, tab_models = st.tabs(
-    ["Gold effect (RDD)", "Validity checks", "Guest explorer (CATE)", "Threshold simulator", "Model leaderboard"])
+tab_rdd, tab_valid, tab_cate, tab_sim, tab_models, tab_flows = st.tabs(
+    ["Gold effect (RDD)", "Validity checks", "Guest explorer (CATE)", "Threshold simulator", "Model leaderboard", "End-to-end flows"])
 
 # ------------------------------------------------------------------------------------------ RDD
 with tab_rdd:
@@ -245,3 +230,7 @@ with tab_models:
         p = svc.out / "plots" / name
         if p.exists():
             st.image(str(p))
+
+# ------------------------------------------------------------------------------------------ end-to-end flows
+with tab_flows:
+    flows_ui.render(svc)

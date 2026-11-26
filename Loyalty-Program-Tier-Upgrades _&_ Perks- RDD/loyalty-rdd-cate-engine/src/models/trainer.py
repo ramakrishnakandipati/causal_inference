@@ -245,6 +245,11 @@ def main(argv: Optional[List[str]] = None) -> None:
         "hardware": device.detect(), "train_seconds": round(time.time() - t_start, 1),
     }
     dump_json(meta, out / "models" / "meta.json")
+    try:                                    # end-to-end flows (8 worked examples with stage-, flow- and programme-level metrics)
+        from src import flows
+        log.info("building end-to-end flows -> %s", flows.build_and_save(out))
+    except Exception as exc:                # never lose a finished training run over the flows
+        log.warning("flows not built (%s); run `python -m src.flows` once the models exist", exc)
     telemetry(tele, "end")
     log.info("done in %.1f min; artifacts in %s", (time.time() - t_start) / 60, out)
 

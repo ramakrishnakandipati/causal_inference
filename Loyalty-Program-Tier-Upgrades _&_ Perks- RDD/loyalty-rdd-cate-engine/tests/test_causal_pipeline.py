@@ -361,6 +361,108 @@ def test_plotly_serialises_plain_lists_for_old_streamlit():
     assert "bdata" not in go.Figure(go.Bar(x=np.arange(5), y=np.arange(5))).to_json()
 
 
+# ------------------------------------------------------------------------------------ end-to-end flows
+@pytest.fixture(scope="session")
+def flows_report(artifacts):
+    """Flows built on the quick artifacts (12k guests, 3 learners): structure and robust properties only."""
+    from src import flows as fl
+    from src.api.service import ModelService
+    svc = ModelService(artifacts)
+    _KEEP_ALIVE.append(svc)
+    return fl.build_all(svc), artifacts
+
+
+def test_flows_cover_four_types_with_two_examples_each(flows_report):
+    from collections import Counter
+    rep, _ = flows_report
+    assert len(rep["flows"]) == 8
+    counts = Counter(f["type"] for f in rep["flows"])
+    assert set(counts) == {"A", "B", "C", "D"} and min(counts.values()) >= 2
+    assert [f["id"] for f in rep["flows"]] == ["A1", "A2", "B1", "B2", "C1", "C2", "D1", "D2"]
+
+
+def test_every_flow_has_stage_metrics_and_a_verdict(flows_report):
+    rep, _ = flows_report
+    for f in rep["flows"]:
+        expected = {"A": 6, "B": 7, "C": 5, "D": 6}[f["type"]]        # B adds a replication stage; guest flows have no panel diagnostics
+        assert len(f["stages"]) == expected, f["id"]
+        assert f["summary"]["verdict"] and f["summary"]["reason"] and f["summary"]["metrics"]
+        for s in f["stages"]:
+            assert s["status"] in {"PASS", "WARN", "FAIL", "INFO"}
+            assert s["metrics"] and all({"label", "value"} <= set(m) for m in s["metrics"]), (f["id"], s["key"])
+            assert s["title"] and s["takeaway"]
+
+
+def test_flow_report_is_json_safe_and_roundtrips(flows_report, tmp_path):
+    import json
+    from src import flows as fl
+    rep, _ = flows_report
+    text = json.dumps(rep, allow_nan=False)                    # no NaN / numpy leaks
+    path = fl.save(rep, tmp_path)
+    assert json.loads(path.read_text(encoding="utf-8")) == json.loads(text)
+    assert fl.load(tmp_path)["flows"][0]["id"] == "A1"
+
+
+def test_flow_validity_stages_catch_threshold_gaming(flows_report):
+    rep, _ = flows_report
+    b2 = next(f for f in rep["flows"] if f["id"] == "B2")
+    dens = next(s for s in b2["stages"] if s["key"] == "density")
+    assert dens["status"] == "FAIL" and b2["summary"]["verdict"] == "DO NOT TRUST THE ESTIMATE"
+    repl = next(s for s in b2["stages"] if s["key"] == "replication")
+    assert repl["chart"]["values"][0] >= 0.9                      # detection rate on gamed re-draws
+    b1 = next(f for f in rep["flows"] if f["id"] == "B1")
+    assert any(s["key"] == "replication" for s in b1["stages"])
+    assert b1["kpi"]["true_effect"] == 0.0
+
+
+def test_flow_economics_use_the_stated_assumptions(flows_report):
+    rep, _ = flows_report
+    a = rep["assumptions"]
+    a1 = next(f for f in rep["flows"] if f["id"] == "A1")
+    eco = next(s for s in a1["stages"] if s["key"] == "economics")
+    labels = {m["label"] for m in eco["metrics"]}
+    assert f"Contribution at {a['contribution_margin']:.0%}" in labels and "Perk cost" in labels
+    gross, contrib, minus_perk, net = eco["chart"]["values"]          # the perk cost is stored as a negative bar
+    assert contrib == pytest.approx(gross * a["contribution_margin"]) and net == pytest.approx(contrib + minus_perk)
+    assert -minus_perk == pytest.approx(a["perk_cost_per_member"])
+
+
+def test_guest_flows_order_responders_and_threshold_flows_have_opposite_signs(flows_report):
+    rep, _ = flows_report
+    by = {f["id"]: f for f in rep["flows"]}
+    assert by["C1"]["kpi"]["effect"] > by["C2"]["kpi"]["effect"]
+    assert by["D1"]["kpi"]["nights"] > 0 > by["D2"]["kpi"]["nights"]
+    assert by["D1"]["kpi"]["guests_affected"] > 0 and by["D2"]["kpi"]["guests_affected"] > 0
+    for k in ("D1", "D2"):
+        assert by[k]["kpi"]["break_even_cost"] > 0
+
+
+def test_programme_scorecard_covers_all_flows_and_models(flows_report):
+    rep, _ = flows_report
+    prog = rep["programme"]
+    titles = {g["title"] for g in prog["groups"]}
+    assert {"Data and design", "Validity suite", "Compute"} <= titles
+    assert any(t.startswith("Heterogeneity models") for t in titles)
+    assert len(prog["compare"]) == 8 and all(r["Verdict"] and r["Headline"] for r in prog["compare"])
+    assert set(prog["models"]["personas"]) == {"Bleisure couple", "Corporate road warrior"}
+
+
+def test_effect_scale_zero_gives_a_placebo_panel():
+    from src.data.synthetic_generator import generate, local_truth
+    d = generate(8000, "fuzzy", seed=3, effect_scale=0.0)
+    assert all(abs(v) < 1e-9 for v in local_truth(d).values()) and float(d["tau_true_room_nights"].abs().max()) < 1e-9
+    assert generate(8000, "fuzzy", seed=3).equals(generate(8000, "fuzzy", seed=3, effect_scale=1.0))   # default unchanged
+
+
+def test_dashboard_has_flows_tab_and_screenshot_script_matches():
+    app = (ROOT / "src" / "ui" / "app.py").read_text(encoding="utf-8")
+    assert "End-to-end flows" in app and "flows_ui.render" in app
+    ui = (ROOT / "src" / "ui" / "flows_ui.py").read_text(encoding="utf-8")
+    shots = (ROOT / "scripts" / "capture_screenshots.py").read_text(encoding="utf-8")
+    for anchor in ("flowstep-", "flowsummary-", "flow-overall", "flow-end", "flow-top"):
+        assert anchor in ui and anchor in shots
+
+
 def test_api_without_models_returns_503(tmp_path):
     from fastapi.testclient import TestClient
     from src.api.main import create_app

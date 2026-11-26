@@ -1,0 +1,106 @@
+{
+  "mode": "all",
+  "flows": {
+    "A1": {
+      "stages_saved": [
+        "setup",
+        "density",
+        "balance",
+        "estimates",
+        "robustness",
+        "economics"
+      ],
+      "verdict_on_screen": true,
+      "api_value": "+3.67 nights",
+      "ui_matches_api": true
+    },
+    "A2": {
+      "stages_saved": [
+        "setup",
+        "density",
+        "balance",
+        "estimates",
+        "robustness",
+        "economics"
+      ],
+      "verdict_on_screen": true
+    },
+    "B1": {
+      "stages_saved": [
+        "setup",
+        "density",
+        "balance",
+        "estimates",
+        "robustness",
+        "replication",
+        "economics"
+      ],
+      "verdict_on_screen": true
+    },
+    "B2": {
+      "stages_saved": [
+        "setup",
+        "density",
+        "balance",
+        "estimates",
+        "robustness",
+        "replication",
+        "economics"
+      ],
+      "verdict_on_screen": true
+    },
+    "C1": {
+      "stages_saved": [
+        "profile",
+        "context",
+        "models",
+        "evidence",
+        "economics"
+      ],
+      "verdict_on_screen": true,
+      "api_value": "+4.89 nights",
+      "ui_matches_api": true
+    },
+    "C2": {
+      "stages_saved": [
+        "profile",
+        "context",
+        "models",
+        "evidence",
+        "economics"
+      ],
+      "verdict_on_screen": true,
+      "api_value": "+1.40 nights",
+      "ui_matches_api": true
+    },
+    "D1": {
+      "stages_saved": [
+        "today",
+        "candidate",
+        "who",
+        "impact",
+        "net",
+        "sensitivity"
+      ],
+      "verdict_on_screen": true,
+      "api_value": "6,410 guests, net $2,241,412",
+      "ui_matches_api": true
+    },
+    "D2": {
+      "stages_saved": [
+        "today",
+        "candidate",
+        "who",
+        "impact",
+        "net",
+        "sensitivity"
+      ],
+      "verdict_on_screen": true,
+      "api_value": "6,538 guests, net -$1,309,583",
+      "ui_matches_api": true
+    }
+  },
+  "all_ui_matches_api": true,
+  "all_verdicts_shown": true,
+  "seconds": 161
+}

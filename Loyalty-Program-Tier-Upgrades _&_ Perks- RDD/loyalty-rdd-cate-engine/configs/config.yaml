@@ -57,3 +57,8 @@ nn:
 
 paths:
   outputs: outputs
+
+flows:                    # assumptions used by the end-to-end flows (shown on screen next to every money number)
+  contribution_margin: 0.40       # share of incremental revenue that is contribution
+  perk_cost_per_member: 120.0     # USD per Gold member per year
+  seed: 42
