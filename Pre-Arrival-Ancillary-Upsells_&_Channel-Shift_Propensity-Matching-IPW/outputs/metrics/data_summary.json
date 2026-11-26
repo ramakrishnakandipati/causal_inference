@@ -1,0 +1,20 @@
+{
+  "n": 60000,
+  "n_train": 42049,
+  "n_test": 17951,
+  "treated_share": 0.37273333333333336,
+  "true_ate_ancillary": 11.612286545258256,
+  "true_ate_direct": 0.06549173880299988,
+  "segment_share": {
+    "Persuadable": 0.38976666666666665,
+    "Lost Cause": 0.32431666666666664,
+    "Always-Taker": 0.1464,
+    "Sleeping Dog": 0.13951666666666668
+  },
+  "channel_share": {
+    "OTA_Expedia": 0.3390666666666667,
+    "OTA_Booking": 0.29945,
+    "Direct_Web": 0.22196666666666667,
+    "Corporate": 0.13951666666666668
+  }
+}

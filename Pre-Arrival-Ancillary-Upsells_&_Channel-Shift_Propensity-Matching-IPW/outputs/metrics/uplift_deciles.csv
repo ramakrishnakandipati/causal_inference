@@ -1,0 +1,21 @@
+decile,ipw_uplift,n,outcome,model
+1,42.29434932787031,1796,ancillary,Causal Forest DML
+2,30.126177470127416,1795,ancillary,Causal Forest DML
+3,14.603027245705782,1795,ancillary,Causal Forest DML
+4,16.157244269817088,1795,ancillary,Causal Forest DML
+5,12.050716561402025,1795,ancillary,Causal Forest DML
+6,9.241334335630878,1795,ancillary,Causal Forest DML
+7,3.526814479596961,1795,ancillary,Causal Forest DML
+8,10.907090960782368,1795,ancillary,Causal Forest DML
+9,5.983822998548953,1795,ancillary,Causal Forest DML
+10,-3.2924684484922935,1795,ancillary,Causal Forest DML
+1,0.2954435914691287,1796,direct,S-Learner (XGB)
+2,0.1838372319179716,1795,direct,S-Learner (XGB)
+3,0.13690859349044132,1795,direct,S-Learner (XGB)
+4,0.06673419853508389,1795,direct,S-Learner (XGB)
+5,0.05695279966872523,1795,direct,S-Learner (XGB)
+6,0.04407115144093224,1795,direct,S-Learner (XGB)
+7,0.02747675156605946,1795,direct,S-Learner (XGB)
+8,0.024254582078903467,1795,direct,S-Learner (XGB)
+9,0.03905143489984828,1795,direct,S-Learner (XGB)
+10,-0.05614584195909453,1795,direct,S-Learner (XGB)

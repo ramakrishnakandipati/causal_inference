@@ -1,0 +1,9 @@
+{
+  "cuda": true,
+  "gpu_name": "NVIDIA GeForce RTX 3090",
+  "torch_device": "cuda",
+  "cuml": false,
+  "xgb_device": "cuda",
+  "catboost_task": "GPU",
+  "lightgbm_device": "cpu"
+}

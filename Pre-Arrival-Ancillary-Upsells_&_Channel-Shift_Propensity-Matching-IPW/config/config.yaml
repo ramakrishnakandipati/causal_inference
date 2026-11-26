@@ -1,0 +1,46 @@
+seed: 42
+paths:
+  outputs: outputs
+  screenshots: docs/screenshots
+
+data:
+  n_full: 60000
+  n_fast: 6000
+  test_frac: 0.3
+
+propensity:
+  clip: [0.025, 0.975]
+  caliper_sd: 0.2          # caliper = caliper_sd * sd(logit e)
+  knn_k: 3
+  weight_trim_q: 0.99
+  cv_folds: 5
+  n_boot: 100
+  n_boot_fast: 30
+
+learners:
+  folds: 3
+  xgb: {n_estimators: 300, max_depth: 4, learning_rate: 0.05, subsample: 0.8, colsample_bytree: 0.8}
+  xgb_fast: {n_estimators: 80, max_depth: 3, learning_rate: 0.1, subsample: 0.8, colsample_bytree: 0.8}
+  forest_trees: 300
+  forest_trees_fast: 60
+  uplift_trees: 60
+  uplift_trees_fast: 20
+
+deep:
+  hidden: 128
+  rep_layers: 2
+  epochs: 80
+  epochs_fast: 15
+  batch_size: 512
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 10
+  dragon_alpha: 1.0
+  dragon_beta: 1.0
+
+business:
+  budget_frac: 0.30
+  cost_per_offer: 1.50          # $ per guest contacted (SMS/email/app credit)
+  direct_booking_margin: 55.0   # $ saved commission + margin per migrated booking
+  ancillary_margin: 0.45        # margin on ancillary revenue
+  ota_commission: [0.15, 0.20]

@@ -1,0 +1,96 @@
+{
+  "ancillary": {
+    "outcome": "y_ancillary",
+    "n_used": 8000,
+    "baseline_aipw_ate": 11.134434710417416,
+    "builtin": {
+      "random_common_cause": {
+        "new_effect": 11.137975404527833,
+        "pass": true
+      },
+      "placebo_treatment": {
+        "new_effect": -0.048102181241003496,
+        "draws": [
+          0.32101159684471553,
+          -0.3000332875668568,
+          -0.1652848530008692
+        ],
+        "pass": true
+      },
+      "data_subset": {
+        "new_effect": 11.315641142995473,
+        "draws": [
+          11.254777501276436,
+          11.307285993962953,
+          11.384859933747029
+        ],
+        "pass": true
+      }
+    },
+    "dowhy": {
+      "available": true,
+      "estimate": 11.911334960937502,
+      "refuters": {
+        "random_common_cause": {
+          "new_effect": 11.914902373046873,
+          "p_value": 0.48
+        },
+        "placebo_treatment_refuter": {
+          "new_effect": 0.09564154092417425,
+          "p_value": 0.2266707233484832
+        },
+        "data_subset_refuter": {
+          "new_effect": 11.92127032470703,
+          "p_value": 0.48017681529088874
+        }
+      }
+    }
+  },
+  "direct": {
+    "outcome": "y_direct",
+    "n_used": 8000,
+    "baseline_aipw_ate": 0.07343633123711155,
+    "builtin": {
+      "random_common_cause": {
+        "new_effect": 0.07187173051287965,
+        "pass": true
+      },
+      "placebo_treatment": {
+        "new_effect": -0.0004576586243967221,
+        "draws": [
+          -0.003632456843977521,
+          0.00869612332637284,
+          -0.006436642355585486
+        ],
+        "pass": true
+      },
+      "data_subset": {
+        "new_effect": 0.06829485763127768,
+        "draws": [
+          0.07502384441807673,
+          0.06539491189350116,
+          0.06446581658225513
+        ],
+        "pass": true
+      }
+    },
+    "dowhy": {
+      "available": true,
+      "estimate": 0.07763671875,
+      "refuters": {
+        "random_common_cause": {
+          "new_effect": 0.07751039596557617,
+          "p_value": 0.24
+        },
+        "placebo_treatment_refuter": {
+          "new_effect": -0.00518368072509765,
+          "p_value": 0.2842730226387251
+        },
+        "data_subset_refuter": {
+          "new_effect": 0.07564073672740579,
+          "p_value": 0.33260313547910647
+        }
+      }
+    }
+  }
+}

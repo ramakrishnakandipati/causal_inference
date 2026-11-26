@@ -1,0 +1,107 @@
+{
+  "ancillary|S-Learner (XGB)": {
+    "fit_seconds": 1.128096103668213,
+    "latency_ms_per_1k": 4.594882329305013,
+    "family": "meta"
+  },
+  "ancillary|S-Learner (CatBoost)": {
+    "fit_seconds": 2.9476912021636963,
+    "latency_ms_per_1k": 4.442890485127767,
+    "family": "meta"
+  },
+  "ancillary|T-Learner (XGB)": {
+    "fit_seconds": 1.9282915592193604,
+    "latency_ms_per_1k": 3.1079848607381186,
+    "family": "meta"
+  },
+  "ancillary|T-Learner (LightGBM)": {
+    "fit_seconds": 2.3537068367004395,
+    "latency_ms_per_1k": 8.187532424926758,
+    "family": "meta"
+  },
+  "ancillary|X-Learner": {
+    "fit_seconds": 4.0907487869262695,
+    "latency_ms_per_1k": 3.7314891815185547,
+    "family": "meta"
+  },
+  "ancillary|R-Learner (NonParamDML)": {
+    "fit_seconds": 4.416905641555786,
+    "latency_ms_per_1k": 2.519885698954264,
+    "family": "econml"
+  },
+  "ancillary|DR-Learner": {
+    "fit_seconds": 4.832528591156006,
+    "latency_ms_per_1k": 2.086162567138672,
+    "family": "econml"
+  },
+  "ancillary|Causal Forest DML": {
+    "fit_seconds": 13.828543424606323,
+    "latency_ms_per_1k": 41.62220160166422,
+    "family": "econml"
+  },
+  "ancillary|TARNet (PyTorch)": {
+    "fit_seconds": 8.258722305297852,
+    "latency_ms_per_1k": 0.8333524068196615,
+    "family": "deep"
+  },
+  "ancillary|DragonNet (PyTorch)": {
+    "fit_seconds": 10.078861713409424,
+    "latency_ms_per_1k": 1.0117292404174805,
+    "family": "deep"
+  },
+  "direct|S-Learner (XGB)": {
+    "fit_seconds": 0.9228293895721436,
+    "latency_ms_per_1k": 4.454135894775391,
+    "family": "meta"
+  },
+  "direct|S-Learner (CatBoost)": {
+    "fit_seconds": 3.543247699737549,
+    "latency_ms_per_1k": 2.817948659261068,
+    "family": "meta"
+  },
+  "direct|T-Learner (XGB)": {
+    "fit_seconds": 1.8862404823303223,
+    "latency_ms_per_1k": 2.3714701334635415,
+    "family": "meta"
+  },
+  "direct|T-Learner (LightGBM)": {
+    "fit_seconds": 2.2928104400634766,
+    "latency_ms_per_1k": 8.057594299316406,
+    "family": "meta"
+  },
+  "direct|X-Learner": {
+    "fit_seconds": 4.696284055709839,
+    "latency_ms_per_1k": 4.114230473836263,
+    "family": "meta"
+  },
+  "direct|R-Learner (NonParamDML)": {
+    "fit_seconds": 4.192649602890015,
+    "latency_ms_per_1k": 2.5644302368164062,
+    "family": "econml"
+  },
+  "direct|DR-Learner": {
+    "fit_seconds": 5.027389049530029,
+    "latency_ms_per_1k": 2.6987393697102866,
+    "family": "econml"
+  },
+  "direct|Causal Forest DML": {
+    "fit_seconds": 14.884351015090942,
+    "latency_ms_per_1k": 44.68421141306559,
+    "family": "econml"
+  },
+  "direct|TARNet (PyTorch)": {
+    "fit_seconds": 6.778841495513916,
+    "latency_ms_per_1k": 0.9154081344604492,
+    "family": "deep"
+  },
+  "direct|DragonNet (PyTorch)": {
+    "fit_seconds": 10.255207777023315,
+    "latency_ms_per_1k": 1.0863145192464192,
+    "family": "deep"
+  },
+  "direct|Uplift RF (KL)": {
+    "fit_seconds": 2.8072996139526367,
+    "latency_ms_per_1k": 27.361035346984863,
+    "family": "causalml"
+  }
+}

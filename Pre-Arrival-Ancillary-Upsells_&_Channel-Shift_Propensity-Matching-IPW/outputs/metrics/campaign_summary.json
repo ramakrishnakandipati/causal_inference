@@ -1,0 +1,11 @@
+{
+  "best_model": {
+    "ancillary": "Causal Forest DML",
+    "direct": "S-Learner (XGB)"
+  },
+  "budget_frac": 0.3,
+  "est_value_targeted": 90027.17997624748,
+  "true_value_targeted": 92955.5147661239,
+  "true_value_all": 131685.48389336592,
+  "true_value_oracle_top": 94142.00108657946
+}
