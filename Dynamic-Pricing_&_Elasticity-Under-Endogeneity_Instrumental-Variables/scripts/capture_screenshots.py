@@ -99,8 +99,12 @@ async def streamlit_flow(browser) -> None:
         if charts:
             try:
                 await page.wait_for_selector(".js-plotly-plot, [data-testid='stImage'] img, img", timeout=30000)
+                # every <img> in the main area must be fully decoded (a broken/unloaded image has naturalWidth 0)
+                await page.wait_for_function(
+                    "() => Array.from(document.querySelectorAll('[data-testid=\"stImage\"] img'))"
+                    ".every(i => i.complete && i.naturalWidth > 0)", timeout=45000)
             except Exception:  # noqa: BLE001
-                log.warning("no chart detected on tab %d", idx)
+                log.warning("charts/images not fully loaded on tab %d", idx)
         await page.wait_for_timeout(1500)
         await page.screenshot(path=str(SHOTS / "streamlit" / fname), full_page=True)
         log.info("saved %s", fname)
@@ -113,6 +117,10 @@ async def streamlit_flow(browser) -> None:
     await tab(2, "03_streamlit_cate_metalearner_arena.png")
     await scenario("C")
     await tab(3, "04_streamlit_batch_crm_targeting.png")
+    await scenario("C")
+    await tab(1, "02c_streamlit_scenario_c_airline_cut.png")
+    await scenario("D")
+    await tab(1, "02d_streamlit_scenario_d_custom.png")
     await scenario("A")
     await tab(4, "05_streamlit_end_to_end_flows_elasticity.png", charts=False)
     for letter, fname in [("Flow 2", "05b_streamlit_flow_price_optimisation.png"), ("Flow 3", "05c_streamlit_flow_promo_cate.png"),

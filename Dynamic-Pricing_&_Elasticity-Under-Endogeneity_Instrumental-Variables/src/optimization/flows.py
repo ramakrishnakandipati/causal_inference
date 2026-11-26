@@ -177,12 +177,8 @@ def promo_flow(models, cfg, ex) -> Dict[str, Any]:
 
 
 # ------------------------------------------------------------------------------------------------ flow 4
-def crm_flow(models, cfg, ex) -> Dict[str, Any]:
-    df = load_bookings()
-    if ex.get("segment"):
-        df = df[df["segment"] == ex["segment"]]
-    batch = df.sample(ex["n"], random_state=ex["seed"]).reset_index(drop=True)
-    scored = crm_segments(batch, models[ex["model"]], cfg)
+def crm_quality(batch: pd.DataFrame, scored: pd.DataFrame, cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """Targeting quality of a scored batch measured with the TRUE net value of the promotion."""
     d, unit, eps = cfg["dgp"]["promo"]["discount"], cfg["optimization"]["unit_cost_per_room"], cfg["dgp"]["eps_sd"]
     price = batch["adr"].to_numpy(float)
     ld0 = truth_log_demand(batch, cfg, price, batch["demand_shock_u"].to_numpy(float))
@@ -192,29 +188,50 @@ def crm_flow(models, cfg, ex) -> Dict[str, Any]:
     seg = scored["uplift_segment"].to_numpy()
     pers = seg == "Persuadables"
     targeted, blanket, oracle = float(true_nv[pers].sum()), float(true_nv.sum()), float(true_nv[true_nv > 0].sum())
-    precision = float((true_nv[pers] > 0).mean()) if pers.any() else float("nan")
-    capture = targeted / oracle * 100 if oracle > 0 else float("nan")
-    rank = float(pd.Series(scored["net_value_usd"]).corr(pd.Series(true_nv), method="spearman"))
-    counts = {s: int((seg == s).sum()) for s in ["Persuadables", "Sure Things", "Lost Causes", "Sleeping Dogs"]}
+    return {
+        "n_persuadables": int(pers.sum()), "targeted_value": targeted, "blanket_value": blanket, "oracle_value": oracle,
+        "precision": float((true_nv[pers] > 0).mean()) if pers.any() else float("nan"),
+        "oracle_capture_pct": targeted / oracle * 100 if oracle > 0 else float("nan"),
+        "gain_vs_blanket_usd": targeted - blanket,
+        "rank_corr": float(pd.Series(scored["net_value_usd"]).corr(pd.Series(true_nv), method="spearman")),
+        "counts": {k: int((seg == k).sum()) for k in ["Persuadables", "Sure Things", "Lost Causes", "Sleeping Dogs"]},
+        "mean_price": float(price.mean()),
+    }
+
+
+def _crm_batch(ex: Dict[str, Any]) -> pd.DataFrame:
+    df = load_bookings()
+    if ex.get("segment"):
+        df = df[df["segment"] == ex["segment"]]
+    return df.sample(ex["n"], random_state=ex["seed"]).reset_index(drop=True)
+
+
+def crm_flow(models, cfg, ex) -> Dict[str, Any]:
+    batch = _crm_batch(ex)
+    scored = crm_segments(batch, models[ex["model"]], cfg)
+    q = crm_quality(batch, scored, cfg)
+    counts, precision, capture = q["counts"], q["precision"], q["oracle_capture_pct"]
     stages = [
         _stage("1 · Ingest", "Reservation batch",
-               [("Reservations", f"{len(batch):,}"), ("Mean offered ADR", _usd(price.mean())), ("Model", {"Causal Forest DML": "Forest DML"}.get(ex["model"], ex["model"]))]),
+               [("Reservations", f"{len(batch):,}"), ("Mean offered ADR", _usd(q["mean_price"])),
+                ("Model", {"Causal Forest DML": "Forest DML"}.get(ex["model"], ex["model"]))]),
         _stage("2 · Score", "Heterogeneous CATE per guest",
                [("Mean CATE", f"{scored['cate_log_demand'].mean():+.3f}"), ("Mean true CATE", f"{batch['true_promo_cate'].mean():+.3f}"),
-                ("Rank corr. with true value", f"{rank:.2f}")]),
+                ("Rank corr. with true value", f"{q['rank_corr']:.2f}")]),
         _stage("3 · Segment", "Uplift quadrants",
                [("Persuadables", f"{counts['Persuadables']}"), ("Sure Things / Lost Causes", f"{counts['Sure Things']} / {counts['Lost Causes']}"),
                 ("Sleeping Dogs", f"{counts['Sleeping Dogs']}")]),
         _stage("4 · Value", "True net RevPAR change of each policy",
-               [("Target Persuadables", f"{targeted:+,.0f}"), ("Discount everyone", f"{blanket:+,.0f}"), ("Oracle targeting", f"{oracle:+,.0f}")]),
+               [("Target Persuadables", f"{q['targeted_value']:+,.0f}"), ("Discount everyone", f"{q['blanket_value']:+,.0f}"),
+                ("Oracle targeting", f"{q['oracle_value']:+,.0f}")]),
         _stage("5 · Quality", "Targeting against the truth",
                [("Precision", f"{precision:.0%}" if precision == precision else "n/a"),
                 ("Oracle value captured", f"{capture:.0f}%" if capture == capture else "n/a"),
-                ("Gain vs blanket", f"{targeted - blanket:+,.0f}")]),
+                ("Gain vs blanket", f"{q['gain_vs_blanket_usd']:+,.0f}")]),
     ]
     return {"label": ex["label"], "stages": stages,
-            "overall": {"precision": precision, "oracle_capture_pct": capture, "gain_vs_blanket_usd": targeted - blanket, "rank_corr": rank},
-            "headline": f"Targeting {int(pers.sum())} guests earns {targeted:+,.0f} vs {blanket:+,.0f} for discounting all"}
+            "overall": {"precision": precision, "oracle_capture_pct": capture, "gain_vs_blanket_usd": q["gain_vs_blanket_usd"], "rank_corr": q["rank_corr"]},
+            "headline": f"Targeting {q['n_persuadables']} guests earns {q['targeted_value']:+,.0f} vs {q['blanket_value']:+,.0f} for discounting all"}
 
 
 RUNNERS = {"elasticity": elasticity_flow, "pricing": pricing_flow, "promo": promo_flow, "crm": crm_flow}
@@ -245,3 +262,75 @@ def run_all_flows(models: Dict[str, Any], cfg: Dict[str, Any]) -> Dict[str, Any]
     }
     flows["raw_overall"] = o
     return flows
+
+
+def model_flow_matrix(models: Dict[str, Any], cfg: Dict[str, Any]) -> pd.DataFrame:
+    """Every model run through every flow (same examples), one row per model.
+
+    f1  mean |elasticity error| on the Flow-1 examples                      (lower is better)
+    f2  mean % of the best achievable RevPAR realised by the model's ADR    (higher)
+    f3  mean |CATE error| on the Flow-3 examples, and correct promo decisions out of 3
+    f4  targeting precision / % of oracle value captured on Flow-4 batch 1
+    """
+    from src.optimization.revenue_optimizer import optimize_for_model, truth_curve
+
+    exs = examples(cfg)
+    d, unit, eps = cfg["dgp"]["promo"]["discount"], cfg["optimization"]["unit_cost_per_room"], cfg["dgp"]["eps_sd"]
+    rows_f1 = [build_profile_df(e["profile"], e["instruments"], cfg=cfg) for e in exs["elasticity"]]
+    price_rows = [(build_profile_df(e["profile"], e["instruments"], cfg=cfg), e["u"]) for e in exs["pricing"]]
+    best = [float(truth_curve(r, cfg, None)["net_revpar"].max()) for r, _ in price_rows]
+    promo = []
+    for e in exs["promo"]:
+        r = build_profile_df(e["profile"], e["instruments"], cfg=cfg)
+        rack = float(rack_rate(r, cfg)[0])
+        r["ln_adr"], r["adr"] = np.log(rack), rack
+        t0 = float(truth_occupancy(r, cfg, np.array([rack]), None)[0])
+        t1 = float(truth_occupancy(r, cfg, np.array([rack * (1 - d)]), None)[0])
+        nv_true = t1 * (rack * (1 - d) - unit) - t0 * (rack - unit)
+        promo.append((r, rack, float(r["true_elasticity"].iloc[0] * np.log(1 - d)), nv_true > 0))
+    batch = _crm_batch(exs["crm"][0])
+    base_ref = models["DeepIV (PyTorch)"]
+    out = []
+    for name, m in models.items():
+        f1 = float(np.mean([abs(float(m.elasticity(r)[0]) - float(r["true_elasticity"].iloc[0])) for r in rows_f1]))
+        cap = [optimize_for_model(m, r, cfg, u)["realised_net_revpar"] / b * 100 for (r, u), b in zip(price_rows, best)]
+        errs, ok = [], 0
+        for r, rack, tau_t, offer_t in promo:
+            tau = float(m.promo_cate(r)[0])
+            base = base_ref.predict_log_demand(r, np.log([rack]))
+            o0, o1 = float(expected_occupancy(base, eps)[0]), float(expected_occupancy(base + tau, eps)[0])
+            nv = o1 * (rack * (1 - d) - unit) - o0 * (rack - unit)
+            errs.append(abs(tau - tau_t))
+            ok += int((nv > 0) == offer_t)
+        q = crm_quality(batch, crm_segments(batch, m, cfg), cfg)
+        out.append({"model": name, "family": m.family,
+                    "f1_elasticity_abs_error": f1, "f2_revpar_capture_pct": float(np.mean(cap)),
+                    "f3_cate_abs_error": float(np.mean(errs)), "f3_correct_decisions": ok,
+                    "f4_precision": q["precision"], "f4_oracle_capture_pct": q["oracle_capture_pct"],
+                    "f4_gain_vs_blanket": q["gain_vs_blanket_usd"]})
+    df = pd.DataFrame(out)
+    ranks = pd.DataFrame({
+        "r1": df["f1_elasticity_abs_error"].rank(), "r2": (-df["f2_revpar_capture_pct"]).rank(),
+        "r3": df["f3_cate_abs_error"].rank(), "r4": (-df["f4_oracle_capture_pct"].fillna(-1e9)).rank()})
+    df["mean_rank_across_flows"] = ranks.mean(axis=1)
+    return df.sort_values("mean_rank_across_flows").reset_index(drop=True)
+
+
+def main() -> None:
+    """Write outputs/metrics/flows.json and model_flow_comparison.csv."""
+    import warnings
+
+    from src.utils.gpu_utils import load_config
+    from src.utils.metrics import dump_json
+    from src.utils.registry import OUT, load_models
+
+    warnings.filterwarnings("ignore")
+    cfg, models = load_config(), load_models()
+    dump_json(run_all_flows(models, cfg), OUT / "metrics" / "flows.json")
+    mf = model_flow_matrix(models, cfg)
+    mf.to_csv(OUT / "metrics" / "model_flow_comparison.csv", index=False)
+    print(mf.round(3).to_string())
+
+
+if __name__ == "__main__":
+    main()

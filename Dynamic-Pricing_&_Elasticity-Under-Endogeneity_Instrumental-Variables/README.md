@@ -10,6 +10,10 @@ served through **FastAPI** and **Streamlit** and verified with **Playwright** sc
 > Numbers below come from the committed run in `outputs/` (CPU fallback on the dev machine; the GPU paths are
 > implemented but were **not exercised** here because no CUDA device was available).
 
+> **Presentation:** `presentation/Grand_Horizon_IV_CATE_End_to_End.pptx` (55 slides: problem, 21-model comparison, four flows with stage and overall metrics,
+> every model across every flow, uplift end-to-end documentation, and the four Streamlit scenarios as a story). Rebuild with `python -m src.optimization.flows`
+> then `python presentation/build_deck.py`; every number is read from `outputs/`.
+
 ## 1. Executive overview
 
 | Finding (30,000 bookings, 25% held out) | Value |

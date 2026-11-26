@@ -101,7 +101,7 @@ with tab1:
     if diag:
         fs, wu, co = diag["first_stage"], diag["wu_hausman_endogeneity"], diag["coefficients"]
         sg = diag.get("sargan_overidentification_heterogeneous_spec", diag["sargan_overidentification"])
-        c = st.columns(5)
+        c = st.columns([1, 1, 1, 1, 1.5])
         c[0].metric("First-stage F (robust)", f"{fs['f_statistic_robust']:,.0f}", "strong (>10)" if fs["instruments_strong"] else "WEAK")
         c[1].metric("Partial R² of Z", f"{fs['partial_r2']:.3f}")
         c[2].metric("Wu-Hausman stat", f"{wu['statistic']:,.0f}", "endogeneity detected" if wu["reject_exogeneity_5pct"] else "no endogeneity")
@@ -119,7 +119,8 @@ with tab1:
     for i, (rel, cap) in enumerate(imgs):
         p = OUT / "visualizations" / rel
         if p.exists():
-            cols[i % 2].image(str(p), caption=cap, use_column_width=True)
+            # pass bytes: a str path is treated as a URL (file://) which the browser refuses to load
+            cols[i % 2].image(p.read_bytes(), caption=cap, use_column_width=True)
 
 # ----------------------------------------------------------------------------------------------------------- tab 2
 with tab2:

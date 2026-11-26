@@ -1,0 +1,1242 @@
+{
+  "elasticity": {
+    "title": "Flow 1 \u00b7 Elasticity identification",
+    "question": "Can we recover the true price elasticity despite the hidden demand shock?",
+    "examples": [
+      {
+        "label": "A \u00b7 Convention surge (group, urban)",
+        "stages": [
+          {
+            "name": "1 \u00b7 Context",
+            "detail": "Guest profile and market state",
+            "metrics": [
+              {
+                "label": "Segment",
+                "value": "group / urban_business"
+              },
+              {
+                "label": "Reference ADR",
+                "value": "$238"
+              },
+              {
+                "label": "Hidden shock U",
+                "value": "+1.8"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Instrument relevance",
+            "detail": "Z moves the rate without moving demand",
+            "metrics": [
+              {
+                "label": "First-stage F",
+                "value": "6,838"
+              },
+              {
+                "label": "Partial R\u00b2 of Z",
+                "value": "0.23"
+              },
+              {
+                "label": "Rate shift from Z alone",
+                "value": "+56%"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Naive estimate",
+            "detail": "Ignores the hidden shock",
+            "metrics": [
+              {
+                "label": "OLS elasticity",
+                "value": "+0.34"
+              },
+              {
+                "label": "XGBoost elasticity",
+                "value": "+0.01"
+              },
+              {
+                "label": "Rate shift incl. U",
+                "value": "+123%"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 IV estimate",
+            "detail": "2SLS, DML-IV, DR-IV, DeepIV",
+            "metrics": [
+              {
+                "label": "2SLS",
+                "value": "-1.62"
+              },
+              {
+                "label": "DeepIV",
+                "value": "-1.34"
+              },
+              {
+                "label": "IV median",
+                "value": "-1.52"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Validation",
+            "detail": "Against the ground truth",
+            "metrics": [
+              {
+                "label": "True elasticity",
+                "value": "-1.72"
+              },
+              {
+                "label": "Naive |error|",
+                "value": "2.06"
+              },
+              {
+                "label": "IV |error|",
+                "value": "0.20"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "bias_reduction_pct": 90.08653921736324,
+          "naive_error": 2.0619674850057366,
+          "iv_error": 0.20441233797676528,
+          "sign_correct": true
+        },
+        "headline": "Naive error 2.06 \u2192 IV error 0.20 (90% of the bias removed)"
+      },
+      {
+        "label": "B1 \u00b7 Leisure early-bird (resort)",
+        "stages": [
+          {
+            "name": "1 \u00b7 Context",
+            "detail": "Guest profile and market state",
+            "metrics": [
+              {
+                "label": "Segment",
+                "value": "leisure / resort"
+              },
+              {
+                "label": "Reference ADR",
+                "value": "$250"
+              },
+              {
+                "label": "Hidden shock U",
+                "value": "+0.0"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Instrument relevance",
+            "detail": "Z moves the rate without moving demand",
+            "metrics": [
+              {
+                "label": "First-stage F",
+                "value": "6,838"
+              },
+              {
+                "label": "Partial R\u00b2 of Z",
+                "value": "0.23"
+              },
+              {
+                "label": "Rate shift from Z alone",
+                "value": "-9%"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Naive estimate",
+            "detail": "Ignores the hidden shock",
+            "metrics": [
+              {
+                "label": "OLS elasticity",
+                "value": "+0.34"
+              },
+              {
+                "label": "XGBoost elasticity",
+                "value": "-0.84"
+              },
+              {
+                "label": "Rate shift incl. U",
+                "value": "-9%"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 IV estimate",
+            "detail": "2SLS, DML-IV, DR-IV, DeepIV",
+            "metrics": [
+              {
+                "label": "2SLS",
+                "value": "-2.85"
+              },
+              {
+                "label": "DeepIV",
+                "value": "-2.38"
+              },
+              {
+                "label": "IV median",
+                "value": "-2.47"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Validation",
+            "detail": "Against the ground truth",
+            "metrics": [
+              {
+                "label": "True elasticity",
+                "value": "-2.81"
+              },
+              {
+                "label": "Naive |error|",
+                "value": "3.15"
+              },
+              {
+                "label": "IV |error|",
+                "value": "0.34"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "bias_reduction_pct": 89.31140533680264,
+          "naive_error": 3.146967485005737,
+          "iv_error": 0.3363665986548794,
+          "sign_correct": true
+        },
+        "headline": "Naive error 3.15 \u2192 IV error 0.34 (89% of the bias removed)"
+      },
+      {
+        "label": "B2 \u00b7 Corporate traveller (resort)",
+        "stages": [
+          {
+            "name": "1 \u00b7 Context",
+            "detail": "Guest profile and market state",
+            "metrics": [
+              {
+                "label": "Segment",
+                "value": "corporate / resort"
+              },
+              {
+                "label": "Reference ADR",
+                "value": "$313"
+              },
+              {
+                "label": "Hidden shock U",
+                "value": "+0.0"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Instrument relevance",
+            "detail": "Z moves the rate without moving demand",
+            "metrics": [
+              {
+                "label": "First-stage F",
+                "value": "6,838"
+              },
+              {
+                "label": "Partial R\u00b2 of Z",
+                "value": "0.23"
+              },
+              {
+                "label": "Rate shift from Z alone",
+                "value": "-5%"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Naive estimate",
+            "detail": "Ignores the hidden shock",
+            "metrics": [
+              {
+                "label": "OLS elasticity",
+                "value": "+0.34"
+              },
+              {
+                "label": "XGBoost elasticity",
+                "value": "+0.74"
+              },
+              {
+                "label": "Rate shift incl. U",
+                "value": "-5%"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 IV estimate",
+            "detail": "2SLS, DML-IV, DR-IV, DeepIV",
+            "metrics": [
+              {
+                "label": "2SLS",
+                "value": "-0.22"
+              },
+              {
+                "label": "DeepIV",
+                "value": "-0.45"
+              },
+              {
+                "label": "IV median",
+                "value": "-0.41"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Validation",
+            "detail": "Against the ground truth",
+            "metrics": [
+              {
+                "label": "True elasticity",
+                "value": "-0.32"
+              },
+              {
+                "label": "Naive |error|",
+                "value": "0.66"
+              },
+              {
+                "label": "IV |error|",
+                "value": "0.10"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "bias_reduction_pct": 85.27769115530866,
+          "naive_error": 0.6586341516724035,
+          "iv_error": 0.09696615396582409,
+          "sign_correct": true
+        },
+        "headline": "Naive error 0.66 \u2192 IV error 0.10 (85% of the bias removed)"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Flow 2 \u00b7 Price optimisation",
+    "question": "Turn the elasticity into an ADR and check the realised RevPAR against the truth.",
+    "examples": [
+      {
+        "label": "A \u00b7 Convention surge",
+        "stages": [
+          {
+            "name": "1 \u00b7 Elasticity",
+            "detail": "From the fitted estimators",
+            "metrics": [
+              {
+                "label": "Naive OLS",
+                "value": "+0.34"
+              },
+              {
+                "label": "DeepIV",
+                "value": "-1.34"
+              },
+              {
+                "label": "Truth",
+                "value": "-1.72"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Demand at rack",
+            "detail": "Conversion at $285",
+            "metrics": [
+              {
+                "label": "Naive OLS",
+                "value": "72%"
+              },
+              {
+                "label": "DeepIV",
+                "value": "70%"
+              },
+              {
+                "label": "Truth",
+                "value": "67%"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 ADR sweep",
+            "detail": "60 ADRs from $95 to $650",
+            "metrics": [
+              {
+                "label": "Naive OLS optimum",
+                "value": "$650"
+              },
+              {
+                "label": "DeepIV optimum",
+                "value": "$424"
+              },
+              {
+                "label": "True optimum",
+                "value": "$452"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Prescription",
+            "detail": "Rack ADR plus promo depth",
+            "metrics": [
+              {
+                "label": "Offered ADR",
+                "value": "$424"
+              },
+              {
+                "label": "Promo depth",
+                "value": "0%"
+              },
+              {
+                "label": "Status-quo ADR",
+                "value": "$530"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Realised RevPAR",
+            "detail": "On the true demand, averaged over U",
+            "metrics": [
+              {
+                "label": "Naive policy",
+                "value": "$157"
+              },
+              {
+                "label": "DeepIV policy",
+                "value": "$165"
+              },
+              {
+                "label": "Best possible",
+                "value": "$166"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "lift_vs_naive_pct": 5.248143841230402,
+          "lift_vs_status_quo_pct": 0.9067754840358155,
+          "capture_of_best_pct": 99.8190748027423,
+          "adr_gap_vs_truth": 28.22033898305085
+        },
+        "headline": "+5% RevPAR vs naive; captures 100% of the best achievable"
+      },
+      {
+        "label": "B1 \u00b7 Leisure shoulder season",
+        "stages": [
+          {
+            "name": "1 \u00b7 Elasticity",
+            "detail": "From the fitted estimators",
+            "metrics": [
+              {
+                "label": "Naive OLS",
+                "value": "+0.34"
+              },
+              {
+                "label": "DeepIV",
+                "value": "-2.38"
+              },
+              {
+                "label": "Truth",
+                "value": "-2.81"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Demand at rack",
+            "detail": "Conversion at $300",
+            "metrics": [
+              {
+                "label": "Naive OLS",
+                "value": "77%"
+              },
+              {
+                "label": "DeepIV",
+                "value": "52%"
+              },
+              {
+                "label": "Truth",
+                "value": "47%"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 ADR sweep",
+            "detail": "60 ADRs from $95 to $650",
+            "metrics": [
+              {
+                "label": "Naive OLS optimum",
+                "value": "$650"
+              },
+              {
+                "label": "DeepIV optimum",
+                "value": "$300"
+              },
+              {
+                "label": "True optimum",
+                "value": "$246"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Prescription",
+            "detail": "Rack ADR plus promo depth",
+            "metrics": [
+              {
+                "label": "Offered ADR",
+                "value": "$300"
+              },
+              {
+                "label": "Promo depth",
+                "value": "10%"
+              },
+              {
+                "label": "Status-quo ADR",
+                "value": "$229"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Realised RevPAR",
+            "detail": "On the true demand, averaged over U",
+            "metrics": [
+              {
+                "label": "Naive policy",
+                "value": "$45"
+              },
+              {
+                "label": "DeepIV policy",
+                "value": "$115"
+              },
+              {
+                "label": "Best possible",
+                "value": "$116"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "lift_vs_naive_pct": 155.47809128665673,
+          "lift_vs_status_quo_pct": -0.6662639598419617,
+          "capture_of_best_pct": 98.66340919217774,
+          "adr_gap_vs_truth": 54.49152542372863
+        },
+        "headline": "+155% RevPAR vs naive; captures 99% of the best achievable"
+      },
+      {
+        "label": "C \u00b7 Airline -25% seats",
+        "stages": [
+          {
+            "name": "1 \u00b7 Elasticity",
+            "detail": "From the fitted estimators",
+            "metrics": [
+              {
+                "label": "Naive OLS",
+                "value": "+0.34"
+              },
+              {
+                "label": "DeepIV",
+                "value": "-1.85"
+              },
+              {
+                "label": "Truth",
+                "value": "-2.17"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Demand at rack",
+            "detail": "Conversion at $375",
+            "metrics": [
+              {
+                "label": "Naive OLS",
+                "value": "71%"
+              },
+              {
+                "label": "DeepIV",
+                "value": "63%"
+              },
+              {
+                "label": "Truth",
+                "value": "60%"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 ADR sweep",
+            "detail": "60 ADRs from $95 to $650",
+            "metrics": [
+              {
+                "label": "Naive OLS optimum",
+                "value": "$650"
+              },
+              {
+                "label": "DeepIV optimum",
+                "value": "$387"
+              },
+              {
+                "label": "True optimum",
+                "value": "$387"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Prescription",
+            "detail": "Rack ADR plus promo depth",
+            "metrics": [
+              {
+                "label": "Offered ADR",
+                "value": "$387"
+              },
+              {
+                "label": "Promo depth",
+                "value": "0%"
+              },
+              {
+                "label": "Status-quo ADR",
+                "value": "$286"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Realised RevPAR",
+            "detail": "On the true demand, averaged over U",
+            "metrics": [
+              {
+                "label": "Naive policy",
+                "value": "$153"
+              },
+              {
+                "label": "DeepIV policy",
+                "value": "$185"
+              },
+              {
+                "label": "Best possible",
+                "value": "$185"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "lift_vs_naive_pct": 20.383180184895068,
+          "lift_vs_status_quo_pct": 7.907555343759509,
+          "capture_of_best_pct": 100.00000000000003,
+          "adr_gap_vs_truth": 0.0
+        },
+        "headline": "+20% RevPAR vs naive; captures 100% of the best achievable"
+      }
+    ]
+  },
+  "promo": {
+    "title": "Flow 3 \u00b7 Promo CATE decision",
+    "question": "Should this guest get a 15% promotion? Ensemble of 12 causal models vs the truth.",
+    "examples": [
+      {
+        "label": "B1 \u00b7 Leisure early-bird",
+        "stages": [
+          {
+            "name": "1 \u00b7 Baseline",
+            "detail": "Booking probability at rack $300",
+            "metrics": [
+              {
+                "label": "Model baseline",
+                "value": "52%"
+              },
+              {
+                "label": "Truth baseline",
+                "value": "47%"
+              },
+              {
+                "label": "Segment",
+                "value": "leisure"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 CATE ensemble",
+            "detail": "12 causal models, effect on log demand",
+            "metrics": [
+              {
+                "label": "Median CATE",
+                "value": "+0.390"
+              },
+              {
+                "label": "Spread across models",
+                "value": "\u00b10.147"
+              },
+              {
+                "label": "True CATE",
+                "value": "+0.456"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Conversion uplift",
+            "detail": "A 15% discount",
+            "metrics": [
+              {
+                "label": "Estimated uplift",
+                "value": "+13.6 pp"
+              },
+              {
+                "label": "True uplift",
+                "value": "+14.3 pp"
+              },
+              {
+                "label": "CATE |error|",
+                "value": "0.066"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Economics",
+            "detail": "Net RevPAR change after the discount",
+            "metrics": [
+              {
+                "label": "Estimated",
+                "value": "+2.5"
+              },
+              {
+                "label": "True",
+                "value": "+6.1"
+              },
+              {
+                "label": "Unit cost",
+                "value": "$65"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Decision",
+            "detail": "Offer the promo?",
+            "metrics": [
+              {
+                "label": "Model says",
+                "value": "Offer"
+              },
+              {
+                "label": "Truth says",
+                "value": "Offer"
+              },
+              {
+                "label": "Correct",
+                "value": "Yes"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "decision_correct": true,
+          "cate_abs_error": 0.06569479038649761,
+          "value_error_usd": 3.574646018671018,
+          "model_spread": 0.14745506998010807
+        },
+        "headline": "Offer the promo (matches the truth); CATE error 0.066"
+      },
+      {
+        "label": "B2 \u00b7 Corporate traveller",
+        "stages": [
+          {
+            "name": "1 \u00b7 Baseline",
+            "detail": "Booking probability at rack $375",
+            "metrics": [
+              {
+                "label": "Model baseline",
+                "value": "58%"
+              },
+              {
+                "label": "Truth baseline",
+                "value": "60%"
+              },
+              {
+                "label": "Segment",
+                "value": "corporate"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 CATE ensemble",
+            "detail": "12 causal models, effect on log demand",
+            "metrics": [
+              {
+                "label": "Median CATE",
+                "value": "+0.109"
+              },
+              {
+                "label": "Spread across models",
+                "value": "\u00b10.108"
+              },
+              {
+                "label": "True CATE",
+                "value": "+0.051"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Conversion uplift",
+            "detail": "A 15% discount",
+            "metrics": [
+              {
+                "label": "Estimated uplift",
+                "value": "+3.8 pp"
+              },
+              {
+                "label": "True uplift",
+                "value": "+1.6 pp"
+              },
+              {
+                "label": "CATE |error|",
+                "value": "0.058"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Economics",
+            "detail": "Net RevPAR change after the discount",
+            "metrics": [
+              {
+                "label": "Estimated",
+                "value": "-22.8"
+              },
+              {
+                "label": "True",
+                "value": "-29.5"
+              },
+              {
+                "label": "Unit cost",
+                "value": "$65"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Decision",
+            "detail": "Offer the promo?",
+            "metrics": [
+              {
+                "label": "Model says",
+                "value": "Do not offer"
+              },
+              {
+                "label": "Truth says",
+                "value": "Do not offer"
+              },
+              {
+                "label": "Correct",
+                "value": "Yes"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "decision_correct": true,
+          "cate_abs_error": 0.05760310276386454,
+          "value_error_usd": 6.63126083464644,
+          "model_spread": 0.10773979448366415
+        },
+        "headline": "Withhold the promo (matches the truth); CATE error 0.058"
+      },
+      {
+        "label": "C \u00b7 Leisure, airline cut",
+        "stages": [
+          {
+            "name": "1 \u00b7 Baseline",
+            "detail": "Booking probability at rack $375",
+            "metrics": [
+              {
+                "label": "Model baseline",
+                "value": "63%"
+              },
+              {
+                "label": "Truth baseline",
+                "value": "60%"
+              },
+              {
+                "label": "Segment",
+                "value": "leisure"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 CATE ensemble",
+            "detail": "12 causal models, effect on log demand",
+            "metrics": [
+              {
+                "label": "Median CATE",
+                "value": "+0.345"
+              },
+              {
+                "label": "Spread across models",
+                "value": "\u00b10.142"
+              },
+              {
+                "label": "True CATE",
+                "value": "+0.353"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Conversion uplift",
+            "detail": "A 15% discount",
+            "metrics": [
+              {
+                "label": "Estimated uplift",
+                "value": "+11.8 pp"
+              },
+              {
+                "label": "True uplift",
+                "value": "+11.0 pp"
+              },
+              {
+                "label": "CATE |error|",
+                "value": "0.008"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Economics",
+            "detail": "Net RevPAR change after the discount",
+            "metrics": [
+              {
+                "label": "Estimated",
+                "value": "-5.5"
+              },
+              {
+                "label": "True",
+                "value": "-5.5"
+              },
+              {
+                "label": "Unit cost",
+                "value": "$65"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Decision",
+            "detail": "Offer the promo?",
+            "metrics": [
+              {
+                "label": "Model says",
+                "value": "Do not offer"
+              },
+              {
+                "label": "Truth says",
+                "value": "Do not offer"
+              },
+              {
+                "label": "Correct",
+                "value": "Yes"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "decision_correct": true,
+          "cate_abs_error": 0.007993532924143898,
+          "value_error_usd": 0.05481289271844503,
+          "model_spread": 0.14154528870145394
+        },
+        "headline": "Withhold the promo (matches the truth); CATE error 0.008"
+      }
+    ]
+  },
+  "crm": {
+    "title": "Flow 4 \u00b7 Batch CRM targeting",
+    "question": "Score a reservation batch, split guests into uplift quadrants and value the targeting.",
+    "examples": [
+      {
+        "label": "Batch 1 \u00b7 500 mixed reservations \u00b7 Causal Forest DML",
+        "stages": [
+          {
+            "name": "1 \u00b7 Ingest",
+            "detail": "Reservation batch",
+            "metrics": [
+              {
+                "label": "Reservations",
+                "value": "500"
+              },
+              {
+                "label": "Mean offered ADR",
+                "value": "$315"
+              },
+              {
+                "label": "Model",
+                "value": "Forest DML"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Score",
+            "detail": "Heterogeneous CATE per guest",
+            "metrics": [
+              {
+                "label": "Mean CATE",
+                "value": "+0.201"
+              },
+              {
+                "label": "Mean true CATE",
+                "value": "+0.200"
+              },
+              {
+                "label": "Rank corr. with true value",
+                "value": "0.75"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Segment",
+            "detail": "Uplift quadrants",
+            "metrics": [
+              {
+                "label": "Persuadables",
+                "value": "47"
+              },
+              {
+                "label": "Sure Things / Lost Causes",
+                "value": "0 / 32"
+              },
+              {
+                "label": "Sleeping Dogs",
+                "value": "421"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Value",
+            "detail": "True net RevPAR change of each policy",
+            "metrics": [
+              {
+                "label": "Target Persuadables",
+                "value": "+27"
+              },
+              {
+                "label": "Discount everyone",
+                "value": "-8,979"
+              },
+              {
+                "label": "Oracle targeting",
+                "value": "+328"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Quality",
+            "detail": "Targeting against the truth",
+            "metrics": [
+              {
+                "label": "Precision",
+                "value": "60%"
+              },
+              {
+                "label": "Oracle value captured",
+                "value": "8%"
+              },
+              {
+                "label": "Gain vs blanket",
+                "value": "+9,006"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "precision": 0.5957446808510638,
+          "oracle_capture_pct": 8.177185029240293,
+          "gain_vs_blanket_usd": 9006.06338637865,
+          "rank_corr": 0.7455989823959296
+        },
+        "headline": "Targeting 47 guests earns +27 vs -8,979 for discounting all"
+      },
+      {
+        "label": "Batch 2 \u00b7 400 leisure reservations \u00b7 DragonNet",
+        "stages": [
+          {
+            "name": "1 \u00b7 Ingest",
+            "detail": "Reservation batch",
+            "metrics": [
+              {
+                "label": "Reservations",
+                "value": "400"
+              },
+              {
+                "label": "Mean offered ADR",
+                "value": "$340"
+              },
+              {
+                "label": "Model",
+                "value": "DragonNet"
+              }
+            ]
+          },
+          {
+            "name": "2 \u00b7 Score",
+            "detail": "Heterogeneous CATE per guest",
+            "metrics": [
+              {
+                "label": "Mean CATE",
+                "value": "+0.327"
+              },
+              {
+                "label": "Mean true CATE",
+                "value": "+0.364"
+              },
+              {
+                "label": "Rank corr. with true value",
+                "value": "0.45"
+              }
+            ]
+          },
+          {
+            "name": "3 \u00b7 Segment",
+            "detail": "Uplift quadrants",
+            "metrics": [
+              {
+                "label": "Persuadables",
+                "value": "69"
+              },
+              {
+                "label": "Sure Things / Lost Causes",
+                "value": "0 / 68"
+              },
+              {
+                "label": "Sleeping Dogs",
+                "value": "263"
+              }
+            ]
+          },
+          {
+            "name": "4 \u00b7 Value",
+            "detail": "True net RevPAR change of each policy",
+            "metrics": [
+              {
+                "label": "Target Persuadables",
+                "value": "+207"
+              },
+              {
+                "label": "Discount everyone",
+                "value": "-2,260"
+              },
+              {
+                "label": "Oracle targeting",
+                "value": "+778"
+              }
+            ]
+          },
+          {
+            "name": "5 \u00b7 Quality",
+            "detail": "Targeting against the truth",
+            "metrics": [
+              {
+                "label": "Precision",
+                "value": "59%"
+              },
+              {
+                "label": "Oracle value captured",
+                "value": "27%"
+              },
+              {
+                "label": "Gain vs blanket",
+                "value": "+2,467"
+              }
+            ]
+          }
+        ],
+        "overall": {
+          "precision": 0.5942028985507246,
+          "oracle_capture_pct": 26.633098277008177,
+          "gain_vs_blanket_usd": 2467.1725436421907,
+          "rank_corr": 0.4534577091106819
+        },
+        "headline": "Targeting 69 guests earns +207 vs -2,260 for discounting all"
+      }
+    ]
+  },
+  "scorecard": {
+    "elasticity": {
+      "Bias removed (mean)": "88%",
+      "Mean |error| naive \u2192 IV": "1.96 \u2192 0.21"
+    },
+    "pricing": {
+      "RevPAR vs naive (median)": "+20%",
+      "Best achievable captured": "99%"
+    },
+    "promo": {
+      "Correct decisions": "3/3",
+      "Mean CATE |error|": "0.044"
+    },
+    "crm": {
+      "Targeting precision (mean)": "59%",
+      "Oracle value captured (mean)": "17%"
+    }
+  },
+  "raw_overall": {
+    "elasticity": [
+      {
+        "bias_reduction_pct": 90.08653921736324,
+        "naive_error": 2.0619674850057366,
+        "iv_error": 0.20441233797676528,
+        "sign_correct": true
+      },
+      {
+        "bias_reduction_pct": 89.31140533680264,
+        "naive_error": 3.146967485005737,
+        "iv_error": 0.3363665986548794,
+        "sign_correct": true
+      },
+      {
+        "bias_reduction_pct": 85.27769115530866,
+        "naive_error": 0.6586341516724035,
+        "iv_error": 0.09696615396582409,
+        "sign_correct": true
+      }
+    ],
+    "pricing": [
+      {
+        "lift_vs_naive_pct": 5.248143841230402,
+        "lift_vs_status_quo_pct": 0.9067754840358155,
+        "capture_of_best_pct": 99.8190748027423,
+        "adr_gap_vs_truth": 28.22033898305085
+      },
+      {
+        "lift_vs_naive_pct": 155.47809128665673,
+        "lift_vs_status_quo_pct": -0.6662639598419617,
+        "capture_of_best_pct": 98.66340919217774,
+        "adr_gap_vs_truth": 54.49152542372863
+      },
+      {
+        "lift_vs_naive_pct": 20.383180184895068,
+        "lift_vs_status_quo_pct": 7.907555343759509,
+        "capture_of_best_pct": 100.00000000000003,
+        "adr_gap_vs_truth": 0.0
+      }
+    ],
+    "promo": [
+      {
+        "decision_correct": true,
+        "cate_abs_error": 0.06569479038649761,
+        "value_error_usd": 3.574646018671018,
+        "model_spread": 0.14745506998010807
+      },
+      {
+        "decision_correct": true,
+        "cate_abs_error": 0.05760310276386454,
+        "value_error_usd": 6.63126083464644,
+        "model_spread": 0.10773979448366415
+      },
+      {
+        "decision_correct": true,
+        "cate_abs_error": 0.007993532924143898,
+        "value_error_usd": 0.05481289271844503,
+        "model_spread": 0.14154528870145394
+      }
+    ],
+    "crm": [
+      {
+        "precision": 0.5957446808510638,
+        "oracle_capture_pct": 8.177185029240293,
+        "gain_vs_blanket_usd": 9006.06338637865,
+        "rank_corr": 0.7455989823959296
+      },
+      {
+        "precision": 0.5942028985507246,
+        "oracle_capture_pct": 26.633098277008177,
+        "gain_vs_blanket_usd": 2467.1725436421907,
+        "rank_corr": 0.4534577091106819
+      }
+    ]
+  }
+}
