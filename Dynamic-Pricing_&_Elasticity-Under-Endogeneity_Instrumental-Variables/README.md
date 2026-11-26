@@ -91,47 +91,123 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-    participant RM as Revenue manager / CRM
-    participant API as FastAPI /optimize-price
-    participant REG as Model registry (joblib)
-    participant OPT as revenue_optimizer
-    RM->>API: POST guest profile + instruments
-    API->>REG: fetch Naive OLS, 2SLS, DML-IV, DR-IV, DeepIV
-    API->>OPT: compare_policies(models, profile)
-    loop ADR grid $95-$650 x promo grid
-        OPT->>REG: predict_log_demand(X, ln net price)
-        OPT->>OPT: occupancy = E[1-exp(-D)], Net RevPAR
+    participant RM as Revenue manager or CRM
+    participant API as FastAPI optimize-price
+    participant REG as Model registry
+    participant PRICER as revenue_optimizer
+    RM->>API: POST guest profile and instruments
+    API->>REG: fetch Naive OLS, 2SLS, DML-IV, DR-IV and DeepIV
+    API->>PRICER: compare_policies for the guest profile
+    loop For every ADR on the 95 to 650 dollar grid and every promo depth
+        PRICER->>REG: predict_log_demand for X and the log net price
+        PRICER->>PRICER: occupancy from structural demand, then Net RevPAR
     end
-    OPT-->>API: optimal ADR, promo %, realised lift vs naive
-    API-->>RM: JSON (+ RevPAR curves, latency logged)
+    PRICER-->>API: optimal ADR, promo depth and realised lift vs naive
+    API-->>RM: JSON response with RevPAR curves, latency is logged
 ```
 
 ## 3. Mathematical formulation
 
-**Structural demand (DGP).** For booking *i* with net price \(p_i\):
-\(\log D_i = c(X_i) + \theta(X_i)\,\ln p_i + \gamma U_i + \varepsilon_i\), occupancy \(=1-e^{-D}\),
-Net RevPAR \(=\text{occ}\cdot(p(1-d)-c_0)\). Prices follow \(\ln p_i = f(X_i) + \delta U_i + \pi^\top Z_i + \nu_i\),
-so \(\operatorname{Cov}(\ln p, U)\neq 0\) and OLS is biased by \(\gamma\,\delta\,\sigma_U^2/\operatorname{Var}(\ln p\mid X)\).
+**Structural demand (data-generating process).** For booking $i$ with net price $p_i$, demand, occupancy and Net RevPAR are:
 
-**2SLS.** First stage \(\ln p = X\alpha + Z\pi + v\); second stage \(y = X\beta + \theta\,\widehat{\ln p} + e\), i.e.
-\(\hat\theta = (\hat T^\top M_X \hat T)^{-1}\hat T^\top M_X y\). Heterogeneity enters through \(\ln p \times h(X)\) interactions with
-instruments \(Z\times h(X)\). Diagnostics: partial F on \(\pi=0\), Wu-Hausman, Sargan-Hansen J.
+$$
+\log D_i = c(X_i) + \theta(X_i)\,\ln p_i + \gamma\,U_i + \varepsilon_i, \qquad
+\mathrm{occ}_i = 1 - e^{-D_i}, \qquad
+\mathrm{RevPAR}_i = \mathrm{occ}_i \left( p_i (1-d) - c_0 \right)
+$$
 
-**DML-IV / OrthoIV / DR-IV.** Residualise \(\tilde Y = Y-E[Y|X]\), \(\tilde T=T-E[T|X]\), \(\tilde Z=Z-E[Z|X]\) with cross-fitted
-GBDTs and solve \(E[(\tilde Y-\theta(X)\tilde T)\,\tilde Z\mid X]=0\). DR-IV forms the doubly-robust pseudo-outcome
-\(\theta_{pre}(X)+\frac{(\tilde Y-\theta_{pre}\tilde T)\tilde Z}{\beta(X)}\) with compliance \(\beta(X)=E[\tilde T\tilde Z|X]\), then regresses it on X.
+Managers raise rates in a surge, so the observed price depends on the unobserved shock $U$ and on the instruments $Z$:
 
-**DeepIV.** Stage 1: mixture density network \(f_\phi(t\mid x,z)=\sum_k\pi_k\,\mathcal N(\mu_k,\sigma_k^2)\) (NLL). Stage 2:
-\(\min_\psi \sum_i\big(y_i-\tfrac1M\sum_{m=1}^M h_\psi(x_i,\tilde t_{im})\big)^2,\ \tilde t_{im}\sim f_\phi(\cdot\mid x_i,z_i)\),
-which targets \(E[h(X,T)\mid X,Z]\). Elasticity is \(\partial h/\partial\ln p\) by autograd.
-**DeepGMM:** \(\min_g\max_f\ E[f(X,Z)\psi]-\tfrac14E[f(X,Z)^2\psi^2]\), \(\psi=Y-g(X,T)\).
+$$
+\ln p_i = f(X_i) + \delta\,U_i + \pi^{\top} Z_i + \nu_i
+$$
 
-**CATE learners (promo W).** S: \(\mu(x,w)\), \(\tau=\mu(x,1)-\mu(x,0)\). T: \(\mu_1-\mu_0\). X: impute
-\(D^1=Y^1-\hat\mu_0(X^1)\), \(D^0=\hat\mu_1(X^0)-Y^0\), \(\tau=g(x)\hat\tau_0+(1-g(x))\hat\tau_1\). R: minimise
-\(\sum[(Y-m(X))-\tau(X)(W-e(X))]^2\). DR: \(\hat\mu_1-\hat\mu_0+\frac{W(Y-\hat\mu_1)}{e}-\frac{(1-W)(Y-\hat\mu_0)}{1-e}\) regressed on X.
-DragonNet adds a propensity head and targeted regularisation \(\sum(y-\hat y_w-\epsilon\,(\tfrac{w}{e}-\tfrac{1-w}{1-e}))^2\).
-Because the promo changes the net price, its true effect is \(\tau(X)=\theta(X)\ln(1-d)\), so every model is scored on both
-elasticity RMSE and PEHE.
+Hence $\mathrm{Cov}(\ln p, U) \neq 0$, and OLS is biased by roughly:
+
+$$
+\frac{\gamma\,\delta\,\sigma_U^2}{\mathrm{Var}(\ln p \mid X)}
+$$
+
+**2SLS.** First stage and second stage:
+
+$$
+\ln p = X\alpha + Z\pi + v, \qquad y = X\beta + \theta\,\widehat{\ln p} + e
+$$
+
+$$
+\hat\theta = \left( \hat T^{\top} M_X \hat T \right)^{-1} \hat T^{\top} M_X\, y
+$$
+
+Heterogeneity enters through the interactions $\ln p \times h(X)$, instrumented with $Z \times h(X)$. Diagnostics: partial $F$ test of $\pi = 0$, Wu-Hausman, and Sargan-Hansen $J$.
+
+**DML-IV / OrthoIV / DR-IV.** Residualise with cross-fitted GBDTs:
+
+$$
+\tilde Y = Y - E[Y \mid X], \qquad \tilde T = T - E[T \mid X], \qquad \tilde Z = Z - E[Z \mid X]
+$$
+
+and solve the orthogonal moment condition:
+
+$$
+E\left[ \left( \tilde Y - \theta(X)\,\tilde T \right) \tilde Z \mid X \right] = 0
+$$
+
+DR-IV forms a doubly robust pseudo-outcome and regresses it on $X$, with compliance $\beta(X) = E[\tilde T \tilde Z \mid X]$:
+
+$$
+\theta_{\mathrm{pre}}(X) + \frac{\left( \tilde Y - \theta_{\mathrm{pre}}(X)\,\tilde T \right) \tilde Z}{\beta(X)}
+$$
+
+**DeepIV.** Stage 1 is a mixture density network for the price given $X$ and $Z$, trained by negative log-likelihood:
+
+$$
+f_\phi(t \mid x, z) = \sum_{k=1}^{K} \pi_k(x,z)\, \mathcal{N}\!\left( \mu_k(x,z),\, \sigma_k^2(x,z) \right)
+$$
+
+Stage 2 trains the outcome network on a Monte Carlo average over draws from stage 1, which targets $E[h(X,T) \mid X, Z]$:
+
+$$
+\min_\psi \sum_i \left( y_i - \frac{1}{M} \sum_{m=1}^{M} h_\psi(x_i, \tilde t_{im}) \right)^2, \qquad \tilde t_{im} \sim f_\phi(\cdot \mid x_i, z_i)
+$$
+
+Elasticity is $\partial h / \partial \ln p$, computed by autograd.
+
+**DeepGMM.** A learner $g$ and an adversary $f$ play a min-max game on the moment condition, with $\psi = Y - g(X,T)$:
+
+$$
+\min_g \max_f \; E\left[ f(X,Z)\,\psi \right] - \frac{1}{4}\, E\left[ f(X,Z)^2\,\psi^2 \right]
+$$
+
+**CATE learners (binary promo $W$).**
+
+- S-learner: fit $\mu(x,w)$, then $\tau(x) = \mu(x,1) - \mu(x,0)$.
+- T-learner: separate models per arm, $\tau(x) = \mu_1(x) - \mu_0(x)$.
+- X-learner: impute individual effects, then combine with a propensity weight $g(x)$:
+
+$$
+D^1 = Y^1 - \hat\mu_0(X^1), \qquad D^0 = \hat\mu_1(X^0) - Y^0, \qquad
+\tau(x) = g(x)\,\hat\tau_0(x) + \left( 1 - g(x) \right) \hat\tau_1(x)
+$$
+
+- R-learner (residual on residual), with outcome model $m(X)$ and propensity $e(X)$:
+
+$$
+\min_\tau \sum_i \left[ \left( Y_i - m(X_i) \right) - \tau(X_i)\left( W_i - e(X_i) \right) \right]^2
+$$
+
+- DR-learner: regress the doubly robust score on $X$:
+
+$$
+\hat\mu_1(X) - \hat\mu_0(X) + \frac{W \left( Y - \hat\mu_1(X) \right)}{e(X)} - \frac{(1-W)\left( Y - \hat\mu_0(X) \right)}{1 - e(X)}
+$$
+
+- DragonNet adds a propensity head and a targeted regulariser with a learnable $\epsilon$:
+
+$$
+\sum_i \left( y_i - \hat y_{w_i} - \epsilon \left( \frac{w_i}{e_i} - \frac{1-w_i}{1-e_i} \right) \right)^2
+$$
+
+Because the promo changes the net price, its true effect on log demand is $\tau(X) = \theta(X)\ln(1-d)$, so every model is scored on both elasticity RMSE and PEHE.
 
 ## 4. Repository and `outputs/` reference
 
