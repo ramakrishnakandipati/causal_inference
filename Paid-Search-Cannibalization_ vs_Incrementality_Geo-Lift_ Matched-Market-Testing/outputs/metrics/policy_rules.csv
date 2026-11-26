@@ -1,0 +1,10 @@
+rule,n_pause,value_usd,decision_accuracy
+Always keep,0,0.0,0.6
+Always pause,50,-220267.22229569074,0.4
+Oracle (true effects),20,56202.43842617503,1.0
+CATE mean - 0 x learner SD,30,-32889.875724602825,0.64
+CATE mean - 0.5 x learner SD,22,-5670.055411459626,0.64
+CATE mean - 1 x learner SD,11,-9371.264605448214,0.62
+CATE mean - 1.5 x learner SD,5,6158.091373758008,0.7
+CATE mean - 2 x learner SD,1,1367.159559901777,0.62
+CATE mean - 3 x learner SD,0,0.0,0.6

@@ -1,0 +1,9 @@
+{
+  "seed": 42,
+  "n_pre_days": 140,
+  "n_post_days": 28,
+  "n_dmas": 50,
+  "n_holdout": 10,
+  "start_date": "2026-03-02",
+  "intervention_start": "2026-07-20"
+}

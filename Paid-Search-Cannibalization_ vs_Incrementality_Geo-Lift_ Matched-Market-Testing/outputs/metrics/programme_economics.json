@@ -1,0 +1,122 @@
+{
+  "MMT": {
+    "label": "MMT",
+    "n_treated_dmas": 10,
+    "n_days": 28,
+    "gbv_per_direct_booking": 580.5494006236561,
+    "gbv_per_ota_booking": 567.0552071546646,
+    "commission_rate": 0.18287015920251679,
+    "incremental_direct_bookings_from_keeping": 910.1111998098124,
+    "ota_leakage_bookings_when_paused": 442.0891833431808,
+    "ota_commission_leakage_usd": 45843.532483563315,
+    "incremental_direct_gbv_usd": 528364.5115504632,
+    "branded_spend_avoided_usd": 204920.32315853745,
+    "lastclick_bookings": 2058.6,
+    "cannibalization_rate": 0.5578979890168987,
+    "last_click_roas": 5.83211551544963,
+    "iroas": 2.5783899976660285,
+    "iroas_incl_ota_diversion": 1.5787554187206252,
+    "net_margin_change_if_paused_usd": -118598.74743398518,
+    "net_value_of_branded_search_usd": 118598.74743398518,
+    "net_commission_saved_by_keeping_usd": 45843.532483563315,
+    "cannibalization_rate_range": [
+      0.17198959860275997,
+      0.8751085745164036
+    ],
+    "iroas_range": [
+      0.7283812203095037,
+      4.8290523089425195
+    ],
+    "net_margin_change_if_paused_usd_range": [
+      -487133.5217456895,
+      172023.10521537595
+    ]
+  },
+  "SDID": {
+    "label": "SDID",
+    "n_treated_dmas": 10,
+    "n_days": 28,
+    "gbv_per_direct_booking": 580.5494006236561,
+    "gbv_per_ota_booking": 567.0552071546646,
+    "commission_rate": 0.18287015920251679,
+    "incremental_direct_bookings_from_keeping": 788.2652875183758,
+    "ota_leakage_bookings_when_paused": 445.8055084090179,
+    "ota_commission_leakage_usd": 46228.906012919564,
+    "incremental_direct_gbv_usd": 457626.940201227,
+    "branded_spend_avoided_usd": 204920.32315853745,
+    "lastclick_bookings": 2058.6,
+    "cannibalization_rate": 0.6170867154773264,
+    "last_click_roas": 5.83211551544963,
+    "iroas": 2.233194507736463,
+    "iroas_incl_ota_diversion": 1.2251567215143766,
+    "net_margin_change_if_paused_usd": -46139.188134042895,
+    "net_value_of_branded_search_usd": 46139.188134042895,
+    "net_commission_saved_by_keeping_usd": 46228.906012919564,
+    "cannibalization_rate_range": [
+      0.4443328550284148,
+      0.7898405759262381
+    ],
+    "iroas_range": [
+      1.2256740378585447,
+      3.2407149776143807
+    ],
+    "net_margin_change_if_paused_usd_range": [
+      -141429.16113813332,
+      49150.784870047704
+    ]
+  },
+  "BSTS": {
+    "label": "BSTS",
+    "n_treated_dmas": 10,
+    "n_days": 28,
+    "gbv_per_direct_booking": 580.5494006236561,
+    "gbv_per_ota_booking": 567.0552071546646,
+    "commission_rate": 0.18287015920251679,
+    "incremental_direct_bookings_from_keeping": 222.7037551455498,
+    "ota_leakage_bookings_when_paused": 924.4943338343826,
+    "ota_commission_leakage_usd": 95867.72900323775,
+    "incremental_direct_gbv_usd": 129290.5315663864,
+    "branded_spend_avoided_usd": 204920.32315853745,
+    "lastclick_bookings": 2058.6,
+    "cannibalization_rate": 0.8918178591540126,
+    "last_click_roas": 5.83211551544963,
+    "iroas": 0.6309307421224407,
+    "iroas_incl_ota_diversion": -1.4594992863873242,
+    "net_margin_change_if_paused_usd": 504001.3885746827,
+    "net_value_of_branded_search_usd": -504001.3885746827,
+    "net_commission_saved_by_keeping_usd": 95867.72900323775,
+    "cannibalization_rate_range": [
+      0.4669066788931041,
+      1.2891943659337621
+    ],
+    "iroas_range": [
+      -1.6866149485429114,
+      3.1090618292100993
+    ],
+    "net_margin_change_if_paused_usd_range": [
+      270430.9896924239,
+      709443.9658788214
+    ]
+  },
+  "Truth": {
+    "label": "Truth",
+    "n_treated_dmas": 10,
+    "n_days": 28,
+    "gbv_per_direct_booking": 580.5494006236561,
+    "gbv_per_ota_booking": 567.0552071546646,
+    "commission_rate": 0.18287015920251679,
+    "incremental_direct_bookings_from_keeping": 691.6978128468584,
+    "ota_leakage_bookings_when_paused": 458.4274272229946,
+    "ota_commission_leakage_usd": 47537.76713631933,
+    "incremental_direct_gbv_usd": 401564.75066093745,
+    "branded_spend_avoided_usd": 204920.32315853745,
+    "lastclick_bookings": 2058.6,
+    "cannibalization_rate": 0.6639960104698055,
+    "last_click_roas": 5.83211551544963,
+    "iroas": 1.9596140805920224,
+    "iroas_incl_ota_diversion": 0.9230361106819351,
+    "net_margin_change_if_paused_usd": 15771.465070595761,
+    "net_value_of_branded_search_usd": -15771.465070595761,
+    "net_commission_saved_by_keeping_usd": 47537.76713631933
+  }
+}

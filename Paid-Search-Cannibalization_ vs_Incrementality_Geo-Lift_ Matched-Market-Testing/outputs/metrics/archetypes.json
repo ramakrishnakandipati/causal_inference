@@ -1,0 +1,41 @@
+{
+  "1": {
+    "baseline_direct_bookings_day": 59.06214285714286,
+    "ota_to_direct_ratio": 0.7249686966760285,
+    "lastclick_share": 0.2902517643862451,
+    "cannibalization_rate": 0.75,
+    "ota_capture_rate": 0.2,
+    "diversion_rate": 0.45,
+    "adr": 292.2817503125721,
+    "commission_rate": 0.1969373899930114,
+    "cpc": 3.277315728925964,
+    "cvr": 0.025,
+    "horizon_days": 28
+  },
+  "2": {
+    "baseline_direct_bookings_day": 26.663928571428574,
+    "ota_to_direct_ratio": 0.6260179026602329,
+    "lastclick_share": 0.30084437051226326,
+    "cannibalization_rate": 0.75,
+    "ota_capture_rate": 0.2,
+    "diversion_rate": 0.45,
+    "adr": 202.3215176435057,
+    "commission_rate": 0.16932569824499233,
+    "cpc": 2.2226968912379146,
+    "cvr": 0.025,
+    "horizon_days": 28
+  },
+  "3": {
+    "baseline_direct_bookings_day": 10.778214285714286,
+    "ota_to_direct_ratio": 0.5303093689668673,
+    "lastclick_share": 0.2831337227010518,
+    "cannibalization_rate": 0.75,
+    "ota_capture_rate": 0.2,
+    "diversion_rate": 0.45,
+    "adr": 164.62668681199736,
+    "commission_rate": 0.1543188551699713,
+    "cpc": 1.5145333182398173,
+    "cvr": 0.025,
+    "horizon_days": 28
+  }
+}

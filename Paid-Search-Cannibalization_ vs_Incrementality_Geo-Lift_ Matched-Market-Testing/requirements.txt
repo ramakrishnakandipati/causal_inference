@@ -1,0 +1,33 @@
+# Pinned to the versions the results in this repo were produced with (conda env `causal-gpu`, Python 3.12, RTX 3090).
+# Install torch with the CUDA wheel matching your driver, e.g.:
+#   pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cu132
+numpy==2.5.4
+pandas==2.3.3
+scipy==1.18.1
+scikit-learn==1.9.1
+pyarrow==26.0.1
+PyYAML==6.0.3
+joblib==1.6.0
+matplotlib==3.11.2
+pillow==13.0.0
+torch==2.15.0
+xgboost==3.4.1
+catboost==1.2.10
+lightgbm==4.7.0
+econml==0.17.0
+causalml==0.18.0
+jax==0.12.1
+jaxlib==0.12.1
+numpyro==0.22.0
+fastapi==0.163.2
+uvicorn==0.54.0
+pydantic==2.14.3
+streamlit==1.67.0
+playwright==1.65.2
+httpx==0.28.1
+requests==2.34.2
+pytest==9.2.0
+# Optional (Linux only, not installed in the reference run): RAPIDS cuDF / cuML for GPU dataframes and
+# nearest neighbours - code falls back to pandas / scikit-learn automatically.
+#   cudf-cu12, cuml-cu12
+# Optional: causalpy (BSTS is implemented directly in NumPyro, so it is not required).

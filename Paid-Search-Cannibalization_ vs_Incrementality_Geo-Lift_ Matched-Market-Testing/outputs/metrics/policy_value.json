@@ -1,0 +1,11 @@
+{
+  "model_policy_usd": -9371.264605448214,
+  "always_keep_usd": 0.0,
+  "always_pause_usd": -220267.22229569074,
+  "oracle_usd": 56202.43842617503,
+  "n_pause_model": 11,
+  "n_pause_oracle": 20,
+  "decision_accuracy": 0.62,
+  "rule": "mean of 9 OOF learners; pause iff gain > 1.0 x learner SD",
+  "k": 1.0
+}

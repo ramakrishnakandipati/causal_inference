@@ -1,0 +1,9 @@
+{
+  "torch": "cuda",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "xgboost": "cuda",
+  "catboost": "GPU",
+  "lightgbm": "cpu",
+  "jax": "cpu",
+  "rapids": false
+}
