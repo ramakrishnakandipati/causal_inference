@@ -21,6 +21,11 @@ STATUS_COLOR = {"PASS": "#008a17", "WARN": "#b57d00", "FAIL": RED, "INFO": GREY}
 LAYOUT = dict(template="plotly_white", margin=dict(l=10, r=10, t=36, b=10), height=330, legend=dict(orientation="h", y=-0.25))
 
 
+def md(text: str) -> str:
+    """Escape dollar signs: Streamlit markdown treats $...$ as LaTeX, which garbles any sentence with two dollar amounts."""
+    return str(text).replace("$", "\\$")
+
+
 @st.experimental_memo(show_spinner=False)
 def _load_report(path: str, mtime: float) -> dict:
     return fl.json.loads(open(path, encoding="utf-8").read())
@@ -99,7 +104,9 @@ def make_chart(ch: dict):
         vals = ch["values"]
         colors = [AQUA if v >= 0 else ORANGE for v in vals]
         fig = go.Figure(go.Bar(x=ch["labels"], y=vals, marker_color=colors, text=[fl._money(v) for v in vals], textposition="outside"))
-        fig.update_layout(title="From revenue to net value", yaxis_title="USD", **{**LAYOUT, "height": 320})
+        lo, hi = min(0.0, min(vals)), max(vals)
+        fig.update_layout(title="From revenue to net value", yaxis_title="USD", yaxis_range=[lo - 0.22 * (hi - lo), hi + 0.18 * (hi - lo)],
+                          **{**LAYOUT, "height": 320})
     elif t == "distribution":
         e = np.array(ch["edges"])
         mid = ((e[:-1] + e[1:]) / 2).tolist()
@@ -157,9 +164,9 @@ def _chip(status: str) -> str:
 def render_stage(flow_id: str, n: int, s: dict) -> None:
     st.markdown(f"<div id='flowstep-{flow_id}-{s['key']}'></div>", unsafe_allow_html=True)
     st.markdown(f"### {n}. {s['title']} &nbsp; {_chip(s['status'])}", unsafe_allow_html=True)
-    st.caption(s["question"])
+    st.caption(md(s["question"]))
     _metrics_grid(s["metrics"])
-    st.markdown(f"**{s['takeaway']}**")
+    st.markdown(f"**{md(s['takeaway'])}**")
     fig = make_chart(s["chart"])
     if fig is not None:
         st.plotly_chart(fig, use_container_width=True)
@@ -173,7 +180,7 @@ def render_summary(flow: dict) -> None:
     st.markdown(f"### Flow summary: {flow['short']}")
     v = sm["verdict"]
     box = st.success if v in fl.GOOD else st.error if v in fl.BAD else st.warning
-    box(f"**{v}**  \n{sm['reason']}")
+    box(f"**{v}**  \n{md(sm['reason'])}")
     _metrics_grid(sm["metrics"])
 
 
@@ -182,8 +189,8 @@ def render_programme(rep: dict) -> None:
     st.markdown("<div id='flow-overall'></div>", unsafe_allow_html=True)
     st.markdown("## Programme scorecard: all flows and all models")
     a = rep["assumptions"]
-    st.caption(f"Money assumptions: {a['contribution_margin']:.0%} contribution margin on incremental revenue, ${a['perk_cost_per_member']:.0f} perk cost per Gold member; "
-               "change them in configs/config.yaml (flows) and rerun `python -m src.flows`.")
+    st.caption(md(f"Money assumptions: {a['contribution_margin']:.0%} contribution margin on incremental revenue, ${a['perk_cost_per_member']:.0f} perk cost per Gold member; "
+                  "change them in configs/config.yaml (flows) and rerun `python -m src.flows`."))
     groups = prog["groups"]
     for i in range(0, len(groups), 3):
         cols = st.columns(3)
@@ -219,8 +226,8 @@ def render(svc) -> None:
     ft = rep["flow_types"][flow["type"]]
     st.markdown("<div id='flow-top'></div>", unsafe_allow_html=True)
     st.markdown(f"## {flow['short']}")
-    st.markdown(f"**{ft['title']}**: {ft['question']}")
-    st.markdown(f"*{flow['title']}*. {flow['story']}")
+    st.markdown(f"**{md(ft['title'])}**: {md(ft['question'])}")
+    st.markdown(f"*{md(flow['title'])}*. {md(flow['story'])}")
     st.markdown("---")
     for n, s in enumerate(flow["stages"], start=1):
         render_stage(fid, n, s)

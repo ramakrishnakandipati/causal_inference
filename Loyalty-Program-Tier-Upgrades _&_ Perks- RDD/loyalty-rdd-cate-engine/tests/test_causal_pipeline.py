@@ -454,6 +454,49 @@ def test_effect_scale_zero_gives_a_placebo_panel():
     assert generate(8000, "fuzzy", seed=3).equals(generate(8000, "fuzzy", seed=3, effect_scale=1.0))   # default unchanged
 
 
+def test_presentation_builds_with_every_model_flow_and_notes(tmp_path):
+    """The deck is generated from the saved outputs; skip when the committed artifacts are not on disk."""
+    import importlib.util
+    needed = [ROOT / "outputs/models/meta.json", ROOT / "outputs/metrics/flows_report.json", ROOT / "outputs/screenshots/flows/A1_estimates.png"]
+    if not all(p.exists() for p in needed):
+        pytest.skip("run `make train` and `make verify-ui` first")
+    from pptx import Presentation
+    spec = importlib.util.spec_from_file_location("build_deck_under_test", ROOT / "scripts" / "build_deck.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    mod.FILE = tmp_path / "deck.pptx"
+    mod.build()
+    prs = Presentation(str(mod.FILE))
+    texts, missing_notes = [], []
+    for i, sl in enumerate(prs.slides, 1):
+        buf = []
+        for sh in sl.shapes:
+            if sh.has_text_frame:
+                buf.append(sh.text_frame.text)
+            if sh.has_table:
+                buf += [c.text for r in sh.table.rows for c in r.cells]
+        texts.append(" ".join(buf))
+        if not sl.has_notes_slide or not sl.notes_slide.notes_text_frame.text.strip():
+            missing_notes.append(i)
+    alltext = " ".join(texts)
+    assert len(prs.slides) >= 60
+    assert all(name in alltext for name in mod.PRETTY.values())                       # every one of the 12 models is covered
+    assert all(f"SCENARIO {fid}" in alltext.upper() for fid in ("A1", "A2", "B1", "B2", "C1", "C2", "D1", "D2"))   # kickers are upper-cased
+    assert "Programme scorecard" in alltext and "Cross-flow rank" in alltext          # overall metrics and the model-by-flow comparison
+    dark_dividers = [i for i in missing_notes]                                        # every content slide has speaker notes
+    assert len(dark_dividers) <= 5, dark_dividers                                     # only the title/divider slides may lack notes
+
+
+def test_flow_markdown_escapes_dollar_signs(flows_report):
+    """Streamlit markdown reads $...$ as LaTeX; a sentence with two dollar amounts used to render garbled."""
+    from src.ui import flows_ui
+    assert flows_ui.md("$5 and $6") == "\\$5 and \\$6"
+    rep, _ = flows_report
+    sentences = [s["takeaway"] for f in rep["flows"] for s in f["stages"]] + [f["summary"]["reason"] for f in rep["flows"]]
+    assert any(t.count("$") >= 2 for t in sentences)                    # the situation the escape protects against exists
+    assert all("$" not in flows_ui.md(t).replace("\\$", "") for t in sentences)
+
+
 def test_dashboard_has_flows_tab_and_screenshot_script_matches():
     app = (ROOT / "src" / "ui" / "app.py").read_text(encoding="utf-8")
     assert "End-to-end flows" in app and "flows_ui.render" in app

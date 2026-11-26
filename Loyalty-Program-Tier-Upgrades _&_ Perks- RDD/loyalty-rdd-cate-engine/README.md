@@ -97,7 +97,7 @@ make train          # data -> RDD + diagnostics -> 12 tuned learners -> artifact
 make flows          # rebuild outputs/metrics/flows_report.json (8 flows + programme scorecard) from the trained models
 make serve          # FastAPI on :8000  (Swagger UI at /docs)
 make app            # Streamlit on :8501 (6 tabs; the last one is End-to-end flows)
-make test           # pytest suite
+make test           # pytest suite (63 tests)
 make verify-ui      # launches both servers, screenshots the API, every tab and every flow stage, checks UI == API
 make verify-flows   # only the flow screenshots (outputs/screenshots/flows/)
 make all            # setup, train, test, verify-ui
@@ -125,8 +125,9 @@ Without a GPU everything falls back to CPU automatically (`src/utils/device.py`)
 | `src/flows.py` | the 8 end-to-end flows (4 types x 2 examples): stage-, flow- and programme-level metrics, UI independent |
 | `src/ui/app.py`, `src/ui/flows_ui.py` | Streamlit dashboard (6 tabs) and the End-to-end flows tab |
 | `scripts/capture_screenshots.py` | Playwright capture of the API docs, every tab, every flow stage, plus a UI == API check |
+| `scripts/build_deck.py`, `presentation/` | the 62-slide end-to-end deck and its builder |
 | `scripts/build_readme.py` | regenerates the flows section of this README from `flows_report.json` |
-| `tests/test_causal_pipeline.py` | 61 tests: RDD recovery, validity tests, all learners, metrics, API, the end-to-end flows |
+| `tests/test_causal_pipeline.py` | 63 tests: RDD recovery, validity tests, all learners, metrics, API, the end-to-end flows |
 
 ### The 12 learners
 
@@ -496,6 +497,27 @@ Flow-level metrics: Guests affected **6,538**; Incremental nights **-17,954**; I
 How to read the two examples that look odd: **B1** is a programme whose perks do nothing, and with the default seed it produces one of the roughly 1-in-20 draws that looks significant. The flow reports that honestly as a `FALSE POSITIVE` and its replication stage shows the method is calibrated (about 5% over re-draws, standard errors match the spread of estimates). **D1** and **D2** both say ADOPT because they sit on opposite sides of the same break-even perk cost (about $220 per member): lowering the threshold pays below it, raising the threshold pays above it.
 
 <!-- FLOWS:END -->
+
+## Presentation
+
+`presentation/Loyalty_Gold_RDD_Uplift_End_to_End.pptx` is a 62-slide, fully editable deck (native tables and charts, speaker notes on every content
+slide). `make deck` rebuilds it from the saved metrics, plots, `flows_report.json` and the dashboard screenshots, so every number in it is the number the
+dashboard shows; only the narrative and the model descriptions are written by hand in `scripts/build_deck.py`.
+
+| Part | Slides | What it covers |
+|---|---|---|
+| Opening | 1-3 | Title, executive summary, storyline |
+| 1. Problem, approach, uplift end-to-end flow | 4-13 | Why a discontinuity, two-layer approach, data, the 8-stage pipeline with a stage-by-stage documentation table, kernel weights and trend removal, how uplift is measured (AUUC, Qini, uplift@K, R-loss, policy value), architecture, reproducibility |
+| 2. The 12 models and how they compare | 14-33 | RDD evidence and validity tests, every model explained by family with its metrics, tuning, the full leaderboard, accuracy and targeting charts, cost vs accuracy, **a model-by-flow comparison** (each model scored on the guests each flow concerns, decision agreement, cross-flow ranking), which model for which job |
+| 3. Flows, stages and metrics | 34-39 | The four flow types, programme scorecard (overall metrics), all eight flows at a glance (flow-level), stage gate map (stage-level), money logic |
+| 4. Scenarios as a story | 40-58 | Eight scenarios from "Monday: the VP asks whether Gold is worth it" to "Next quarter: tighten Gold to cut perk cost?", each with the stage table and verdict, then the Streamlit screenshots of the stages that matter; dashboard tour and API |
+| Wrap-up and appendix | 59-62 | Five takeaways, limits and next steps, file map, glossary |
+
+The model-by-flow comparison is the one view not on the dashboard. For each model it reports the estimated average effect against the truth for the four
+populations the model-driven flows are about (look-alikes of the two guest personas, and the guests whose eligibility each threshold change affects),
+plus each model's net value for the two threshold decisions. It shows that the global leaderboard winner (R-Learner) is not the winner on those populations
+(T-Learner is, by a few hundredths of a night), and that all 12 models agree on the sign of both threshold decisions. It is computed by
+`flows.model_flow_matrix` and stored in `flows_report.json`.
 
 ## Design decisions worth knowing
 

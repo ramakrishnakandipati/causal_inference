@@ -34,6 +34,7 @@ dependencies = [
   "altair<5",
   "protobuf<4",
   "playwright>=1.40",
+  "python-pptx>=0.6.21",
   "pytest>=7.0",
 ]
 

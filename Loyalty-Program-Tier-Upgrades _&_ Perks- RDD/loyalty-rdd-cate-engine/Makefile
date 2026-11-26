@@ -1,7 +1,7 @@
 VENV ?= C:/venvs/loyalty
 PY   ?= $(VENV)/Scripts/python
 
-.PHONY: setup train flows serve app verify-ui verify-flows test all
+.PHONY: setup train flows deck serve app verify-ui verify-flows test all
 
 setup:
 	python -m venv $(VENV)
@@ -15,6 +15,9 @@ train:
 
 flows:                       # rebuild outputs/metrics/flows_report.json (8 flows + scorecard) from the trained models
 	$(PY) -m src.flows
+
+deck:                        # rebuild presentation/*.pptx from the saved metrics, plots and screenshots
+	$(PY) scripts/build_deck.py
 
 serve:
 	$(PY) -m uvicorn src.api.main:app --host 127.0.0.1 --port 8000
