@@ -1,0 +1,128 @@
+# Grand Horizon Hotels - Dynamic Pricing & Elasticity under Endogeneity
+# All paths are relative to the repository root.
+
+project:
+  name: grand-horizon-dynamic-pricing-iv
+  seed: 42
+
+paths:
+  outputs: outputs
+  data: outputs/data
+  models: outputs/models
+  metrics: outputs/metrics
+  logs: outputs/logs
+  eda_plots: outputs/visualizations/eda
+  eval_plots: outputs/visualizations/evaluation
+  screenshots: outputs/screenshots
+
+gpu:
+  use_gpu: true            # auto-falls back to CPU when CUDA is unavailable
+  xgboost: true
+  catboost: true
+  lightgbm: false          # LightGBM GPU needs a special build; CPU is fast enough
+  torch_amp: false
+
+data:
+  n_samples: 30000
+  test_size: 0.25
+  heavy_model_n: 12000     # subsample used for forests / kernel-style estimators
+  price_min: 95.0
+  price_max: 650.0
+  price_grid_points: 60
+
+# Structural parameters of the data generating process.
+# log D = ln_base_demand + seasonal/dow terms + theta(X) * (ln p - ln p_ref[tier]) + gamma_u * U + eps
+dgp:
+  ln_base_demand: 0.10         # D0 = 1.1 -> ~67% occupancy at the reference price
+  gamma_u: 0.50                # effect of the unobserved demand shock on log demand
+  eps_sd: 0.30
+  season_demand: 0.30
+  weekend_leisure_demand: 0.10
+  theta:                       # segment base elasticities
+    leisure: -2.15
+    corporate: -0.95
+    group: -1.30
+  theta_clip: [-3.6, -0.20]
+  price_ref:                   # reference ADR by property tier (USD)
+    luxury: 320.0
+    urban_business: 190.0
+    resort: 250.0
+  price_equation:
+    u_coef: 0.20               # managers raise rates during surges (source of endogeneity)
+    season: 0.11
+    weekend: 0.05
+    loyalty: 0.02
+    z_outage: 0.09             # competitor outage -> focal ADR up
+    z_airline: 0.07            # airline capacity shock (+ = more seats) -> ADR up
+    z_rounding: 0.05           # rate-rule rounding trigger -> ADR step
+    noise_sd: 0.06
+  promo:
+    discount: 0.15             # promotional discount depth when offered
+    base_logit: -0.8
+  outage_lambda: 6.0           # mean competitor room outage (%), exponential-ish
+
+models:
+  ridge_alpha: 1.0
+  nuisance:
+    n_estimators: 200
+    max_depth: 4
+    learning_rate: 0.08
+  forest:
+    n_estimators: 200
+    min_samples_leaf: 20
+  deep:
+    hidden: 96
+    epochs: 40
+    batch_size: 512
+    lr: 0.001
+    weight_decay: 0.00001
+    mdn_components: 5
+    mc_samples: 24
+    patience: 8
+  deepgmm:
+    epochs: 40
+    batch_size: 512
+    lr_learner: 0.0005
+    lr_adversary: 0.001
+  cevae:
+    latent_dim: 8
+    epochs: 30
+
+optimization:
+  unit_cost_per_room: 65.0     # variable cost per occupied room incl. distribution (USD)
+  promo_grid: [0.0, 0.05, 0.10, 0.15, 0.20, 0.25]
+  rack_premium: 1.20           # published rack rate = reference price x premium (headroom for targeted promos)
+
+scenarios:
+  A:
+    name: "City-Wide Tech Convention Surge (Severe Endogeneity)"
+    description: "Unobserved demand shock plus 22% competitor room outage. Rates and demand rise together, so a naive model reads the surge as inelastic demand and over-prices."
+    profile: {segment: group, property_tier: urban_business, lead_time: 60, los: 3, dow: 2, seasonality: 1.2, loyalty_tier: 1, hist_adr_sensitivity: 1.5, room_type: 1}
+    instruments: {competitor_room_outage_pct: 22.0, airline_seat_capacity_shock: 0.0, pricing_algo_rounding_threshold: 1}
+    demand_shock_u: 1.8
+  B:
+    name: "Mid-Week Shoulder Season (Leisure vs Corporate)"
+    description: "Price-elastic leisure early-birds versus price-inelastic corporate travellers on the same mid-week night."
+    profile: {segment: leisure, property_tier: resort, lead_time: 75, los: 4, dow: 2, seasonality: -0.4, loyalty_tier: 0, hist_adr_sensitivity: 0.6, room_type: 0}
+    profile_alt: {segment: corporate, property_tier: resort, lead_time: 8, los: 2, dow: 2, seasonality: -0.4, loyalty_tier: 2, hist_adr_sensitivity: -0.3, room_type: 1}
+    instruments: {competitor_room_outage_pct: 3.0, airline_seat_capacity_shock: 0.0, pricing_algo_rounding_threshold: 0}
+    demand_shock_u: 0.0
+  C:
+    name: "Feeder Airport Airline Capacity Cut (-25% Seats)"
+    description: "A -25% feeder-airport seat cut is an exogenous shifter of market rates. Following the market down gives away RevPAR; the structural demand curve says where to price."
+    profile: {segment: leisure, property_tier: resort, lead_time: 40, los: 3, dow: 4, seasonality: 0.3, loyalty_tier: 1, hist_adr_sensitivity: 0.4, room_type: 1}
+    instruments: {competitor_room_outage_pct: 5.0, airline_seat_capacity_shock: -2.5, pricing_algo_rounding_threshold: 0}
+    demand_shock_u: 0.0
+  D:
+    name: "Custom Live Simulation"
+    description: "Manual control of every confounder and instrument."
+    profile: {segment: leisure, property_tier: urban_business, lead_time: 30, los: 2, dow: 5, seasonality: 0.0, loyalty_tier: 1, hist_adr_sensitivity: 0.0, room_type: 1}
+    instruments: {competitor_room_outage_pct: 5.0, airline_seat_capacity_shock: 0.0, pricing_algo_rounding_threshold: 0}
+    demand_shock_u: 0.0
+
+api:
+  host: 127.0.0.1
+  port: 8000
+
+streamlit:
+  port: 8501

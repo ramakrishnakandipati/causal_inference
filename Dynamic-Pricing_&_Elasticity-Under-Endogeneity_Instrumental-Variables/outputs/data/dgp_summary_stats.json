@@ -1,0 +1,36 @@
+{
+  "n_rows": 30000,
+  "mean_adr": 310.71440173279285,
+  "mean_occupancy": 0.67174782877579,
+  "mean_net_revpar": 157.471937943834,
+  "promo_rate": 0.36743333333333333,
+  "segment_shares": {
+    "corporate": 0.5648,
+    "leisure": 0.382,
+    "group": 0.0532
+  },
+  "true_mean_elasticity": -1.2242856262799107,
+  "true_elasticity_by_segment": {
+    "corporate": -0.5059,
+    "group": -1.4187,
+    "leisure": -2.2595
+  },
+  "naive_ols_price_coefficient": 0.33619341472770264,
+  "naive_ols_bias": 1.5604790410076133,
+  "first_stage": {
+    "f_stat": 3078.488198495372,
+    "partial_r2": 0.23549366820998183,
+    "n_instruments": 3,
+    "dof": 29982
+  },
+  "corr_instrument_with_treatment": {
+    "competitor_room_outage_pct": 0.18845952666401442,
+    "airline_seat_capacity_shock": 0.1763016444997588,
+    "pricing_algo_rounding_threshold": 0.05858651883608356
+  },
+  "corr_instrument_with_unobserved_shock": {
+    "competitor_room_outage_pct": -0.006358385767572143,
+    "airline_seat_capacity_shock": -0.003744189223207416,
+    "pricing_algo_rounding_threshold": -0.012061179575922665
+  }
+}

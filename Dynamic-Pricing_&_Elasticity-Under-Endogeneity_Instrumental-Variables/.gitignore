@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.idea/
+.pytest_cache/
+# large fitted-estimator registry; regenerate with `make train`
+outputs/models/*.joblib
+outputs/models/*.pt
+outputs/logs/*.log*

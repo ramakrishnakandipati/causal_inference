@@ -1,0 +1,50 @@
+{
+  "coefficients": {
+    "ols_price_coefficient": 0.3419677312041145,
+    "2sls_price_coefficient": -1.1668444787835952,
+    "2sls_std_error": 0.03695296673460981,
+    "liml_price_coefficient": -1.1695361893381033,
+    "gmm_price_coefficient": -1.1696750257152644,
+    "true_mean_elasticity": -1.2221836659298695
+  },
+  "first_stage": {
+    "f_statistic_robust": 6838.298657310705,
+    "f_pvalue": 0.0,
+    "partial_r2": 0.2327525588508379,
+    "cragg_donald_equivalent_f_homoskedastic": 2273.5857441088715,
+    "rule_of_thumb_threshold": 10.0,
+    "instruments_strong": true,
+    "n_instruments": 3
+  },
+  "wu_hausman_endogeneity": {
+    "statistic": 4726.396339097075,
+    "pvalue": 1.1102230246251565e-16,
+    "reject_exogeneity_5pct": true
+  },
+  "sargan_overidentification": {
+    "statistic": 9.332071571319656,
+    "pvalue": 0.009409496952259122,
+    "reject_validity_5pct": true
+  },
+  "basmann_overidentification": {
+    "statistic": 9.32930484222442,
+    "pvalue": 0.009422522724372162
+  },
+  "hansen_j_gmm": {
+    "statistic": 9.430800463068707,
+    "pvalue": 0.008956280763459001
+  },
+  "instruments": [
+    "competitor_room_outage_pct",
+    "airline_seat_capacity_shock",
+    "pricing_algo_rounding_threshold"
+  ],
+  "n_obs": 22500,
+  "sargan_overidentification_heterogeneous_spec": {
+    "statistic": 24.16806234688401,
+    "pvalue": 0.14959853212824503,
+    "reject_validity_5pct": false,
+    "n_overidentifying_restrictions": 18
+  },
+  "notes": "Sargan on the constant-elasticity spec is sensitive to misspecification (true elasticity varies by segment); the heterogeneous spec is the one used for the elasticity estimates."
+}
