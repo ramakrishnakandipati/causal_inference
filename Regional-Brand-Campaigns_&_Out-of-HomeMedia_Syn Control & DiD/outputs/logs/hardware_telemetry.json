@@ -1,0 +1,76 @@
+[
+  {
+    "tag": "start",
+    "timestamp": "2026-11-25 17:56:30",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.16",
+    "cpu_count": 24,
+    "device": {
+      "cuda": true,
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3090",
+      "torch_device": "cuda",
+      "xgb_device": "cuda",
+      "catboost_task": "GPU",
+      "lightgbm": "cpu (pip wheel has no CUDA build)"
+    },
+    "gpu": {
+      "gpu_name": "NVIDIA GeForce RTX 3090",
+      "driver": "610.60",
+      "util_pct": 0.0,
+      "mem_used_mb": 1612.0,
+      "mem_total_mb": 24576.0,
+      "temp_c": 44.0,
+      "power_w": 31.99
+    },
+    "jax": {
+      "backend": "cpu",
+      "devices": [
+        "cpu:0",
+        "cpu:1",
+        "cpu:2",
+        "cpu:3"
+      ]
+    },
+    "torch": "2.15.0+cu132",
+    "torch_cuda_mem_allocated_mb": 0.0,
+    "torch_cuda_max_mem_allocated_mb": 0.0
+  },
+  {
+    "tag": "end",
+    "timestamp": "2026-11-25 17:56:31",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.16",
+    "cpu_count": 24,
+    "device": {
+      "cuda": true,
+      "cuda_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 3090",
+      "torch_device": "cuda",
+      "xgb_device": "cuda",
+      "catboost_task": "GPU",
+      "lightgbm": "cpu (pip wheel has no CUDA build)"
+    },
+    "gpu": {
+      "gpu_name": "NVIDIA GeForce RTX 3090",
+      "driver": "610.60",
+      "util_pct": 0.0,
+      "mem_used_mb": 1612.0,
+      "mem_total_mb": 24576.0,
+      "temp_c": 44.0,
+      "power_w": 31.99
+    },
+    "jax": {
+      "backend": "cpu",
+      "devices": [
+        "cpu:0",
+        "cpu:1",
+        "cpu:2",
+        "cpu:3"
+      ]
+    },
+    "torch": "2.15.0+cu132",
+    "torch_cuda_mem_allocated_mb": 0.0,
+    "torch_cuda_max_mem_allocated_mb": 0.0
+  }
+]

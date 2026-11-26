@@ -1,0 +1,25 @@
+scenario,outcome,estimator,p_exact_ratio,p_exact_ratio_filtered,rank_of_treated,n_units,min_possible_p
+mia_all24,room_nights_booked,SCM,0.04,0.043478260869565216,1,25,0.04
+mia_all24,room_nights_booked,ASCM (Ridge),0.04,0.043478260869565216,1,25,0.04
+mia_all24,room_nights_booked,SDID,0.04,0.04,1,25,0.04
+mia_all24,direct_web_sessions,SCM,0.04,0.041666666666666664,1,25,0.04
+mia_all24,direct_web_sessions,ASCM (Ridge),0.04,0.041666666666666664,1,25,0.04
+mia_all24,direct_web_sessions,SDID,0.04,0.04,1,25,0.04
+mia_all24,branded_search_index,SCM,0.04,0.041666666666666664,1,25,0.04
+mia_all24,branded_search_index,ASCM (Ridge),0.04,0.041666666666666664,1,25,0.04
+mia_all24,branded_search_index,SDID,0.04,0.04,1,25,0.04
+mia_all24,incremental_net_revenue_usd,SCM,0.04,0.041666666666666664,1,25,0.04
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),0.04,0.041666666666666664,1,25,0.04
+mia_all24,incremental_net_revenue_usd,SDID,0.2,0.2,5,25,0.04
+mia_flagship,room_nights_booked,SCM,0.09090909090909091,0.1,1,11,0.09090909090909091
+mia_flagship,room_nights_booked,ASCM (Ridge),0.09090909090909091,0.1,1,11,0.09090909090909091
+mia_flagship,room_nights_booked,SDID,0.36363636363636365,0.36363636363636365,4,11,0.09090909090909091
+las_convention,room_nights_booked,SCM,0.2,0.2,1,5,0.2
+las_convention,room_nights_booked,ASCM (Ridge),0.2,0.2,1,5,0.2
+las_convention,room_nights_booked,SDID,0.4,0.4,2,5,0.2
+nyc_spring_break,room_nights_booked,SCM,0.25,0.25,1,4,0.25
+nyc_spring_break,room_nights_booked,ASCM (Ridge),0.25,0.25,1,4,0.25
+nyc_spring_break,room_nights_booked,SDID,0.5,0.5,2,4,0.25
+tpa_placebo,room_nights_booked,SCM,0.375,0.375,3,8,0.125
+tpa_placebo,room_nights_booked,ASCM (Ridge),0.25,0.25,2,8,0.125
+tpa_placebo,room_nights_booked,SDID,0.875,0.875,7,8,0.125

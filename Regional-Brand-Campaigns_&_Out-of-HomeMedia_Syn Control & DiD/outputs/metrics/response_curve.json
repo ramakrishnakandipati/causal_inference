@@ -1,0 +1,19 @@
+{
+  "fitted": {
+    "theta": 0.8999999999999999,
+    "K": 232.24267659340956,
+    "s": 1.0,
+    "c": 0.13011856039547773,
+    "r2": 0.5572399344353965,
+    "rmse": 42.41549530004387,
+    "n": 60
+  },
+  "truth_dgp": {
+    "theta": 0.75,
+    "K": 150.0,
+    "s": 1.3
+  },
+  "source": "ASCM (Ridge) daily ATT vs spend path with the best CATE learner's market multiplier",
+  "modifier_from": "CFRNet-DragonNet",
+  "theta_upper_bound": 0.9
+}

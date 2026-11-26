@@ -1,0 +1,42 @@
+{
+  "api_cate": {
+    "cate_status": 200,
+    "cate_response": {
+      "learner": "Causal Forest DML",
+      "n": 2,
+      "lift_pct": [
+        7.228624712594833,
+        7.325754653311363
+      ],
+      "incremental_room_nights": [
+        108.4293706889225,
+        109.88631979967045
+      ],
+      "baseline_room_nights": 1500.0,
+      "mean_lift_pct": 7.2771896829530975,
+      "ci": {
+        "level": 0.95,
+        "lift_pct_lo": [
+          5.863762143874099,
+          5.805033952108853
+        ],
+        "lift_pct_hi": [
+          8.593487281315564,
+          8.846475354513874
+        ],
+        "incremental_room_nights_lo": [
+          87.95643215811148,
+          87.07550928163279
+        ],
+        "incremental_room_nights_hi": [
+          128.90230921973347,
+          132.6971303177081
+        ]
+      }
+    }
+  },
+  "consistency": {
+    "api_att_total_ascm_mia_flagship": 7962.965679126068,
+    "ui_shows_same_total": true
+  }
+}

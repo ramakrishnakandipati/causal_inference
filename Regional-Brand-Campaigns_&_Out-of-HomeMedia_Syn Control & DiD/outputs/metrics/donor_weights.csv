@@ -1,0 +1,601 @@
+scenario,outcome,estimator,donor,weight,weight_sd
+mia_all24,room_nights_booked,SCM,ATL,0.0,
+mia_all24,room_nights_booked,SCM,AUS,0.0,
+mia_all24,room_nights_booked,SCM,BNA,0.0,
+mia_all24,room_nights_booked,SCM,BOS,0.0,
+mia_all24,room_nights_booked,SCM,CHI,0.0,
+mia_all24,room_nights_booked,SCM,CHS,0.06414818731534831,
+mia_all24,room_nights_booked,SCM,CLT,0.0,
+mia_all24,room_nights_booked,SCM,DCA,0.0,
+mia_all24,room_nights_booked,SCM,DEN,0.0,
+mia_all24,room_nights_booked,SCM,DFW,0.0,
+mia_all24,room_nights_booked,SCM,FLL,0.2906291718780492,
+mia_all24,room_nights_booked,SCM,HNL,0.0930570745259234,
+mia_all24,room_nights_booked,SCM,IAH,0.0,
+mia_all24,room_nights_booked,SCM,LAS,0.0,
+mia_all24,room_nights_booked,SCM,LAX,0.0,
+mia_all24,room_nights_booked,SCM,MSY,0.0,
+mia_all24,room_nights_booked,SCM,NYC,0.0,
+mia_all24,room_nights_booked,SCM,ORL,0.2109369965819397,
+mia_all24,room_nights_booked,SCM,PHX,0.2523422266574297,
+mia_all24,room_nights_booked,SCM,SAN,0.0,
+mia_all24,room_nights_booked,SCM,SAV,0.0,
+mia_all24,room_nights_booked,SCM,SEA,0.0,
+mia_all24,room_nights_booked,SCM,SFO,0.0,
+mia_all24,room_nights_booked,SCM,TPA,0.08888634304130977,
+mia_all24,room_nights_booked,ASCM (Ridge),ATL,-0.0075200726721816645,
+mia_all24,room_nights_booked,ASCM (Ridge),AUS,0.0034683176295710917,
+mia_all24,room_nights_booked,ASCM (Ridge),BNA,0.004341274319043508,
+mia_all24,room_nights_booked,ASCM (Ridge),BOS,-0.0008853248762694308,
+mia_all24,room_nights_booked,ASCM (Ridge),CHI,-0.003149048023212794,
+mia_all24,room_nights_booked,ASCM (Ridge),CHS,0.06691024765389844,
+mia_all24,room_nights_booked,ASCM (Ridge),CLT,-0.0025116977332517916,
+mia_all24,room_nights_booked,ASCM (Ridge),DCA,0.0007984661430290318,
+mia_all24,room_nights_booked,ASCM (Ridge),DEN,0.005949310842062554,
+mia_all24,room_nights_booked,ASCM (Ridge),DFW,-0.006071947331213556,
+mia_all24,room_nights_booked,ASCM (Ridge),FLL,0.28551162673369473,
+mia_all24,room_nights_booked,ASCM (Ridge),HNL,0.0927921002868106,
+mia_all24,room_nights_booked,ASCM (Ridge),IAH,-0.006182895036451383,
+mia_all24,room_nights_booked,ASCM (Ridge),LAS,0.0011375810340809231,
+mia_all24,room_nights_booked,ASCM (Ridge),LAX,0.009312414781454736,
+mia_all24,room_nights_booked,ASCM (Ridge),MSY,-0.0007222766689461672,
+mia_all24,room_nights_booked,ASCM (Ridge),NYC,-0.0016640010513309532,
+mia_all24,room_nights_booked,ASCM (Ridge),ORL,0.21494257509555767,
+mia_all24,room_nights_booked,ASCM (Ridge),PHX,0.2528870021667512,
+mia_all24,room_nights_booked,ASCM (Ridge),SAN,0.002228276546516754,
+mia_all24,room_nights_booked,ASCM (Ridge),SAV,0.00018176522498965857,
+mia_all24,room_nights_booked,ASCM (Ridge),SEA,0.0006076677153277047,
+mia_all24,room_nights_booked,ASCM (Ridge),SFO,-0.0005636230183480292,
+mia_all24,room_nights_booked,ASCM (Ridge),TPA,0.08820226023841723,
+mia_all24,room_nights_booked,SDID,ATL,9.04371943388874e-24,
+mia_all24,room_nights_booked,SDID,AUS,0.010137428712551917,
+mia_all24,room_nights_booked,SDID,BNA,0.006815861985926158,
+mia_all24,room_nights_booked,SDID,BOS,1.8727189299126185e-23,
+mia_all24,room_nights_booked,SDID,CHI,2.1304551643944603e-23,
+mia_all24,room_nights_booked,SDID,CHS,0.04177357255683807,
+mia_all24,room_nights_booked,SDID,CLT,2.112865767185964e-23,
+mia_all24,room_nights_booked,SDID,DCA,1.436142322083471e-23,
+mia_all24,room_nights_booked,SDID,DEN,2.2913124823592172e-23,
+mia_all24,room_nights_booked,SDID,DFW,1.0859990500111525e-23,
+mia_all24,room_nights_booked,SDID,FLL,0.17849901279418762,
+mia_all24,room_nights_booked,SDID,HNL,0.10921492175304348,
+mia_all24,room_nights_booked,SDID,IAH,1.450064413221706e-23,
+mia_all24,room_nights_booked,SDID,LAS,0.09338721077371251,
+mia_all24,room_nights_booked,SDID,LAX,0.024073506034841968,
+mia_all24,room_nights_booked,SDID,MSY,0.045584194968413747,
+mia_all24,room_nights_booked,SDID,NYC,1.9236689818769032e-23,
+mia_all24,room_nights_booked,SDID,ORL,0.10883350464366384,
+mia_all24,room_nights_booked,SDID,PHX,0.14297011834643644,
+mia_all24,room_nights_booked,SDID,SAN,0.0796551687777044,
+mia_all24,room_nights_booked,SDID,SAV,0.0343594792010105,
+mia_all24,room_nights_booked,SDID,SEA,1.8172691545241167e-23,
+mia_all24,room_nights_booked,SDID,SFO,1.481381811588645e-23,
+mia_all24,room_nights_booked,SDID,TPA,0.1246960194516693,
+mia_all24,room_nights_booked,Bayesian SC,ATL,0.0026541963593959134,0.0036522653797862324
+mia_all24,room_nights_booked,Bayesian SC,AUS,0.004935178677669482,0.006858766192294296
+mia_all24,room_nights_booked,Bayesian SC,BNA,0.004805723299603769,0.0066470611887538816
+mia_all24,room_nights_booked,Bayesian SC,BOS,0.002246313567405646,0.00315440950807478
+mia_all24,room_nights_booked,Bayesian SC,CHI,0.001911628237512473,0.002549440225442819
+mia_all24,room_nights_booked,Bayesian SC,CHS,0.008179206773812765,0.010713975139406575
+mia_all24,room_nights_booked,Bayesian SC,CLT,0.003832049098822953,0.005485576916728189
+mia_all24,room_nights_booked,Bayesian SC,DCA,0.001960942547891449,0.00268949187358403
+mia_all24,room_nights_booked,Bayesian SC,DEN,0.004994721014092537,0.006864335375238122
+mia_all24,room_nights_booked,Bayesian SC,DFW,0.002649597162355789,0.003739361248458257
+mia_all24,room_nights_booked,Bayesian SC,FLL,0.3132148776283174,0.058665230131361275
+mia_all24,room_nights_booked,Bayesian SC,HNL,0.09741571060295705,0.058443865851121754
+mia_all24,room_nights_booked,Bayesian SC,IAH,0.002898731943305762,0.004114429279734654
+mia_all24,room_nights_booked,Bayesian SC,LAS,0.022061331511496973,0.027404367396999207
+mia_all24,room_nights_booked,Bayesian SC,LAX,0.004377018704623867,0.005589852468762565
+mia_all24,room_nights_booked,Bayesian SC,MSY,0.007762494851796166,0.010383393094968
+mia_all24,room_nights_booked,Bayesian SC,NYC,0.0019326370126032466,0.002650895960146973
+mia_all24,room_nights_booked,Bayesian SC,ORL,0.14874072794174883,0.04055327626540239
+mia_all24,room_nights_booked,Bayesian SC,PHX,0.13850777881775325,0.07404562168271243
+mia_all24,room_nights_booked,Bayesian SC,SAN,0.011357004454954212,0.015499009273453962
+mia_all24,room_nights_booked,Bayesian SC,SAV,0.0075803356681271635,0.010220636073548174
+mia_all24,room_nights_booked,Bayesian SC,SEA,0.003426669881588019,0.004523733959788754
+mia_all24,room_nights_booked,Bayesian SC,SFO,0.002314628303337305,0.003204282343595551
+mia_all24,room_nights_booked,Bayesian SC,TPA,0.20024049593882823,0.09134979154921984
+mia_all24,room_nights_booked,ASCM (ElasticNet),ATL,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),AUS,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),BNA,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),BOS,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),CHI,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),CHS,0.06414818731534831,
+mia_all24,room_nights_booked,ASCM (ElasticNet),CLT,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),DCA,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),DEN,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),DFW,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),FLL,0.2906291718780492,
+mia_all24,room_nights_booked,ASCM (ElasticNet),HNL,0.0930570745259234,
+mia_all24,room_nights_booked,ASCM (ElasticNet),IAH,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),LAS,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),LAX,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),MSY,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),NYC,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),ORL,0.2109369965819397,
+mia_all24,room_nights_booked,ASCM (ElasticNet),PHX,0.2523422266574297,
+mia_all24,room_nights_booked,ASCM (ElasticNet),SAN,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),SAV,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),SEA,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),SFO,0.0,
+mia_all24,room_nights_booked,ASCM (ElasticNet),TPA,0.08888634304130977,
+mia_all24,direct_web_sessions,SCM,ATL,1.471138309951499e-19,
+mia_all24,direct_web_sessions,SCM,AUS,1.3433907630737597e-19,
+mia_all24,direct_web_sessions,SCM,BNA,1.3372852578669712e-19,
+mia_all24,direct_web_sessions,SCM,BOS,1.0536475362993429e-19,
+mia_all24,direct_web_sessions,SCM,CHI,3.461306280452541e-21,
+mia_all24,direct_web_sessions,SCM,CHS,0.010015757347878433,
+mia_all24,direct_web_sessions,SCM,CLT,1.8822543472790028e-19,
+mia_all24,direct_web_sessions,SCM,DCA,3.07182604108549e-21,
+mia_all24,direct_web_sessions,SCM,DEN,9.480293425214228e-20,
+mia_all24,direct_web_sessions,SCM,DFW,1.0825487429248721e-19,
+mia_all24,direct_web_sessions,SCM,FLL,0.23523758441858106,
+mia_all24,direct_web_sessions,SCM,HNL,0.09127924075906105,
+mia_all24,direct_web_sessions,SCM,IAH,2.5995099125336407e-20,
+mia_all24,direct_web_sessions,SCM,LAS,6.447831694100183e-20,
+mia_all24,direct_web_sessions,SCM,LAX,0.004930563109244328,
+mia_all24,direct_web_sessions,SCM,MSY,2.333780998601037e-19,
+mia_all24,direct_web_sessions,SCM,NYC,4.417078989334261e-20,
+mia_all24,direct_web_sessions,SCM,ORL,0.14447770145576236,
+mia_all24,direct_web_sessions,SCM,PHX,0.39105983318706083,
+mia_all24,direct_web_sessions,SCM,SAN,0.12299931972241204,
+mia_all24,direct_web_sessions,SCM,SAV,2.0163891912497373e-19,
+mia_all24,direct_web_sessions,SCM,SEA,1.760406626745229e-20,
+mia_all24,direct_web_sessions,SCM,SFO,1.200934578288017e-19,
+mia_all24,direct_web_sessions,SCM,TPA,0.0,
+mia_all24,direct_web_sessions,ASCM (Ridge),ATL,0.0006712303669028492,
+mia_all24,direct_web_sessions,ASCM (Ridge),AUS,0.009607262640586846,
+mia_all24,direct_web_sessions,ASCM (Ridge),BNA,0.00803455580168047,
+mia_all24,direct_web_sessions,ASCM (Ridge),BOS,0.01897143311316183,
+mia_all24,direct_web_sessions,ASCM (Ridge),CHI,-0.008597921754998995,
+mia_all24,direct_web_sessions,ASCM (Ridge),CHS,0.01621522124136106,
+mia_all24,direct_web_sessions,ASCM (Ridge),CLT,0.0028893724258606973,
+mia_all24,direct_web_sessions,ASCM (Ridge),DCA,-0.01724079767125031,
+mia_all24,direct_web_sessions,ASCM (Ridge),DEN,0.011470469591581845,
+mia_all24,direct_web_sessions,ASCM (Ridge),DFW,-0.00403031631715672,
+mia_all24,direct_web_sessions,ASCM (Ridge),FLL,0.22428717080113414,
+mia_all24,direct_web_sessions,ASCM (Ridge),HNL,0.08686616352138567,
+mia_all24,direct_web_sessions,ASCM (Ridge),IAH,-0.023716408899580363,
+mia_all24,direct_web_sessions,ASCM (Ridge),LAS,0.002023546408556523,
+mia_all24,direct_web_sessions,ASCM (Ridge),LAX,0.03391981074406089,
+mia_all24,direct_web_sessions,ASCM (Ridge),MSY,-0.0029353041188529844,
+mia_all24,direct_web_sessions,ASCM (Ridge),NYC,-0.0034914894632637372,
+mia_all24,direct_web_sessions,ASCM (Ridge),ORL,0.14368910285577344,
+mia_all24,direct_web_sessions,ASCM (Ridge),PHX,0.39001113530197257,
+mia_all24,direct_web_sessions,ASCM (Ridge),SAN,0.12614959142456306,
+mia_all24,direct_web_sessions,ASCM (Ridge),SAV,0.006333504983570527,
+mia_all24,direct_web_sessions,ASCM (Ridge),SEA,-0.010990551130323482,
+mia_all24,direct_web_sessions,ASCM (Ridge),SFO,-0.005015562706391486,
+mia_all24,direct_web_sessions,ASCM (Ridge),TPA,-0.005121219160333807,
+mia_all24,direct_web_sessions,SDID,ATL,1.8570787790084774e-23,
+mia_all24,direct_web_sessions,SDID,AUS,0.017706809592566874,
+mia_all24,direct_web_sessions,SDID,BNA,0.010839391825295799,
+mia_all24,direct_web_sessions,SDID,BOS,1.1439027149758349e-23,
+mia_all24,direct_web_sessions,SDID,CHI,8.153263793522832e-24,
+mia_all24,direct_web_sessions,SDID,CHS,0.04241249637806745,
+mia_all24,direct_web_sessions,SDID,CLT,1.5485494222300587e-23,
+mia_all24,direct_web_sessions,SDID,DCA,6.006484768081213e-24,
+mia_all24,direct_web_sessions,SDID,DEN,4.267630694554227e-24,
+mia_all24,direct_web_sessions,SDID,DFW,4.813718349360692e-24,
+mia_all24,direct_web_sessions,SDID,FLL,0.1714694075726787,
+mia_all24,direct_web_sessions,SDID,HNL,0.10547847997676203,
+mia_all24,direct_web_sessions,SDID,IAH,1.110867216505979e-23,
+mia_all24,direct_web_sessions,SDID,LAS,0.09081786658621234,
+mia_all24,direct_web_sessions,SDID,LAX,0.0374936604846991,
+mia_all24,direct_web_sessions,SDID,MSY,0.045357370788540505,
+mia_all24,direct_web_sessions,SDID,NYC,9.109982219417075e-24,
+mia_all24,direct_web_sessions,SDID,ORL,0.09741987136518111,
+mia_all24,direct_web_sessions,SDID,PHX,0.14537847943342763,
+mia_all24,direct_web_sessions,SDID,SAN,0.08032352244447588,
+mia_all24,direct_web_sessions,SDID,SAV,0.03729697157597691,
+mia_all24,direct_web_sessions,SDID,SEA,7.586752399314656e-24,
+mia_all24,direct_web_sessions,SDID,SFO,5.776370118479958e-24,
+mia_all24,direct_web_sessions,SDID,TPA,0.11800567197611572,
+mia_all24,direct_web_sessions,Bayesian SC,ATL,0.006015245508227695,0.007676430940115439
+mia_all24,direct_web_sessions,Bayesian SC,AUS,0.00798103979704321,0.011143344891792927
+mia_all24,direct_web_sessions,Bayesian SC,BNA,0.007874719195166241,0.010768186633692948
+mia_all24,direct_web_sessions,Bayesian SC,BOS,0.004809664650177118,0.006290469723739778
+mia_all24,direct_web_sessions,Bayesian SC,CHI,0.003582022310206978,0.004797435198836129
+mia_all24,direct_web_sessions,Bayesian SC,CHS,0.012087705051365277,0.015010839575632016
+mia_all24,direct_web_sessions,Bayesian SC,CLT,0.007055172426006665,0.009465914786491447
+mia_all24,direct_web_sessions,Bayesian SC,DCA,0.002901992323158024,0.004016198744486895
+mia_all24,direct_web_sessions,Bayesian SC,DEN,0.008258956094582054,0.010958782332369976
+mia_all24,direct_web_sessions,Bayesian SC,DFW,0.005571039471576233,0.007685621914524364
+mia_all24,direct_web_sessions,Bayesian SC,FLL,0.26135441523260733,0.0562718509910609
+mia_all24,direct_web_sessions,Bayesian SC,HNL,0.19268557127908595,0.06635290898482597
+mia_all24,direct_web_sessions,Bayesian SC,IAH,0.004492326548484916,0.006314537187412951
+mia_all24,direct_web_sessions,Bayesian SC,LAS,0.01762205302910055,0.02295456842293605
+mia_all24,direct_web_sessions,Bayesian SC,LAX,0.015125702936080098,0.01492719011609571
+mia_all24,direct_web_sessions,Bayesian SC,MSY,0.01578199791954812,0.019390958537966047
+mia_all24,direct_web_sessions,Bayesian SC,NYC,0.0032733131437299935,0.004366658595306563
+mia_all24,direct_web_sessions,Bayesian SC,ORL,0.0589868665247101,0.039509726158617246
+mia_all24,direct_web_sessions,Bayesian SC,PHX,0.22612678055876487,0.07531606478650478
+mia_all24,direct_web_sessions,Bayesian SC,SAN,0.02742179342572777,0.03192825286966192
+mia_all24,direct_web_sessions,Bayesian SC,SAV,0.011781938512303134,0.015238819256874963
+mia_all24,direct_web_sessions,Bayesian SC,SEA,0.005202182864534224,0.007129260975029701
+mia_all24,direct_web_sessions,Bayesian SC,SFO,0.003470893802973738,0.004608071395113198
+mia_all24,direct_web_sessions,Bayesian SC,TPA,0.09053660739483953,0.07142738259603276
+mia_all24,direct_web_sessions,ASCM (ElasticNet),ATL,1.471138309951499e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),AUS,1.3433907630737597e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),BNA,1.3372852578669712e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),BOS,1.0536475362993429e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),CHI,3.461306280452541e-21,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),CHS,0.010015757347878433,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),CLT,1.8822543472790028e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),DCA,3.07182604108549e-21,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),DEN,9.480293425214228e-20,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),DFW,1.0825487429248721e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),FLL,0.23523758441858106,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),HNL,0.09127924075906105,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),IAH,2.5995099125336407e-20,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),LAS,6.447831694100183e-20,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),LAX,0.004930563109244328,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),MSY,2.333780998601037e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),NYC,4.417078989334261e-20,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),ORL,0.14447770145576236,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),PHX,0.39105983318706083,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),SAN,0.12299931972241204,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),SAV,2.0163891912497373e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),SEA,1.760406626745229e-20,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),SFO,1.200934578288017e-19,
+mia_all24,direct_web_sessions,ASCM (ElasticNet),TPA,0.0,
+mia_all24,branded_search_index,SCM,ATL,3.220178393302294e-20,
+mia_all24,branded_search_index,SCM,AUS,5.224039895162982e-21,
+mia_all24,branded_search_index,SCM,BNA,0.0,
+mia_all24,branded_search_index,SCM,BOS,6.407203784465155e-20,
+mia_all24,branded_search_index,SCM,CHI,4.611856122454113e-20,
+mia_all24,branded_search_index,SCM,CHS,0.0368261004950437,
+mia_all24,branded_search_index,SCM,CLT,0.0,
+mia_all24,branded_search_index,SCM,DCA,8.369632649306053e-20,
+mia_all24,branded_search_index,SCM,DEN,5.794317554630333e-20,
+mia_all24,branded_search_index,SCM,DFW,1.9747826095356186e-20,
+mia_all24,branded_search_index,SCM,FLL,0.26479030426781563,
+mia_all24,branded_search_index,SCM,HNL,0.05602299710736712,
+mia_all24,branded_search_index,SCM,IAH,3.3954607655603427e-20,
+mia_all24,branded_search_index,SCM,LAS,0.04905225935260412,
+mia_all24,branded_search_index,SCM,LAX,0.024437601599485555,
+mia_all24,branded_search_index,SCM,MSY,0.0,
+mia_all24,branded_search_index,SCM,NYC,3.2577989153855806e-20,
+mia_all24,branded_search_index,SCM,ORL,0.12344343785428666,
+mia_all24,branded_search_index,SCM,PHX,0.22726465052949452,
+mia_all24,branded_search_index,SCM,SAN,0.05341487923414423,
+mia_all24,branded_search_index,SCM,SAV,0.0,
+mia_all24,branded_search_index,SCM,SEA,7.858941697288747e-20,
+mia_all24,branded_search_index,SCM,SFO,4.9637137188948524e-21,
+mia_all24,branded_search_index,SCM,TPA,0.16474776955975842,
+mia_all24,branded_search_index,ASCM (Ridge),ATL,0.005243943748345147,
+mia_all24,branded_search_index,ASCM (Ridge),AUS,0.013027419081650584,
+mia_all24,branded_search_index,ASCM (Ridge),BNA,0.010387012703035423,
+mia_all24,branded_search_index,ASCM (Ridge),BOS,0.009951180154289236,
+mia_all24,branded_search_index,ASCM (Ridge),CHI,-0.015646432169316517,
+mia_all24,branded_search_index,ASCM (Ridge),CHS,0.043889639330062936,
+mia_all24,branded_search_index,ASCM (Ridge),CLT,-0.004868423201534213,
+mia_all24,branded_search_index,ASCM (Ridge),DCA,0.00199444328985359,
+mia_all24,branded_search_index,ASCM (Ridge),DEN,-0.0053614261926548746,
+mia_all24,branded_search_index,ASCM (Ridge),DFW,-0.015667754599333564,
+mia_all24,branded_search_index,ASCM (Ridge),FLL,0.25363553483522017,
+mia_all24,branded_search_index,ASCM (Ridge),HNL,0.05244610362461229,
+mia_all24,branded_search_index,ASCM (Ridge),IAH,-0.004018530522247225,
+mia_all24,branded_search_index,ASCM (Ridge),LAS,0.05236700441141687,
+mia_all24,branded_search_index,ASCM (Ridge),LAX,0.04765156888807663,
+mia_all24,branded_search_index,ASCM (Ridge),MSY,-0.0018918600359038897,
+mia_all24,branded_search_index,ASCM (Ridge),NYC,0.0033039084104563854,
+mia_all24,branded_search_index,ASCM (Ridge),ORL,0.12461440450719757,
+mia_all24,branded_search_index,ASCM (Ridge),PHX,0.2237367079177175,
+mia_all24,branded_search_index,ASCM (Ridge),SAN,0.05696898334879102,
+mia_all24,branded_search_index,ASCM (Ridge),SAV,0.001266370322382333,
+mia_all24,branded_search_index,ASCM (Ridge),SEA,-0.00016698999844822282,
+mia_all24,branded_search_index,ASCM (Ridge),SFO,-0.014322509383931172,
+mia_all24,branded_search_index,ASCM (Ridge),TPA,0.1614597015302617,
+mia_all24,branded_search_index,SDID,ATL,1.0621083232805e-23,
+mia_all24,branded_search_index,SDID,AUS,0.023129012334271552,
+mia_all24,branded_search_index,SDID,BNA,0.016030870349913698,
+mia_all24,branded_search_index,SDID,BOS,1.5406190074418728e-23,
+mia_all24,branded_search_index,SDID,CHI,1.3431107168791987e-23,
+mia_all24,branded_search_index,SDID,CHS,0.04499819711923087,
+mia_all24,branded_search_index,SDID,CLT,0.0007000840569143044,
+mia_all24,branded_search_index,SDID,DCA,1.3726716569941546e-23,
+mia_all24,branded_search_index,SDID,DEN,1.7476119918603937e-23,
+mia_all24,branded_search_index,SDID,DFW,1.264449102902974e-23,
+mia_all24,branded_search_index,SDID,FLL,0.16703512934423503,
+mia_all24,branded_search_index,SDID,HNL,0.10114076634792044,
+mia_all24,branded_search_index,SDID,IAH,2.4845198231071137e-23,
+mia_all24,branded_search_index,SDID,LAS,0.09278338460881731,
+mia_all24,branded_search_index,SDID,LAX,0.04020005562875261,
+mia_all24,branded_search_index,SDID,MSY,0.04795864451480048,
+mia_all24,branded_search_index,SDID,NYC,9.965114125463215e-24,
+mia_all24,branded_search_index,SDID,ORL,0.09156343283843892,
+mia_all24,branded_search_index,SDID,PHX,0.13763445807801192,
+mia_all24,branded_search_index,SDID,SAN,0.07848267859993402,
+mia_all24,branded_search_index,SDID,SAV,0.03962712815508294,
+mia_all24,branded_search_index,SDID,SEA,1.819040649275614e-23,
+mia_all24,branded_search_index,SDID,SFO,1.698153391422609e-23,
+mia_all24,branded_search_index,SDID,TPA,0.11871615802367606,
+mia_all24,branded_search_index,Bayesian SC,ATL,0.004179619935487624,0.005496919298151776
+mia_all24,branded_search_index,Bayesian SC,AUS,0.007393951368846161,0.01007587498621252
+mia_all24,branded_search_index,Bayesian SC,BNA,0.007130488175072176,0.00995844164666951
+mia_all24,branded_search_index,Bayesian SC,BOS,0.0035987438015989705,0.004916990468146953
+mia_all24,branded_search_index,Bayesian SC,CHI,0.002760209228672868,0.003686533619511033
+mia_all24,branded_search_index,Bayesian SC,CHS,0.012353872590442986,0.015178294138117712
+mia_all24,branded_search_index,Bayesian SC,CLT,0.004701058380026076,0.006706660908472219
+mia_all24,branded_search_index,Bayesian SC,DCA,0.0027278021731427576,0.003711702163567836
+mia_all24,branded_search_index,Bayesian SC,DEN,0.006191217577010767,0.008262360253514883
+mia_all24,branded_search_index,Bayesian SC,DFW,0.003513119522229825,0.0049378766610688705
+mia_all24,branded_search_index,Bayesian SC,FLL,0.2697489006880782,0.056330011977424856
+mia_all24,branded_search_index,Bayesian SC,HNL,0.06836819068963906,0.052225792726566946
+mia_all24,branded_search_index,Bayesian SC,IAH,0.004430780695953515,0.006178010806963154
+mia_all24,branded_search_index,Bayesian SC,LAS,0.022371615626263188,0.027425866356354217
+mia_all24,branded_search_index,Bayesian SC,LAX,0.013111052133286978,0.012716152446120146
+mia_all24,branded_search_index,Bayesian SC,MSY,0.010231533378738484,0.014019569485465438
+mia_all24,branded_search_index,Bayesian SC,NYC,0.0029133040108780075,0.0038549648408850814
+mia_all24,branded_search_index,Bayesian SC,ORL,0.10055712996432428,0.042691804965977215
+mia_all24,branded_search_index,Bayesian SC,PHX,0.22931122138452456,0.07253341177272746
+mia_all24,branded_search_index,Bayesian SC,SAN,0.02568391947278021,0.029944308336847802
+mia_all24,branded_search_index,Bayesian SC,SAV,0.009363963561960372,0.012546558004824855
+mia_all24,branded_search_index,Bayesian SC,SEA,0.0056973372970021835,0.007856444685332503
+mia_all24,branded_search_index,Bayesian SC,SFO,0.002697289078942208,0.0035602875197856456
+mia_all24,branded_search_index,Bayesian SC,TPA,0.18096367926509888,0.07790731383907198
+mia_all24,branded_search_index,ASCM (ElasticNet),ATL,3.220178393302294e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),AUS,5.224039895162982e-21,
+mia_all24,branded_search_index,ASCM (ElasticNet),BNA,0.0,
+mia_all24,branded_search_index,ASCM (ElasticNet),BOS,6.407203784465155e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),CHI,4.611856122454113e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),CHS,0.0368261004950437,
+mia_all24,branded_search_index,ASCM (ElasticNet),CLT,0.0,
+mia_all24,branded_search_index,ASCM (ElasticNet),DCA,8.369632649306053e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),DEN,5.794317554630333e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),DFW,1.9747826095356186e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),FLL,0.26479030426781563,
+mia_all24,branded_search_index,ASCM (ElasticNet),HNL,0.05602299710736712,
+mia_all24,branded_search_index,ASCM (ElasticNet),IAH,3.3954607655603427e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),LAS,0.04905225935260412,
+mia_all24,branded_search_index,ASCM (ElasticNet),LAX,0.024437601599485555,
+mia_all24,branded_search_index,ASCM (ElasticNet),MSY,0.0,
+mia_all24,branded_search_index,ASCM (ElasticNet),NYC,3.2577989153855806e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),ORL,0.12344343785428666,
+mia_all24,branded_search_index,ASCM (ElasticNet),PHX,0.22726465052949452,
+mia_all24,branded_search_index,ASCM (ElasticNet),SAN,0.05341487923414423,
+mia_all24,branded_search_index,ASCM (ElasticNet),SAV,0.0,
+mia_all24,branded_search_index,ASCM (ElasticNet),SEA,7.858941697288747e-20,
+mia_all24,branded_search_index,ASCM (ElasticNet),SFO,4.9637137188948524e-21,
+mia_all24,branded_search_index,ASCM (ElasticNet),TPA,0.16474776955975842,
+mia_all24,incremental_net_revenue_usd,SCM,ATL,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,AUS,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,BNA,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,BOS,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,CHI,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,CHS,0.07014276260548807,
+mia_all24,incremental_net_revenue_usd,SCM,CLT,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,DCA,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,DEN,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,DFW,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,FLL,0.30548110718843585,
+mia_all24,incremental_net_revenue_usd,SCM,HNL,0.14803369299670194,
+mia_all24,incremental_net_revenue_usd,SCM,IAH,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,LAS,0.005781790215625312,
+mia_all24,incremental_net_revenue_usd,SCM,LAX,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,MSY,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,NYC,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,ORL,0.1691818017961612,
+mia_all24,incremental_net_revenue_usd,SCM,PHX,0.2829327878878494,
+mia_all24,incremental_net_revenue_usd,SCM,SAN,1.853928429583352e-19,
+mia_all24,incremental_net_revenue_usd,SCM,SAV,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,SEA,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,SFO,0.0,
+mia_all24,incremental_net_revenue_usd,SCM,TPA,0.018446057309738216,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),ATL,-0.013260504669781733,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),AUS,0.0049703003872213925,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),BNA,0.004791616054209546,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),BOS,-0.003733374780711358,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),CHI,-0.004160369398865122,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),CHS,0.07463223935502385,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),CLT,-0.0029499126097899783,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),DCA,0.001946623917202522,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),DEN,0.010742501852038008,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),DFW,-0.016137345389576216,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),FLL,0.2994060644344231,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),HNL,0.1467613920413378,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),IAH,-0.002739712532242631,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),LAS,0.01662424829703517,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),LAX,0.0072850389009968515,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),MSY,-0.006184170341724077,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),NYC,-8.530423668927856e-05,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),ORL,0.17574369312051955,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),PHX,0.2847112092900874,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),SAN,-0.005513805209661213,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),SAV,0.0005805287109572424,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),SEA,0.00443701630738634,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),SFO,0.0033335253839095456,
+mia_all24,incremental_net_revenue_usd,ASCM (Ridge),TPA,0.018798501116692613,
+mia_all24,incremental_net_revenue_usd,SDID,ATL,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,AUS,0.012509448766153916,
+mia_all24,incremental_net_revenue_usd,SDID,BNA,0.00776848546894456,
+mia_all24,incremental_net_revenue_usd,SDID,BOS,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,CHI,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,CHS,0.04030308480351107,
+mia_all24,incremental_net_revenue_usd,SDID,CLT,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,DCA,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,DEN,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,DFW,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,FLL,0.1811275045994589,
+mia_all24,incremental_net_revenue_usd,SDID,HNL,0.13591945923422338,
+mia_all24,incremental_net_revenue_usd,SDID,IAH,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,LAS,0.09348197307834182,
+mia_all24,incremental_net_revenue_usd,SDID,LAX,0.018379161899887506,
+mia_all24,incremental_net_revenue_usd,SDID,MSY,0.04079546904797361,
+mia_all24,incremental_net_revenue_usd,SDID,NYC,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,ORL,0.10271893430374567,
+mia_all24,incremental_net_revenue_usd,SDID,PHX,0.13743884477076754,
+mia_all24,incremental_net_revenue_usd,SDID,SAN,0.0801854138766311,
+mia_all24,incremental_net_revenue_usd,SDID,SAV,0.031707264538436856,
+mia_all24,incremental_net_revenue_usd,SDID,SEA,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,SFO,0.0,
+mia_all24,incremental_net_revenue_usd,SDID,TPA,0.1176649556119242,
+mia_all24,incremental_net_revenue_usd,Bayesian SC,ATL,0.003846043931530152,0.005080885276948388
+mia_all24,incremental_net_revenue_usd,Bayesian SC,AUS,0.006202795832811274,0.008737822463696789
+mia_all24,incremental_net_revenue_usd,Bayesian SC,BNA,0.006586133971965502,0.009335666151535473
+mia_all24,incremental_net_revenue_usd,Bayesian SC,BOS,0.0026517149044229787,0.003636647042610326
+mia_all24,incremental_net_revenue_usd,Bayesian SC,CHI,0.002209622939151896,0.0029705439010435787
+mia_all24,incremental_net_revenue_usd,Bayesian SC,CHS,0.010301404086205817,0.012918338037041262
+mia_all24,incremental_net_revenue_usd,Bayesian SC,CLT,0.00473862114455931,0.00660741993742594
+mia_all24,incremental_net_revenue_usd,Bayesian SC,DCA,0.0023508112427026327,0.0031273985220287427
+mia_all24,incremental_net_revenue_usd,Bayesian SC,DEN,0.006100893509963082,0.008466210922288728
+mia_all24,incremental_net_revenue_usd,Bayesian SC,DFW,0.0033583397407809202,0.0047201478091787345
+mia_all24,incremental_net_revenue_usd,Bayesian SC,FLL,0.30628835761448947,0.05962287832786386
+mia_all24,incremental_net_revenue_usd,Bayesian SC,HNL,0.16775107614704257,0.05195249513399683
+mia_all24,incremental_net_revenue_usd,Bayesian SC,IAH,0.003918577727042565,0.00571599089474302
+mia_all24,incremental_net_revenue_usd,Bayesian SC,LAS,0.038133804708855454,0.04110030390433826
+mia_all24,incremental_net_revenue_usd,Bayesian SC,LAX,0.004722289699777313,0.006141149781966966
+mia_all24,incremental_net_revenue_usd,Bayesian SC,MSY,0.008474084205094962,0.011242366534598992
+mia_all24,incremental_net_revenue_usd,Bayesian SC,NYC,0.002402131286881297,0.0033486097839821437
+mia_all24,incremental_net_revenue_usd,Bayesian SC,ORL,0.10233960784491375,0.044312251700703104
+mia_all24,incremental_net_revenue_usd,Bayesian SC,PHX,0.1796640403829593,0.08390505041881093
+mia_all24,incremental_net_revenue_usd,Bayesian SC,SAN,0.01154451032734922,0.015541365749550283
+mia_all24,incremental_net_revenue_usd,Bayesian SC,SAV,0.008616280734486143,0.011056769307814657
+mia_all24,incremental_net_revenue_usd,Bayesian SC,SEA,0.00410317710955908,0.005755342763264213
+mia_all24,incremental_net_revenue_usd,Bayesian SC,SFO,0.002518831044710761,0.003377300214915651
+mia_all24,incremental_net_revenue_usd,Bayesian SC,TPA,0.11117684986274529,0.08380572689996875
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),ATL,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),AUS,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),BNA,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),BOS,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),CHI,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),CHS,0.07014276260548807,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),CLT,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),DCA,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),DEN,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),DFW,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),FLL,0.30548110718843585,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),HNL,0.14803369299670194,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),IAH,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),LAS,0.005781790215625312,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),LAX,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),MSY,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),NYC,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),ORL,0.1691818017961612,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),PHX,0.2829327878878494,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),SAN,1.853928429583352e-19,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),SAV,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),SEA,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),SFO,0.0,
+mia_all24,incremental_net_revenue_usd,ASCM (ElasticNet),TPA,0.018446057309738216,
+mia_flagship,room_nights_booked,SCM,FLL,0.2906291721102305,
+mia_flagship,room_nights_booked,SCM,TPA,0.08888634223402964,
+mia_flagship,room_nights_booked,SCM,ORL,0.21093699666248333,
+mia_flagship,room_nights_booked,SCM,SAN,0.0,
+mia_flagship,room_nights_booked,SCM,PHX,0.25234222695882874,
+mia_flagship,room_nights_booked,SCM,LAS,0.0,
+mia_flagship,room_nights_booked,SCM,HNL,0.09305707452400241,
+mia_flagship,room_nights_booked,SCM,MSY,0.0,
+mia_flagship,room_nights_booked,SCM,CHS,0.06414818751042548,
+mia_flagship,room_nights_booked,SCM,SAV,0.0,
+mia_flagship,room_nights_booked,ASCM (Ridge),FLL,0.27660484794668194,
+mia_flagship,room_nights_booked,ASCM (Ridge),TPA,0.09552869918290456,
+mia_flagship,room_nights_booked,ASCM (Ridge),ORL,0.2233807854816377,
+mia_flagship,room_nights_booked,ASCM (Ridge),SAN,0.003289930635347498,
+mia_flagship,room_nights_booked,ASCM (Ridge),PHX,0.27314046293228544,
+mia_flagship,room_nights_booked,ASCM (Ridge),LAS,-0.02313630505927048,
+mia_flagship,room_nights_booked,ASCM (Ridge),HNL,0.10194510914770395,
+mia_flagship,room_nights_booked,ASCM (Ridge),MSY,-0.048491779946268077,
+mia_flagship,room_nights_booked,ASCM (Ridge),CHS,0.10631846385038157,
+mia_flagship,room_nights_booked,ASCM (Ridge),SAV,-0.00858021417140626,
+mia_flagship,room_nights_booked,SDID,FLL,0.1837664162114906,
+mia_flagship,room_nights_booked,SDID,TPA,0.12852954188428503,
+mia_flagship,room_nights_booked,SDID,ORL,0.1218730065228165,
+mia_flagship,room_nights_booked,SDID,SAN,0.08593865297196857,
+mia_flagship,room_nights_booked,SDID,PHX,0.15036846297607775,
+mia_flagship,room_nights_booked,SDID,LAS,0.10297960736088868,
+mia_flagship,room_nights_booked,SDID,HNL,0.11177033475473003,
+mia_flagship,room_nights_booked,SDID,MSY,0.04683959217746037,
+mia_flagship,room_nights_booked,SDID,CHS,0.038329971948452,
+mia_flagship,room_nights_booked,SDID,SAV,0.029604413191830537,
+mia_flagship,room_nights_booked,Bayesian SC,FLL,0.2467174265752973,0.052077991741363724
+mia_flagship,room_nights_booked,Bayesian SC,TPA,0.18059817797420108,0.09061863613091262
+mia_flagship,room_nights_booked,Bayesian SC,ORL,0.1866274444019275,0.037348499921881134
+mia_flagship,room_nights_booked,Bayesian SC,SAN,0.014823549661761436,0.019381295864024123
+mia_flagship,room_nights_booked,Bayesian SC,PHX,0.19927644256746924,0.07352743555903694
+mia_flagship,room_nights_booked,Bayesian SC,LAS,0.045783447432922786,0.04315379575233339
+mia_flagship,room_nights_booked,Bayesian SC,HNL,0.09786617373755281,0.05793459148954066
+mia_flagship,room_nights_booked,Bayesian SC,MSY,0.010205000914278489,0.013557463146018718
+mia_flagship,room_nights_booked,Bayesian SC,CHS,0.010048720771209647,0.012823847866261104
+mia_flagship,room_nights_booked,Bayesian SC,SAV,0.008053615963380067,0.010582554240864678
+mia_flagship,room_nights_booked,ASCM (ElasticNet),FLL,0.2906291721102305,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),TPA,0.08888634223402964,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),ORL,0.21093699666248333,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),SAN,0.0,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),PHX,0.25234222695882874,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),LAS,0.0,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),HNL,0.09305707452400241,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),MSY,0.0,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),CHS,0.06414818751042548,
+mia_flagship,room_nights_booked,ASCM (ElasticNet),SAV,0.0,
+las_convention,room_nights_booked,SCM,ORL,0.3478852831395015,
+las_convention,room_nights_booked,SCM,SAN,0.10395431729004442,
+las_convention,room_nights_booked,SCM,PHX,0.3592595084502274,
+las_convention,room_nights_booked,SCM,AUS,0.1889008911202265,
+las_convention,room_nights_booked,ASCM (Ridge),ORL,0.3478852831491152,
+las_convention,room_nights_booked,ASCM (Ridge),SAN,0.10395431726324098,
+las_convention,room_nights_booked,ASCM (Ridge),PHX,0.35925950845863713,
+las_convention,room_nights_booked,ASCM (Ridge),AUS,0.1889008911290058,
+las_convention,room_nights_booked,SDID,ORL,0.2369746221474777,
+las_convention,room_nights_booked,SDID,SAN,0.24250875881087008,
+las_convention,room_nights_booked,SDID,PHX,0.2850113071523067,
+las_convention,room_nights_booked,SDID,AUS,0.23550531188934565,
+las_convention,room_nights_booked,Bayesian SC,ORL,0.17144416320040426,0.03803129605645128
+las_convention,room_nights_booked,Bayesian SC,SAN,0.21479545582096185,0.0674468203555632
+las_convention,room_nights_booked,Bayesian SC,PHX,0.3751526527312067,0.03638651864064215
+las_convention,room_nights_booked,Bayesian SC,AUS,0.23860772824742588,0.030410269386410248
+las_convention,room_nights_booked,ASCM (ElasticNet),ORL,0.3478852831395015,
+las_convention,room_nights_booked,ASCM (ElasticNet),SAN,0.10395431729004442,
+las_convention,room_nights_booked,ASCM (ElasticNet),PHX,0.3592595084502274,
+las_convention,room_nights_booked,ASCM (ElasticNet),AUS,0.1889008911202265,
+nyc_spring_break,room_nights_booked,SCM,BOS,0.36272732087871246,
+nyc_spring_break,room_nights_booked,SCM,CHI,0.49314581580952754,
+nyc_spring_break,room_nights_booked,SCM,DCA,0.14412686331176,
+nyc_spring_break,room_nights_booked,ASCM (Ridge),BOS,0.3627273208792371,
+nyc_spring_break,room_nights_booked,ASCM (Ridge),CHI,0.49314581581042083,
+nyc_spring_break,room_nights_booked,ASCM (Ridge),DCA,0.1441268633103421,
+nyc_spring_break,room_nights_booked,SDID,BOS,0.3338421497954992,
+nyc_spring_break,room_nights_booked,SDID,CHI,0.3371230695352309,
+nyc_spring_break,room_nights_booked,SDID,DCA,0.3290347806692699,
+nyc_spring_break,room_nights_booked,Bayesian SC,BOS,0.40585460133250206,0.04810513031575664
+nyc_spring_break,room_nights_booked,Bayesian SC,CHI,0.37415997484238617,0.05928513710780261
+nyc_spring_break,room_nights_booked,Bayesian SC,DCA,0.21998542382511238,0.06895858166481715
+nyc_spring_break,room_nights_booked,ASCM (ElasticNet),BOS,0.36272732087871246,
+nyc_spring_break,room_nights_booked,ASCM (ElasticNet),CHI,0.49314581580952754,
+nyc_spring_break,room_nights_booked,ASCM (ElasticNet),DCA,0.14412686331176,
+tpa_placebo,room_nights_booked,SCM,FLL,0.29310723649614145,
+tpa_placebo,room_nights_booked,SCM,ORL,0.0750691452130692,
+tpa_placebo,room_nights_booked,SCM,CHS,0.21959245597478821,
+tpa_placebo,room_nights_booked,SCM,SAV,0.009578492042832624,
+tpa_placebo,room_nights_booked,SCM,MSY,5.4251005074386827e-17,
+tpa_placebo,room_nights_booked,SCM,SAN,0.0494217362287124,
+tpa_placebo,room_nights_booked,SCM,PHX,0.353230934044456,
+tpa_placebo,room_nights_booked,ASCM (Ridge),FLL,0.29148248243803526,
+tpa_placebo,room_nights_booked,ASCM (Ridge),ORL,0.0757756399634508,
+tpa_placebo,room_nights_booked,ASCM (Ridge),CHS,0.2240580852163933,
+tpa_placebo,room_nights_booked,ASCM (Ridge),SAV,0.0147525176667571,
+tpa_placebo,room_nights_booked,ASCM (Ridge),MSY,-0.015682394888420707,
+tpa_placebo,room_nights_booked,ASCM (Ridge),SAN,0.05399494642999447,
+tpa_placebo,room_nights_booked,ASCM (Ridge),PHX,0.3556187231737908,
+tpa_placebo,room_nights_booked,SDID,FLL,0.23451958252738764,
+tpa_placebo,room_nights_booked,SDID,ORL,0.12377363920283854,
+tpa_placebo,room_nights_booked,SDID,CHS,0.09934722884492155,
+tpa_placebo,room_nights_booked,SDID,SAV,0.0964244794706863,
+tpa_placebo,room_nights_booked,SDID,MSY,0.10592282909985447,
+tpa_placebo,room_nights_booked,SDID,SAN,0.12477633836454093,
+tpa_placebo,room_nights_booked,SDID,PHX,0.21523590248977065,
+tpa_placebo,room_nights_booked,Bayesian SC,FLL,0.25804399452550103,0.04924137372502938
+tpa_placebo,room_nights_booked,Bayesian SC,ORL,0.06667179024129942,0.03868350281252233
+tpa_placebo,room_nights_booked,Bayesian SC,CHS,0.0722069086198014,0.061407734684333845
+tpa_placebo,room_nights_booked,Bayesian SC,SAV,0.07515111604171545,0.059639017913585314
+tpa_placebo,room_nights_booked,Bayesian SC,MSY,0.03985879954004043,0.04603620682335287
+tpa_placebo,room_nights_booked,Bayesian SC,SAN,0.1446801543965104,0.06999721625055204
+tpa_placebo,room_nights_booked,Bayesian SC,PHX,0.3433872366351322,0.05987035200638942
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),FLL,0.29310723649614145,
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),ORL,0.0750691452130692,
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),CHS,0.21959245597478821,
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),SAV,0.009578492042832624,
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),MSY,5.4251005074386827e-17,
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),SAN,0.0494217362287124,
+tpa_placebo,room_nights_booked,ASCM (ElasticNet),PHX,0.353230934044456,
