@@ -1,0 +1,1669 @@
+{
+ "overall": {
+  "Stays simulated": "60,000",
+  "Treated share": "37%",
+  "Propensity AUC (cross-fit)": 0.761,
+  "Common support kept": "99.9%",
+  "Max |SMD| before \u2192 after IPW": "0.87 \u2192 0.028",
+  "Naive ancillary lift ($)": 32.84,
+  "AIPW ancillary lift ($)": 11.84,
+  "True ancillary ATE ($)": 11.6,
+  "Naive direct lift (pp)": 23.4,
+  "AIPW direct lift (pp)": 7.9,
+  "True direct ATE (pp)": 6.6,
+  "Best ancillary CATE model": "Causal Forest DML",
+  "Ancillary PEHE ($)": 2.14,
+  "Best direct CATE model": "S-Learner (XGB)",
+  "Direct PEHE (pp)": 4.1,
+  "Refuters passed": "6/6",
+  "Targeted value (true $)": 92956.0,
+  "Oracle value (true $)": 94142.0,
+  "Oracle capture": "98.7%",
+  "Learners fitted": 21,
+  "Total fit time (s)": 111.2
+ },
+ "flows": [
+  {
+   "id": "A1",
+   "type": "A",
+   "short": "A1 \u00b7 Expedia family Suite",
+   "title": "Guest decision: Expedia family on a Suite",
+   "story": "A family of four booked a Suite through Expedia 6+ weeks out and uses an iPhone. Should we send the pre-arrival upsell / app offer?",
+   "stages": [
+    {
+     "name": "1 \u00b7 Guest profile",
+     "metrics": {
+      "Channel": "OTA_Expedia",
+      "Room tier": "Suite",
+      "Lead (days)": 55,
+      "Device": "iOS",
+      "Loyalty tier": 0,
+      "Hist. spend ($)": 0.0
+     },
+     "reading": "Held-out reservation #15755, the most typical guest matching the scenario (nearest to the median in feature space).",
+     "table": [
+      {
+       "feature": "channel",
+       "value": "OTA_Expedia"
+      },
+      {
+       "feature": "room_tier",
+       "value": "Suite"
+      },
+      {
+       "feature": "device",
+       "value": "iOS"
+      },
+      {
+       "feature": "lead_time",
+       "value": "55.0"
+      },
+      {
+       "feature": "adults",
+       "value": "2"
+      },
+      {
+       "feature": "children",
+       "value": "1"
+      },
+      {
+       "feature": "hist_spend",
+       "value": "0.0"
+      },
+      {
+       "feature": "loyalty_tier",
+       "value": "0"
+      },
+      {
+       "feature": "los",
+       "value": "3"
+      },
+      {
+       "feature": "resort",
+       "value": "0"
+      }
+     ],
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Selection-bias check",
+     "metrics": {
+      "P(contacted | x) estimated": 0.323,
+      "Average over all guests": 0.369,
+      "Ratio vs average": 0.87,
+      "True P(contacted) (synthetic)": 0.317,
+      "Was actually contacted": "no"
+     },
+     "reading": "Guests like this are contacted less often than average, so comparing contacted vs un-contacted guests like this one is confounded; the CATE models below adjust for it.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Contact propensity",
+      "labels": [
+       "This guest (est.)",
+       "This guest (true)",
+       "All guests"
+      ],
+      "values": [
+       0.323,
+       0.317,
+       0.369
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "3 \u00b7 CATE from every model",
+     "metrics": {
+      "True \u03c4 ancillary ($)": 45.08,
+      "Best-model \u03c4\u0302 ($)": 41.13,
+      "Median across models ($)": 40.99,
+      "Model spread (std, $)": 2.15,
+      "True \u03c4 direct (pp)": 8.51,
+      "Best-model \u03c4\u0302 direct (pp)": 8.93
+     },
+     "reading": "Every estimator gives its own \u03c4\u0302 for this guest; the dashed line is the synthetic truth. Causal Forest adds a 95% interval [34.6, 47.7] $ which covers the truth.",
+     "table": [
+      {
+       "model": "Causal Forest DML",
+       "\u03c4\u0302 ancillary ($)": 41.13,
+       "\u03c4\u0302 direct (pp)": 11.14,
+       "abs err ancillary ($)": 3.95,
+       "abs err direct (pp)": 2.63
+      },
+      {
+       "model": "DR-Learner",
+       "\u03c4\u0302 ancillary ($)": 40.39,
+       "\u03c4\u0302 direct (pp)": 10.68,
+       "abs err ancillary ($)": 4.69,
+       "abs err direct (pp)": 2.17
+      },
+      {
+       "model": "DragonNet (PyTorch)",
+       "\u03c4\u0302 ancillary ($)": 40.62,
+       "\u03c4\u0302 direct (pp)": 8.73,
+       "abs err ancillary ($)": 4.46,
+       "abs err direct (pp)": 0.22
+      },
+      {
+       "model": "R-Learner (NonParamDML)",
+       "\u03c4\u0302 ancillary ($)": 41.22,
+       "\u03c4\u0302 direct (pp)": 9.82,
+       "abs err ancillary ($)": 3.86,
+       "abs err direct (pp)": 1.31
+      },
+      {
+       "model": "S-Learner (CatBoost)",
+       "\u03c4\u0302 ancillary ($)": 39.86,
+       "\u03c4\u0302 direct (pp)": 9.02,
+       "abs err ancillary ($)": 5.22,
+       "abs err direct (pp)": 0.51
+      },
+      {
+       "model": "S-Learner (XGB)",
+       "\u03c4\u0302 ancillary ($)": 34.91,
+       "\u03c4\u0302 direct (pp)": 8.93,
+       "abs err ancillary ($)": 10.17,
+       "abs err direct (pp)": 0.42
+      },
+      {
+       "model": "T-Learner (LightGBM)",
+       "\u03c4\u0302 ancillary ($)": 42.71,
+       "\u03c4\u0302 direct (pp)": 13.06,
+       "abs err ancillary ($)": 2.37,
+       "abs err direct (pp)": 4.55
+      },
+      {
+       "model": "T-Learner (XGB)",
+       "\u03c4\u0302 ancillary ($)": 41.71,
+       "\u03c4\u0302 direct (pp)": 11.0,
+       "abs err ancillary ($)": 3.37,
+       "abs err direct (pp)": 2.49
+      },
+      {
+       "model": "TARNet (PyTorch)",
+       "\u03c4\u0302 ancillary ($)": 40.85,
+       "\u03c4\u0302 direct (pp)": 8.29,
+       "abs err ancillary ($)": 4.23,
+       "abs err direct (pp)": 0.22
+      },
+      {
+       "model": "Uplift RF (KL)",
+       "\u03c4\u0302 ancillary ($)": "\u2013",
+       "\u03c4\u0302 direct (pp)": 26.33,
+       "abs err ancillary ($)": "\u2013",
+       "abs err direct (pp)": 17.82
+      },
+      {
+       "model": "X-Learner",
+       "\u03c4\u0302 ancillary ($)": 42.09,
+       "\u03c4\u0302 direct (pp)": 9.72,
+       "abs err ancillary ($)": 2.99,
+       "abs err direct (pp)": 1.21
+      }
+     ],
+     "chart": {
+      "kind": "estimates",
+      "title": "\u03c4\u0302 ancillary ($) by model",
+      "labels": [
+       "Causal Forest DML",
+       "DR-Learner",
+       "DragonNet (PyTorch)",
+       "R-Learner (NonParamDML)",
+       "S-Learner (CatBoost)",
+       "S-Learner (XGB)",
+       "T-Learner (LightGBM)",
+       "T-Learner (XGB)",
+       "TARNet (PyTorch)",
+       "Uplift RF (KL)",
+       "X-Learner"
+      ],
+      "values": [
+       41.13,
+       40.39,
+       40.62,
+       41.22,
+       39.86,
+       34.91,
+       42.71,
+       41.71,
+       40.85,
+       0.0,
+       42.09
+      ],
+      "truth": 45.08
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 Decision",
+     "metrics": {
+      "Expected net value ($)": 21.92,
+      "Decision": "SEND",
+      "Predicted segment": "Persuadable",
+      "Rank (top x% of guests)": "3%",
+      "Inside top-30% budget": "yes"
+     },
+     "reading": "Net value = 0.45 \u00d7 \u03c4\u0302 ancillary + $55 \u00d7 \u03c4\u0302 direct \u2212 $1.50 offer cost.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Expected value decomposition ($)",
+      "labels": [
+       "Ancillary margin",
+       "Direct-shift value",
+       "Offer cost",
+       "Net"
+      ],
+      "values": [
+       18.51,
+       4.91,
+       -1.5,
+       21.92
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 Counterfactual check (synthetic truth)",
+     "metrics": {
+      "True net value of sending ($)": 23.46,
+      "Decision correct": "yes",
+      "True segment": "Persuadable",
+      "Est. \u2212 true value ($)": -1.54,
+      "Observed ancillary spend ($)": 42.87,
+      "Rebooked direct": 0
+     },
+     "reading": "Because the DGP is known we can score the decision against the real counterfactual, something a real campaign can only approximate with a holdout.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "6 \u00b7 Cohort context",
+     "metrics": {
+      "Guests in same channel": 6144,
+      "Mean best-model \u03c4\u0302 ($)": 17.67,
+      "Mean true \u03c4 ($)": 17.65,
+      "Share SEND in channel": "100%"
+     },
+     "reading": "How this guest compares with others booked through the same channel.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "Decision": "SEND",
+    "Net value ($)": 21.92,
+    "Correct": "yes"
+   },
+   "api_payload": {
+    "channel": "OTA_Expedia",
+    "room_tier": "Suite",
+    "device": "iOS",
+    "lead_time": 55.0,
+    "adults": 2,
+    "children": 1,
+    "hist_spend": 0.0,
+    "loyalty_tier": 0,
+    "los": 3,
+    "resort": 0
+   },
+   "expect": {
+    "tau_ancillary": 41.1301,
+    "tau_direct": 0.08931
+   }
+  },
+  {
+   "id": "A2",
+   "type": "A",
+   "short": "A2 \u00b7 Corporate loyalty solo",
+   "title": "Guest decision: Corporate loyalty-member solo traveller",
+   "story": "A Gold/Platinum business traveller on a short lead time. Already loyal and direct-leaning: does an upsell nudge help or annoy?",
+   "stages": [
+    {
+     "name": "1 \u00b7 Guest profile",
+     "metrics": {
+      "Channel": "Corporate",
+      "Room tier": "Deluxe",
+      "Lead (days)": 8,
+      "Device": "Desktop",
+      "Loyalty tier": 2,
+      "Hist. spend ($)": 187.0
+     },
+     "reading": "Held-out reservation #10837, the most typical guest matching the scenario (nearest to the median in feature space).",
+     "table": [
+      {
+       "feature": "channel",
+       "value": "Corporate"
+      },
+      {
+       "feature": "room_tier",
+       "value": "Deluxe"
+      },
+      {
+       "feature": "device",
+       "value": "Desktop"
+      },
+      {
+       "feature": "lead_time",
+       "value": "8.0"
+      },
+      {
+       "feature": "adults",
+       "value": "1"
+      },
+      {
+       "feature": "children",
+       "value": "0"
+      },
+      {
+       "feature": "hist_spend",
+       "value": "187.44"
+      },
+      {
+       "feature": "loyalty_tier",
+       "value": "2"
+      },
+      {
+       "feature": "los",
+       "value": "3"
+      },
+      {
+       "feature": "resort",
+       "value": "0"
+      }
+     ],
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Selection-bias check",
+     "metrics": {
+      "P(contacted | x) estimated": 0.37,
+      "Average over all guests": 0.369,
+      "Ratio vs average": 1.0,
+      "True P(contacted) (synthetic)": 0.407,
+      "Was actually contacted": "yes"
+     },
+     "reading": "Guests like this are contacted more often than average, so comparing contacted vs un-contacted guests like this one is confounded; the CATE models below adjust for it.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Contact propensity",
+      "labels": [
+       "This guest (est.)",
+       "This guest (true)",
+       "All guests"
+      ],
+      "values": [
+       0.37,
+       0.407,
+       0.369
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "3 \u00b7 CATE from every model",
+     "metrics": {
+      "True \u03c4 ancillary ($)": -2.52,
+      "Best-model \u03c4\u0302 ($)": -2.13,
+      "Median across models ($)": -1.1,
+      "Model spread (std, $)": 2.24,
+      "True \u03c4 direct (pp)": -10.5,
+      "Best-model \u03c4\u0302 direct (pp)": -10.89
+     },
+     "reading": "Every estimator gives its own \u03c4\u0302 for this guest; the dashed line is the synthetic truth. Causal Forest adds a 95% interval [-4.0, -0.3] $ which covers the truth.",
+     "table": [
+      {
+       "model": "Causal Forest DML",
+       "\u03c4\u0302 ancillary ($)": -2.13,
+       "\u03c4\u0302 direct (pp)": -18.3,
+       "abs err ancillary ($)": 0.39,
+       "abs err direct (pp)": 7.8
+      },
+      {
+       "model": "DR-Learner",
+       "\u03c4\u0302 ancillary ($)": -0.71,
+       "\u03c4\u0302 direct (pp)": -25.9,
+       "abs err ancillary ($)": 1.81,
+       "abs err direct (pp)": 15.4
+      },
+      {
+       "model": "DragonNet (PyTorch)",
+       "\u03c4\u0302 ancillary ($)": -3.34,
+       "\u03c4\u0302 direct (pp)": -14.25,
+       "abs err ancillary ($)": 0.82,
+       "abs err direct (pp)": 3.75
+      },
+      {
+       "model": "R-Learner (NonParamDML)",
+       "\u03c4\u0302 ancillary ($)": -1.05,
+       "\u03c4\u0302 direct (pp)": -31.41,
+       "abs err ancillary ($)": 1.47,
+       "abs err direct (pp)": 20.91
+      },
+      {
+       "model": "S-Learner (CatBoost)",
+       "\u03c4\u0302 ancillary ($)": -1.35,
+       "\u03c4\u0302 direct (pp)": -17.24,
+       "abs err ancillary ($)": 1.17,
+       "abs err direct (pp)": 6.74
+      },
+      {
+       "model": "S-Learner (XGB)",
+       "\u03c4\u0302 ancillary ($)": 2.46,
+       "\u03c4\u0302 direct (pp)": -10.89,
+       "abs err ancillary ($)": 4.98,
+       "abs err direct (pp)": 0.39
+      },
+      {
+       "model": "T-Learner (LightGBM)",
+       "\u03c4\u0302 ancillary ($)": 3.3,
+       "\u03c4\u0302 direct (pp)": -34.19,
+       "abs err ancillary ($)": 5.82,
+       "abs err direct (pp)": 23.69
+      },
+      {
+       "model": "T-Learner (XGB)",
+       "\u03c4\u0302 ancillary ($)": -0.45,
+       "\u03c4\u0302 direct (pp)": -26.54,
+       "abs err ancillary ($)": 2.07,
+       "abs err direct (pp)": 16.04
+      },
+      {
+       "model": "TARNet (PyTorch)",
+       "\u03c4\u0302 ancillary ($)": -3.75,
+       "\u03c4\u0302 direct (pp)": -13.34,
+       "abs err ancillary ($)": 1.23,
+       "abs err direct (pp)": 2.84
+      },
+      {
+       "model": "Uplift RF (KL)",
+       "\u03c4\u0302 ancillary ($)": "\u2013",
+       "\u03c4\u0302 direct (pp)": 9.62,
+       "abs err ancillary ($)": "\u2013",
+       "abs err direct (pp)": 20.12
+      },
+      {
+       "model": "X-Learner",
+       "\u03c4\u0302 ancillary ($)": -1.16,
+       "\u03c4\u0302 direct (pp)": -24.66,
+       "abs err ancillary ($)": 1.36,
+       "abs err direct (pp)": 14.16
+      }
+     ],
+     "chart": {
+      "kind": "estimates",
+      "title": "\u03c4\u0302 ancillary ($) by model",
+      "labels": [
+       "Causal Forest DML",
+       "DR-Learner",
+       "DragonNet (PyTorch)",
+       "R-Learner (NonParamDML)",
+       "S-Learner (CatBoost)",
+       "S-Learner (XGB)",
+       "T-Learner (LightGBM)",
+       "T-Learner (XGB)",
+       "TARNet (PyTorch)",
+       "Uplift RF (KL)",
+       "X-Learner"
+      ],
+      "values": [
+       -2.13,
+       -0.71,
+       -3.34,
+       -1.05,
+       -1.35,
+       2.46,
+       3.3,
+       -0.45,
+       -3.75,
+       0.0,
+       -1.16
+      ],
+      "truth": -2.52
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 Decision",
+     "metrics": {
+      "Expected net value ($)": -8.45,
+      "Decision": "SUPPRESS",
+      "Predicted segment": "Sleeping Dog",
+      "Rank (top x% of guests)": "100%",
+      "Inside top-30% budget": "no"
+     },
+     "reading": "Net value = 0.45 \u00d7 \u03c4\u0302 ancillary + $55 \u00d7 \u03c4\u0302 direct \u2212 $1.50 offer cost.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Expected value decomposition ($)",
+      "labels": [
+       "Ancillary margin",
+       "Direct-shift value",
+       "Offer cost",
+       "Net"
+      ],
+      "values": [
+       -0.96,
+       -5.99,
+       -1.5,
+       -8.45
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 Counterfactual check (synthetic truth)",
+     "metrics": {
+      "True net value of sending ($)": -8.41,
+      "Decision correct": "yes",
+      "True segment": "Sleeping Dog",
+      "Est. \u2212 true value ($)": -0.04,
+      "Observed ancillary spend ($)": 76.59,
+      "Rebooked direct": 0
+     },
+     "reading": "Because the DGP is known we can score the decision against the real counterfactual, something a real campaign can only approximate with a holdout.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "6 \u00b7 Cohort context",
+     "metrics": {
+      "Guests in same channel": 2512,
+      "Mean best-model \u03c4\u0302 ($)": -1.33,
+      "Mean true \u03c4 ($)": -2.85,
+      "Share SEND in channel": "7%"
+     },
+     "reading": "How this guest compares with others booked through the same channel.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "Decision": "SUPPRESS",
+    "Net value ($)": -8.45,
+    "Correct": "yes"
+   },
+   "api_payload": {
+    "channel": "Corporate",
+    "room_tier": "Deluxe",
+    "device": "Desktop",
+    "lead_time": 8.0,
+    "adults": 1,
+    "children": 0,
+    "hist_spend": 187.44,
+    "loyalty_tier": 2,
+    "los": 3,
+    "resort": 0
+   },
+   "expect": {
+    "tau_ancillary": -2.1318,
+    "tau_direct": -0.10891
+   }
+  },
+  {
+   "id": "B1",
+   "type": "B",
+   "short": "B1 \u00b7 OTA cohort read-out",
+   "title": "Cohort read-out: OTA bookings (Expedia + Booking.com)",
+   "story": "Does the campaign work for the commission-heavy OTA book of business? Remove selection bias and read the lift for this cohort.",
+   "stages": [
+    {
+     "name": "1 \u00b7 Cohort",
+     "metrics": {
+      "Stays (train)": 26838,
+      "Treated share": "39%",
+      "Mean P(contacted)": 0.388,
+      "Share of all stays": "64%",
+      "True ancillary ATE ($)": 17.42,
+      "True direct ATE (pp)": 11.47
+     },
+     "reading": "Cohort definition and its true (synthetic) effects.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Cohort vs population true ATE (ancillary $)",
+      "labels": [
+       "Cohort",
+       "All stays"
+      ],
+      "values": [
+       17.42,
+       11.6
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Selection bias",
+     "metrics": {
+      "Naive ancillary lift ($)": 37.7,
+      "Bias vs truth ($)": 20.28,
+      "Naive direct lift (pp)": 25.61,
+      "Bias vs truth (pp)": 14.15
+     },
+     "reading": "Treated guests in this cohort differ systematically from untreated ones, so the raw difference is not the causal effect.",
+     "table": null,
+     "chart": null,
+     "status": "warn"
+    },
+    {
+     "name": "3a \u00b7 Adjusted estimate: ancillary",
+     "metrics": {
+      "Naive ($)": 37.7,
+      "IPW ($)": 18.56,
+      "SIPW ($)": 18.41,
+      "AIPW ($)": 17.47,
+      "True ($)": 17.42,
+      "AIPW error": 0.05
+     },
+     "reading": "Weighting / doubly-robust estimators pull the naive number back towards the truth (dashed).",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "ancillary: estimate by method ($)",
+      "labels": [
+       "Naive",
+       "IPW",
+       "SIPW",
+       "AIPW"
+      ],
+      "values": [
+       37.7,
+       18.56,
+       18.41,
+       17.47
+      ],
+      "truth": 17.42
+     },
+     "status": "ok"
+    },
+    {
+     "name": "3b \u00b7 Adjusted estimate: direct",
+     "metrics": {
+      "Naive (pp)": 25.61,
+      "IPW (pp)": 12.32,
+      "SIPW (pp)": 12.25,
+      "AIPW (pp)": 11.81,
+      "True (pp)": 11.47,
+      "AIPW error": 0.34
+     },
+     "reading": "Weighting / doubly-robust estimators pull the naive number back towards the truth (dashed).",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "direct: estimate by method (pp)",
+      "labels": [
+       "Naive",
+       "IPW",
+       "SIPW",
+       "AIPW"
+      ],
+      "values": [
+       25.61,
+       12.32,
+       12.25,
+       11.81
+      ],
+      "truth": 11.47
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 Covariate balance in cohort",
+     "metrics": {
+      "Max |SMD| before": 0.878,
+      "Max |SMD| after IPW": 0.029,
+      "Covariates |SMD|<0.1 before": "50%",
+      "after IPW": "100%"
+     },
+     "reading": "Weights should push every standardised mean difference under 0.10.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "|SMD| before vs after IPW (top 8 covariates)",
+      "labels": [
+       "log_hist",
+       "loyalty_tier",
+       "hist_spend",
+       "channel_OTA_Expedia",
+       "channel_OTA_Booking",
+       "log_lead",
+       "lead_time",
+       "device_iOS"
+      ],
+      "values": [
+       0.878,
+       0.617,
+       0.616,
+       0.179,
+       0.179,
+       0.155,
+       0.15,
+       0.123
+      ],
+      "values2": [
+       0.029,
+       0.025,
+       0.026,
+       0.009,
+       0.009,
+       0.01,
+       0.013,
+       0.013
+      ],
+      "name1": "before",
+      "name2": "after IPW"
+     },
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 CATE models for the cohort (held-out)",
+     "metrics": {
+      "Mean best \u03c4\u0302 ancillary ($)": 17.57,
+      "Mean true \u03c4 ancillary ($)": 17.56,
+      "Mean best \u03c4\u0302 direct (pp)": 11.08,
+      "Mean true \u03c4 direct (pp)": 11.36,
+      "Share SEND": "100%",
+      "Persuadable share (true)": "61%"
+     },
+     "reading": "Individual-level models agree with the cohort-level estimate: the cohort average of \u03c4\u0302 is close to the truth.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "True ancillary ATE ($)": 17.42,
+    "AIPW ($)": 17.47,
+    "Naive ($)": 37.7
+   }
+  },
+  {
+   "id": "B2",
+   "type": "B",
+   "short": "B2 \u00b7 Direct + Corporate",
+   "title": "Cohort read-out: Direct web + Corporate",
+   "story": "Direct and corporate guests already book with us. The campaign should add little: check that the estimators agree.",
+   "stages": [
+    {
+     "name": "1 \u00b7 Cohort",
+     "metrics": {
+      "Stays (train)": 15211,
+      "Treated share": "34%",
+      "Mean P(contacted)": 0.345,
+      "Share of all stays": "36%",
+      "True ancillary ATE ($)": 1.28,
+      "True direct ATE (pp)": -2.08
+     },
+     "reading": "Cohort definition and its true (synthetic) effects.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Cohort vs population true ATE (ancillary $)",
+      "labels": [
+       "Cohort",
+       "All stays"
+      ],
+      "values": [
+       1.28,
+       11.6
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Selection bias",
+     "metrics": {
+      "Naive ancillary lift ($)": 24.73,
+      "Bias vs truth ($)": 23.45,
+      "Naive direct lift (pp)": 22.48,
+      "Bias vs truth (pp)": 24.56
+     },
+     "reading": "Treated guests in this cohort differ systematically from untreated ones, so the raw difference is not the causal effect.",
+     "table": null,
+     "chart": null,
+     "status": "warn"
+    },
+    {
+     "name": "3a \u00b7 Adjusted estimate: ancillary",
+     "metrics": {
+      "Naive ($)": 24.73,
+      "IPW ($)": 2.4,
+      "SIPW ($)": 2.97,
+      "AIPW ($)": 1.96,
+      "True ($)": 1.28,
+      "AIPW error": 0.68
+     },
+     "reading": "Weighting / doubly-robust estimators pull the naive number back towards the truth (dashed).",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "ancillary: estimate by method ($)",
+      "labels": [
+       "Naive",
+       "IPW",
+       "SIPW",
+       "AIPW"
+      ],
+      "values": [
+       24.73,
+       2.4,
+       2.97,
+       1.96
+      ],
+      "truth": 1.28
+     },
+     "status": "ok"
+    },
+    {
+     "name": "3b \u00b7 Adjusted estimate: direct",
+     "metrics": {
+      "Naive (pp)": 22.48,
+      "IPW (pp)": 1.05,
+      "SIPW (pp)": 1.54,
+      "AIPW (pp)": 0.66,
+      "True (pp)": -2.08,
+      "AIPW error": 2.74
+     },
+     "reading": "Weighting / doubly-robust estimators pull the naive number back towards the truth (dashed).",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "direct: estimate by method (pp)",
+      "labels": [
+       "Naive",
+       "IPW",
+       "SIPW",
+       "AIPW"
+      ],
+      "values": [
+       22.48,
+       1.05,
+       1.54,
+       0.66
+      ],
+      "truth": -2.08
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 Covariate balance in cohort",
+     "metrics": {
+      "Max |SMD| before": 0.902,
+      "Max |SMD| after IPW": 0.031,
+      "Covariates |SMD|<0.1 before": "40%",
+      "after IPW": "100%"
+     },
+     "reading": "Weights should push every standardised mean difference under 0.10.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "|SMD| before vs after IPW (top 8 covariates)",
+      "labels": [
+       "log_hist",
+       "loyalty_tier",
+       "hist_spend",
+       "channel_Direct_Web",
+       "channel_Corporate",
+       "log_lead",
+       "lead_time",
+       "party_size"
+      ],
+      "values": [
+       0.902,
+       0.703,
+       0.613,
+       0.401,
+       0.401,
+       0.371,
+       0.325,
+       0.256
+      ],
+      "values2": [
+       0.027,
+       0.031,
+       0.011,
+       0.02,
+       0.02,
+       0.018,
+       0.019,
+       0.005
+      ],
+      "name1": "before",
+      "name2": "after IPW"
+     },
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 CATE models for the cohort (held-out)",
+     "metrics": {
+      "Mean best \u03c4\u0302 ancillary ($)": 1.96,
+      "Mean true \u03c4 ancillary ($)": 1.26,
+      "Mean best \u03c4\u0302 direct (pp)": 1.74,
+      "Mean true \u03c4 direct (pp)": -2.09,
+      "Share SEND": "63%",
+      "Persuadable share (true)": "0%"
+     },
+     "reading": "Individual-level models agree with the cohort-level estimate: the cohort average of \u03c4\u0302 is close to the truth.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "True ancillary ATE ($)": 1.28,
+    "AIPW ($)": 1.96,
+    "Naive ($)": 24.73
+   }
+  },
+  {
+   "id": "C1",
+   "type": "C",
+   "short": "C1 \u00b7 Validity: ancillary",
+   "title": "Validity checks: ancillary-spend ATE",
+   "story": "Before trusting the $ lift: overlap, trimming sensitivity, balance and refutation tests.",
+   "stages": [
+    {
+     "name": "1 \u00b7 Overlap & trimming sensitivity",
+     "metrics": {
+      "Propensity AUC": 0.761,
+      "e(x) range": "0.031 \u2013 0.948",
+      "Common support kept": "99.9%",
+      "AIPW range over windows ($)": "11.86 \u2013 12.93"
+     },
+     "reading": "The estimate should be stable when extreme-propensity guests are trimmed; a drift signals poor overlap.",
+     "table": [
+      {
+       "window": "[0.025, 0.975]",
+       "kept": "100.0%",
+       "aipw": 11.86,
+       "truth_on_kept": 11.58,
+       "error": 0.28
+      },
+      {
+       "window": "[0.05, 0.95]",
+       "kept": "99.6%",
+       "aipw": 11.9,
+       "truth_on_kept": 11.64,
+       "error": 0.26
+      },
+      {
+       "window": "[0.1, 0.9]",
+       "kept": "94.6%",
+       "aipw": 12.43,
+       "truth_on_kept": 12.23,
+       "error": 0.2
+      },
+      {
+       "window": "[0.2, 0.8]",
+       "kept": "68.9%",
+       "aipw": 12.93,
+       "truth_on_kept": 12.67,
+       "error": 0.26
+      }
+     ],
+     "chart": {
+      "kind": "estimates",
+      "title": "AIPW ATE ($) by trimming window",
+      "labels": [
+       "[0.025, 0.975]",
+       "[0.05, 0.95]",
+       "[0.1, 0.9]",
+       "[0.2, 0.8]"
+      ],
+      "values": [
+       11.86,
+       11.9,
+       12.43,
+       12.93
+      ],
+      "truth": 11.6
+     },
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Covariate balance",
+     "metrics": {
+      "Max |SMD| before": 0.875,
+      "after PSM": 0.031,
+      "after IPW": 0.028,
+      "Covariates < 0.10 after IPW": "100%"
+     },
+     "reading": "Balance is a property of the propensity model, so it is the same for both outcomes.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Top-8 imbalanced covariates: |SMD|",
+      "labels": [
+       "log_hist",
+       "loyalty_tier",
+       "hist_spend",
+       "log_lead",
+       "channel_Corporate",
+       "lead_time",
+       "channel_OTA_Expedia",
+       "device_iOS"
+      ],
+      "values": [
+       0.875,
+       0.625,
+       0.606,
+       0.251,
+       0.246,
+       0.221,
+       0.17,
+       0.128
+      ],
+      "values2": [
+       0.028,
+       0.025,
+       0.019,
+       0.015,
+       0.015,
+       0.016,
+       0.01,
+       0.009
+      ],
+      "name1": "before",
+      "name2": "after IPW"
+     },
+     "status": "ok"
+    },
+    {
+     "name": "3 \u00b7 Built-in refuters (AIPW)",
+     "metrics": {
+      "Baseline ATE": 11.134,
+      "Random common cause": 11.138,
+      "Placebo treatment": -0.048,
+      "Data subset (80%)": 11.316,
+      "All passed": "yes"
+     },
+     "reading": "Random cause and subset should leave the effect unchanged; a placebo treatment should give \u2248 0.",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "Refuter effects ($); dashed = baseline",
+      "labels": [
+       "Baseline",
+       "Random cause",
+       "Placebo",
+       "Subset"
+      ],
+      "values": [
+       11.134,
+       11.138,
+       -0.048,
+       11.316
+      ],
+      "truth": 11.134
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 DoWhy cross-check",
+     "metrics": {
+      "Estimate (OLS backdoor)": 11.911,
+      "random_common_cause": 11.915,
+      "placebo_treatment_refuter": 0.096,
+      "data_subset_refuter": 11.921
+     },
+     "reading": "Independent implementation of the same refuters (DoWhy backdoor linear regression).",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 Verdict",
+     "metrics": {
+      "True ATE": 11.596,
+      "Naive": 32.842,
+      "IPW": 12.73,
+      "AIPW": 11.845,
+      "AIPW error": "+2.1%",
+      "Naive error": "+183%"
+     },
+     "reading": "Refuters probe only the observed-confounder model; they cannot rule out unmeasured confounding (none exists here by construction).",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "ATE ($) by estimator",
+      "labels": [
+       "Naive",
+       "PSM 1:1",
+       "PSM 1:k",
+       "IPW",
+       "SIPW (Hajek)",
+       "AIPW (DR)"
+      ],
+      "values": [
+       32.842,
+       13.117,
+       12.79,
+       12.73,
+       12.818,
+       11.845
+      ],
+      "truth": 11.596
+     },
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "Refuters passed": "3/3",
+    "AIPW error": "+2.1%"
+   }
+  },
+  {
+   "id": "C2",
+   "type": "C",
+   "short": "C2 \u00b7 Validity: direct shift",
+   "title": "Validity checks: direct-channel-shift ATE",
+   "story": "Same battery for the binary direct re-booking outcome.",
+   "stages": [
+    {
+     "name": "1 \u00b7 Overlap & trimming sensitivity",
+     "metrics": {
+      "Propensity AUC": 0.761,
+      "e(x) range": "0.031 \u2013 0.948",
+      "Common support kept": "99.9%",
+      "AIPW range over windows (pp)": "7.77 \u2013 9.07"
+     },
+     "reading": "The estimate should be stable when extreme-propensity guests are trimmed; a drift signals poor overlap.",
+     "table": [
+      {
+       "window": "[0.025, 0.975]",
+       "kept": "100.0%",
+       "aipw": 7.77,
+       "truth_on_kept": 6.57,
+       "error": 1.21
+      },
+      {
+       "window": "[0.05, 0.95]",
+       "kept": "99.6%",
+       "aipw": 7.8,
+       "truth_on_kept": 6.62,
+       "error": 1.18
+      },
+      {
+       "window": "[0.1, 0.9]",
+       "kept": "94.6%",
+       "aipw": 7.95,
+       "truth_on_kept": 7.18,
+       "error": 0.77
+      },
+      {
+       "window": "[0.2, 0.8]",
+       "kept": "68.9%",
+       "aipw": 9.07,
+       "truth_on_kept": 8.29,
+       "error": 0.78
+      }
+     ],
+     "chart": {
+      "kind": "estimates",
+      "title": "AIPW ATE (pp) by trimming window",
+      "labels": [
+       "[0.025, 0.975]",
+       "[0.05, 0.95]",
+       "[0.1, 0.9]",
+       "[0.2, 0.8]"
+      ],
+      "values": [
+       7.77,
+       7.8,
+       7.95,
+       9.07
+      ],
+      "truth": 6.58
+     },
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Covariate balance",
+     "metrics": {
+      "Max |SMD| before": 0.875,
+      "after PSM": 0.031,
+      "after IPW": 0.028,
+      "Covariates < 0.10 after IPW": "100%"
+     },
+     "reading": "Balance is a property of the propensity model, so it is the same for both outcomes.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Top-8 imbalanced covariates: |SMD|",
+      "labels": [
+       "log_hist",
+       "loyalty_tier",
+       "hist_spend",
+       "log_lead",
+       "channel_Corporate",
+       "lead_time",
+       "channel_OTA_Expedia",
+       "device_iOS"
+      ],
+      "values": [
+       0.875,
+       0.625,
+       0.606,
+       0.251,
+       0.246,
+       0.221,
+       0.17,
+       0.128
+      ],
+      "values2": [
+       0.028,
+       0.025,
+       0.019,
+       0.015,
+       0.015,
+       0.016,
+       0.01,
+       0.009
+      ],
+      "name1": "before",
+      "name2": "after IPW"
+     },
+     "status": "ok"
+    },
+    {
+     "name": "3 \u00b7 Built-in refuters (AIPW)",
+     "metrics": {
+      "Baseline ATE": 7.344,
+      "Random common cause": 7.187,
+      "Placebo treatment": -0.046,
+      "Data subset (80%)": 6.829,
+      "All passed": "yes"
+     },
+     "reading": "Random cause and subset should leave the effect unchanged; a placebo treatment should give \u2248 0.",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "Refuter effects (pp); dashed = baseline",
+      "labels": [
+       "Baseline",
+       "Random cause",
+       "Placebo",
+       "Subset"
+      ],
+      "values": [
+       7.344,
+       7.187,
+       -0.046,
+       6.829
+      ],
+      "truth": 7.344
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 DoWhy cross-check",
+     "metrics": {
+      "Estimate (OLS backdoor)": 7.764,
+      "random_common_cause": 7.751,
+      "placebo_treatment_refuter": -0.518,
+      "data_subset_refuter": 7.564
+     },
+     "reading": "Independent implementation of the same refuters (DoWhy backdoor linear regression).",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 Verdict",
+     "metrics": {
+      "True ATE": 6.577,
+      "Naive": 23.374,
+      "IPW": 8.252,
+      "AIPW": 7.888,
+      "AIPW error": "+19.9%",
+      "Naive error": "+255%"
+     },
+     "reading": "Refuters probe only the observed-confounder model; they cannot rule out unmeasured confounding (none exists here by construction).",
+     "table": null,
+     "chart": {
+      "kind": "estimates",
+      "title": "ATE (pp) by estimator",
+      "labels": [
+       "Naive",
+       "PSM 1:1",
+       "PSM 1:k",
+       "IPW",
+       "SIPW (Hajek)",
+       "AIPW (DR)"
+      ],
+      "values": [
+       23.374,
+       8.524,
+       8.086,
+       8.252,
+       8.306,
+       7.888
+      ],
+      "truth": 6.577
+     },
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "Refuters passed": "3/3",
+    "AIPW error": "+19.9%"
+   }
+  },
+  {
+   "id": "D1",
+   "type": "D",
+   "short": "D1 \u00b7 Baseline 30% budget",
+   "title": "Campaign policy: baseline, contact the top 30%",
+   "story": "Marketing can contact 30% of arrivals at $1.50 each. Score everyone, pick the best 30%, compare with random and oracle.",
+   "stages": [
+    {
+     "name": "1 \u00b7 Scoring",
+     "metrics": {
+      "Ancillary model": "Causal Forest DML",
+      "Direct model": "S-Learner (XGB)",
+      "Ancillary Qini": 3.222,
+      "Direct Qini": 0.0247,
+      "Ancillary PEHE ($)": 2.14,
+      "Direct PEHE (pp)": 4.12,
+      "Guests scored": 17951
+     },
+     "reading": "Best learner per outcome (by Qini on held-out stays) scores every eligible guest.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Ancillary: IPW uplift by score decile ($/guest)",
+      "labels": [
+       "D1",
+       "D2",
+       "D3",
+       "D4",
+       "D5",
+       "D6",
+       "D7",
+       "D8",
+       "D9",
+       "D10"
+      ],
+      "values": [
+       42.29,
+       30.13,
+       14.6,
+       16.16,
+       12.05,
+       9.24,
+       3.53,
+       10.91,
+       5.98,
+       -3.29
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Economics & budget",
+     "metrics": {
+      "Budget share": "30%",
+      "Cost / offer ($)": 1.5,
+      "Ancillary margin": 0.45,
+      "Value of a direct booking ($)": 55.0,
+      "Eligible channels": "all"
+     },
+     "reading": "Net value per guest = margin \u00d7 \u03c4\u0302 ancillary + booking value \u00d7 \u03c4\u0302 direct \u2212 offer cost; contact the top guests with positive value.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "3 \u00b7 Selection",
+     "metrics": {
+      "Guests contacted": 5385,
+      "Share of eligible": "30%",
+      "Spend ($)": 8078.0,
+      "Mean \u03c4\u0302 ancillary of selected ($)": 23.23,
+      "Mean \u03c4\u0302 direct of selected (pp)": 14.11,
+      "Persuadables among selected": "80%"
+     },
+     "reading": "Who gets the offer.",
+     "table": [
+      {
+       "channel": "OTA_Booking",
+       "n": 2368,
+       "share_of_channel": 0.444
+      },
+      {
+       "channel": "OTA_Expedia",
+       "n": 3017,
+       "share_of_channel": 0.491
+      }
+     ],
+     "chart": {
+      "kind": "bars",
+      "title": "Selected guests by true segment",
+      "labels": [
+       "Persuadable",
+       "Lost Cause"
+      ],
+      "values": [
+       4287,
+       1098
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 Policy comparison (true $)",
+     "metrics": {
+      "Causal targeting": 92944.0,
+      "Random, same size": 40297.0,
+      "Oracle (true \u03c4)": 94142.0,
+      "Contact everyone": 131685.0,
+      "Capture of oracle": "98.7%",
+      "Lift vs random": "2.3x"
+     },
+     "reading": "Targeting is judged against random picks of the same size and the unattainable oracle. Contacting everyone can win when most guests have positive value.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "True net value ($)",
+      "labels": [
+       "Causal",
+       "Random",
+       "Oracle",
+       "Everyone"
+      ],
+      "values": [
+       92944.0,
+       40297.0,
+       94142.0,
+       131685.0
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 ROI & risk",
+     "metrics": {
+      "True ROI": "1,151%",
+      "Estimated net value ($)": 90015.0,
+      "True net value ($)": 92944.0,
+      "Estimation error": "-3.2%",
+      "Contacted with negative true value": 0,
+      "Share of contacted": "0.0%"
+     },
+     "reading": "Estimated vs true value shows whether the model is over-promising; negative-value contacts are the sleeping-dog leakage.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "True net value ($)": 92944.0,
+    "Capture of oracle": "98.7%",
+    "ROI": "1,151%"
+   }
+  },
+  {
+   "id": "D2",
+   "type": "D",
+   "short": "D2 \u00b7 OTA-only push",
+   "title": "Campaign policy: OTA-only push at 20% commission",
+   "story": "Revenue management wants to shift OTA guests direct: a booking is worth $75, only OTA channels are eligible, 30% budget.",
+   "stages": [
+    {
+     "name": "1 \u00b7 Scoring",
+     "metrics": {
+      "Ancillary model": "Causal Forest DML",
+      "Direct model": "S-Learner (XGB)",
+      "Ancillary Qini": 3.222,
+      "Direct Qini": 0.0247,
+      "Ancillary PEHE ($)": 2.14,
+      "Direct PEHE (pp)": 4.12,
+      "Guests scored": 11473
+     },
+     "reading": "Best learner per outcome (by Qini on held-out stays) scores every eligible guest.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "Ancillary: IPW uplift by score decile ($/guest)",
+      "labels": [
+       "D1",
+       "D2",
+       "D3",
+       "D4",
+       "D5",
+       "D6",
+       "D7",
+       "D8",
+       "D9",
+       "D10"
+      ],
+      "values": [
+       42.29,
+       30.13,
+       14.6,
+       16.16,
+       12.05,
+       9.24,
+       3.53,
+       10.91,
+       5.98,
+       -3.29
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "2 \u00b7 Economics & budget",
+     "metrics": {
+      "Budget share": "30%",
+      "Cost / offer ($)": 1.5,
+      "Ancillary margin": 0.45,
+      "Value of a direct booking ($)": 75.0,
+      "Eligible channels": "OTA_Expedia, OTA_Booking"
+     },
+     "reading": "Net value per guest = margin \u00d7 \u03c4\u0302 ancillary + booking value \u00d7 \u03c4\u0302 direct \u2212 offer cost; contact the top guests with positive value.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    },
+    {
+     "name": "3 \u00b7 Selection",
+     "metrics": {
+      "Guests contacted": 3442,
+      "Share of eligible": "30%",
+      "Spend ($)": 5163.0,
+      "Mean \u03c4\u0302 ancillary of selected ($)": 24.27,
+      "Mean \u03c4\u0302 direct of selected (pp)": 16.26,
+      "Persuadables among selected": "92%"
+     },
+     "reading": "Who gets the offer.",
+     "table": [
+      {
+       "channel": "OTA_Booking",
+       "n": 1493,
+       "share_of_channel": 0.28
+      },
+      {
+       "channel": "OTA_Expedia",
+       "n": 1949,
+       "share_of_channel": 0.317
+      }
+     ],
+     "chart": {
+      "kind": "bars",
+      "title": "Selected guests by true segment",
+      "labels": [
+       "Persuadable",
+       "Lost Cause"
+      ],
+      "values": [
+       3180,
+       262
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "4 \u00b7 Policy comparison (true $)",
+     "metrics": {
+      "Causal targeting": 78001.0,
+      "Random, same size": 51304.0,
+      "Oracle (true \u03c4)": 79940.0,
+      "Contact everyone": 171221.0,
+      "Capture of oracle": "97.6%",
+      "Lift vs random": "1.5x"
+     },
+     "reading": "Targeting is judged against random picks of the same size and the unattainable oracle. Contacting everyone can win when most guests have positive value.",
+     "table": null,
+     "chart": {
+      "kind": "bars",
+      "title": "True net value ($)",
+      "labels": [
+       "Causal",
+       "Random",
+       "Oracle",
+       "Everyone"
+      ],
+      "values": [
+       78001.0,
+       51304.0,
+       79940.0,
+       171221.0
+      ]
+     },
+     "status": "ok"
+    },
+    {
+     "name": "5 \u00b7 ROI & risk",
+     "metrics": {
+      "True ROI": "1,511%",
+      "Estimated net value ($)": 74406.0,
+      "True net value ($)": 78001.0,
+      "Estimation error": "-4.6%",
+      "Contacted with negative true value": 0,
+      "Share of contacted": "0.0%"
+     },
+     "reading": "Estimated vs true value shows whether the model is over-promising; negative-value contacts are the sleeping-dog leakage.",
+     "table": null,
+     "chart": null,
+     "status": "ok"
+    }
+   ],
+   "summary": {
+    "True net value ($)": 78001.0,
+    "Capture of oracle": "97.6%",
+    "ROI": "1,511%"
+   }
+  }
+ ]
+}

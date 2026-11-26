@@ -28,7 +28,7 @@ from src.models import propensity_ate as pa
 from src.models.cate_learners import make_learners
 from src.models.deep_causal import _DeepCATE
 
-STAGES = ["hardware", "data", "propensity", "cate", "evaluate", "score"]
+STAGES = ["hardware", "data", "propensity", "cate", "evaluate", "score", "flows"]
 OUTCOMES = {"ancillary": ("y_ancillary", "tau_anc", False), "direct": ("y_direct", "tau_direct", True)}
 log = logging.getLogger("pipeline")
 
@@ -202,7 +202,13 @@ def stage_score(fast):
     gpu_telemetry("end")
 
 
-FUNCS = dict(hardware=stage_hardware, data=stage_data, propensity=stage_propensity, cate=stage_cate,
+def stage_flows(fast):
+    from src.flows import build_flows
+    r = build_flows()
+    log.info("Flows written: %s", [f["id"] for f in r["flows"]])
+
+
+FUNCS = dict(flows=stage_flows, hardware=stage_hardware, data=stage_data, propensity=stage_propensity, cate=stage_cate,
              evaluate=stage_evaluate, score=stage_score)
 
 

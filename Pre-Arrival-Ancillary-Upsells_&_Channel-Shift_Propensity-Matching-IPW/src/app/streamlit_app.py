@@ -44,7 +44,7 @@ st.title("🏨 Pre-Arrival Ancillary Upsells & Direct-Channel Shift")
 st.caption(f"Causal inference & uplift engine · synthetic hospitality data with known ground truth · "
            f"compute: {'CUDA – ' + str(dev['gpu_name']) if dev['cuda'] else 'CPU'}")
 
-t1, t2, t3, t4 = st.tabs(["1 · Observational bias & balance", "2 · CATE leaderboard & uplift", "3 · Guest simulator", "4 · Campaign optimiser"])
+t1, t2, t3, t4, t5 = st.tabs(["1 · Observational bias & balance", "2 · CATE leaderboard & uplift", "3 · Guest simulator", "4 · Campaign optimiser", "5 · End-to-end flows"])
 
 # ============================================================ TAB 1
 with t1:
@@ -239,3 +239,8 @@ with t4:
     d2.dataframe(pd.DataFrame(res["by_true_segment"]), width="stretch", hide_index=True)
     st.caption("Treat-all can beat a tight-budget policy: the budget constraint is what makes targeting valuable. "
                "Compare the model to *random of the same size* and to the *oracle* for the same budget.")
+
+# ============================================================ TAB 5
+with t5:
+    from src.app import flows_ui
+    flows_ui.render()

@@ -83,11 +83,20 @@ def pipeline_out(tmp_path_factory):
 def test_pipeline_artifacts(pipeline_out):
     for f in ("data/train.parquet", "data/test.parquet", "data/scored_guests.parquet", "metrics/ate_comparison.json",
               "metrics/cate_leaderboard.csv", "metrics/balance_smd.csv", "plots/love_plot.png", "plots/propensity_overlap.png",
-              "plots/qini_curves_ancillary.png", "logs/pipeline.log"):
+              "plots/qini_curves_ancillary.png", "metrics/flows.json", "logs/pipeline.log"):
         assert (pipeline_out / f).exists(), f
     lb = pd.read_csv(pipeline_out / "metrics" / "cate_leaderboard.csv")
     assert lb[lb.outcome == "direct"].model.str.contains("Uplift RF").any()
     assert lb[lb.outcome == "ancillary"].shape[0] >= 10
+
+
+def test_flows(pipeline_out):
+    import json
+    d = json.load(open(pipeline_out / "metrics" / "flows.json"))
+    types = [f["type"] for f in d["flows"]]
+    assert all(types.count(t) >= 2 for t in "ABCD")
+    assert all(len(f["stages"]) >= 5 and all(s["metrics"] for s in f["stages"]) for f in d["flows"])
+    assert "Oracle capture" in d["overall"]
 
 
 def test_api_endpoints(pipeline_out, monkeypatch):

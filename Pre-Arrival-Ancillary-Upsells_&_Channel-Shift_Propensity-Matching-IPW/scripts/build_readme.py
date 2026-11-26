@@ -14,6 +14,25 @@ dev = json.load(open(M / "device_report.json"))
 ds = json.load(open(M / "data_summary.json"))
 camp = json.load(open(M / "campaign_summary.json"))
 ref = json.load(open(M / "refutation.json"))
+fl = json.load(open(M / "flows.json"))
+
+
+def flows_md():
+    nl = "\n"
+    o = ["Open the dashboard's **tab 5 · End-to-end flows**. Pipeline: Data → Propensity → Balance → ATE/ATT → Refutation → CATE models → Policy. "
+         "Four flow types × two examples; each flow walks through 5–6 stages and every stage shows its own metrics "
+         "(full-page shots in `outputs/screenshots/flows/`)." + nl]
+    o.append("**Programme-level metrics (shared by all flows)**" + nl + nl + "| Metric | Value |" + nl + "|---|---|")
+    o += [f"| {k} | {v} |" for k, v in fl["overall"].items()]
+    for f in fl["flows"]:
+        o.append(nl + f"### {f['id']} · {f['title']}" + nl + nl + f"_{f['story']}_" + nl)
+        o.append("| Stage | Key metrics |" + nl + "|---|---|")
+        for st_ in f["stages"]:
+            km = "; ".join(f"{k}: {v}" for k, v in list(st_["metrics"].items())[:5])
+            o.append(f"| {st_['name']} | {km} |")
+        res = ", ".join(f"{k} = {v}" for k, v in f["summary"].items())
+        o.append(nl + f"**Result:** {res}" + nl + nl + f"![{f['id']}](outputs/screenshots/flows/{f['id']}.png)")
+    return nl.join(o)
 
 
 def ate_table(o):
@@ -96,31 +115,38 @@ Contacting the top {camp['budget_frac']:.0%} yields true net value ${camp['true_
 (estimated ${camp['est_value_targeted']:,.0f}); contacting everyone yields ${camp['true_value_all']:,.0f}. With these cost assumptions most guests have positive
 expected value, so a 30% budget leaves money on the table — the optimiser is most valuable when offers are expensive or budgets are tight (see the scenarios in tab 4).
 
-## 5. Screenshots
+## 5. End-to-end flows (dashboard tab 5)
+{flows_md()}
+
+## 6. Screenshots
 ![Swagger](docs/screenshots/api_swagger_docs.png)
 ![CATE response](docs/screenshots/api_cate_response.png)
 ![Tab 1](docs/screenshots/streamlit_tab1_ate_balance.png)
 ![Tab 2](docs/screenshots/streamlit_tab2_cate_uplift.png)
 ![Tab 3](docs/screenshots/streamlit_tab3_guest_simulator.png)
 ![Tab 4](docs/screenshots/streamlit_tab4_campaign_optimizer.png)
+![Tab 5 flows](outputs/screenshots/flows/A1.png)
 
-## 6. Run it
+All dashboard screenshots are also written to `outputs/screenshots/`.
+
+## 7. Run it
 Use an environment with CUDA PyTorch (tested: Python 3.12, RTX 3090). `pip install -r requirements.txt`, `playwright install chromium`.
 ```bash
 python scripts/run_pipeline.py            # data -> propensity -> CATE -> evaluate -> score (~4 min on GPU); --fast for a smoke run
 uvicorn src.api.main:app --port 8000      # /health /predict/cate /optimize/campaign /models/metrics  (docs at /docs)
-streamlit run src/app/streamlit_app.py    # 4-tab dashboard
-python scripts/capture_screenshots.py     # regenerates docs/screenshots
+streamlit run src/app/streamlit_app.py    # 5-tab dashboard
+python scripts/capture_screenshots.py     # regenerates docs/screenshots + outputs/screenshots (+ flows)
+python scripts/run_pipeline.py --stage flows   # rebuild outputs/metrics/flows.json only
 python scripts/build_readme.py            # regenerates this README
 pytest tests -q
 ```
 Set `CAUSAL_OUT=<dir>` to redirect outputs. Config (seeds, N, hyper-parameters, margins, budget) lives in `config/config.yaml`.
 
-## 7. Layout
+## 8. Layout
 `src/data` DGP · `src/models` propensity/ATE, CATE learners, TARNet/DragonNet · `src/evaluation` metrics & plots · `src/serving.py` shared scoring/optimiser
-(used by both API and UI) · `src/api` FastAPI · `src/app` Streamlit · `scripts` orchestration · `tests`.
+(used by both API and UI) · `src/api` FastAPI · `src/flows.py` end-to-end flows · `src/app` Streamlit · `scripts` orchestration · `tests`.
 
-## 8. Limitations
+## 9. Limitations
 - Synthetic data; unconfoundedness holds by construction. Real logs need sensitivity analysis for unmeasured confounding.
 - Selection of "best model" by Qini on one test split is noisy; no repeated-seed Monte-Carlo was run.
 - DragonNet's targeted regularisation is applied on the probability scale for the binary outcome (an approximation).
